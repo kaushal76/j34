@@ -24,4 +24,4 @@ try {
 }
 
 $controller->redirect();
-?>
+
