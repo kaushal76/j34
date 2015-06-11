@@ -46,9 +46,11 @@
 		<field name="attending" label="COM_CONFMGR_AUTHOR_FIELD_ATTENDING_LABEL" description="COM_CONFMGR_AUTHOR_FIELD_ATTENDING_DESC"
 			type="radio"
 			maxlength="3"
-			validate="boolean"
-			filter="BOOLEAN"
-		/>
+			filter="INTEGER"
+		>
+		<option value="0">No</option>
+  		<option value="1">Yes</option>
+  		</field>
 		<field
 			name="published"
 			type="list"
