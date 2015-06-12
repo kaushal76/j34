@@ -20,9 +20,12 @@ $lang->load('joomla', JPATH_ADMINISTRATOR);
 JHtml::_('bootstrap.loadCss');
 JHtml::_('bootstrap.framework');
 
-try {
+try 
+{
 	$controller->execute($input->get('task'));
-} catch (Exception $e) {
+} 
+catch (Exception $e) 
+{
 	$controller->setRedirect(JURI::base(), $e->getMessage(), 'error');
 }
 

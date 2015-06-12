@@ -18,10 +18,9 @@ abstract class AclHelper
 {
 	
 	/**
-	 * @since		0.0.5
 	 * @desc		Method to check if the logged in user the author for a given paper id
-	 * @param		Paper ID (default 0)
-	 * @return		true / false 
+	 * @param		int $paperid
+	 * @return		boolean 
 	 */
 	
 	public static function isAuthor($paperid = 0)
@@ -36,7 +35,7 @@ abstract class AclHelper
 
 			if ($user->id == 0) 
 			{
-				return false;
+				return FALSE;
 			}
 			
 			//Build the query
@@ -58,15 +57,15 @@ abstract class AclHelper
 			
 			if ($result > 0) 
 			{
-				return true;
+				return TRUE;
 			
 			} 
 			else 
 			{
-				return false;
+				return FALSE;
 			}
 		}
-		else //No paper id given, hence only check if the user logged in. All logged in users can be an author
+		else //No paper id given, hence only check if the user logged in. All logged in users can be authors
 		{
 			if ($user->guest)
 			{
@@ -85,9 +84,9 @@ abstract class AclHelper
 	 * @param number $themeid
 	 * @param number $paperid
 	 * @return boolean
+	 * @todo Update to meet the new database schema @author Kaushal
 	 */
-	
-	//TODO Update to meet the new database schema
+
 	public static function isThemeleader($themeid = 0, $paperid = 0)
 	{
 
@@ -154,7 +153,12 @@ abstract class AclHelper
 		}
 	}
 
-	// function to check if the logged in user is a Student Paper Coordinator
+	/**
+	 * @desc function to check if the logged in user is a Student Paper Coordinator
+	 * @return boolean
+	 * @todo Update to meet the new database schema
+	 */
+	
 	public static function isStudentCoordinator()
 	{
 		//Obtain a database connection
@@ -188,14 +192,18 @@ abstract class AclHelper
 		}
 	}
 
-	// function to check if the logged in user is a Super Coordinator
+	/**
+	 * @desc function to check if the logged in user is a Super Coordinator
+	 * @return boolean
+	 * @todo Update to meet the new database schema
+	 */
 	public static function isSuperCoordinator()
 	{
 		//Obtain a database connection
 		$db   = JFactory::getDbo();
 		$user = JFactory::getUser();
 		if ($user->id == 0) {
-			return false;
+			return false; 
 		}
 
 		if(!(isset($user->groups[8]) || isset($user->groups[7]))){
@@ -221,6 +229,13 @@ abstract class AclHelper
 			return false;
 		}
 	}
+	
+	/**
+	 * @desc Method to check if a paper is a student submission
+	 * @param int $paperid
+	 * @return boolean
+	 * @todo Update to meet the new database schema
+	 */
 
 	public static function isStudentPaper($paperid)
 	{
@@ -247,6 +262,13 @@ abstract class AclHelper
 			return false;
 		}
 	}
+	
+	/**
+	 * @desc method to check if the logged in user is a reviewer for a given paper
+	 * @param number $paperid
+	 * @return boolean
+	 * @todo Update to meet the new database schema
+	 */
 
 	public static function isRev1ewer($paperid = 0)
 	{
@@ -285,6 +307,13 @@ abstract class AclHelper
 			return false;
 		}
 	}
+	
+	/**
+	 * @desc method to get the theme for a given paper
+	 * @param number $paperid
+	 * @return mixed|boolean
+	 * @todo Update to meet the new database schema
+	 */
 
 	public static function getTheme($paperid = 0)
 	{
@@ -292,7 +321,6 @@ abstract class AclHelper
 		$db   = JFactory::getDbo();
 		$user = JFactory::getUser();
 
-		//- paper id given, hence checking if the themeleader for the given paper
 		//Build the query
 		$query = $db->getQuery(true);
 		$query->select($db->quoteName(array(
@@ -304,6 +332,8 @@ abstract class AclHelper
 		)));
 		$query->from($db->quoteName('#__confmgt_papers', 'a'));
 		$query->join('INNER', $db->quoteName('#__confmgt_themes', 'b') . ' ON (' . $db->quoteName('a.theme') . ' = ' . $db->quoteName('b.id') . ')');
+		
+		//- paper id given, hence checking if the themeleader for the given paper
 		if ($paperid) {
 			$query->where('a.id = ' . (int) $paperid);
 		} //$paperid
@@ -318,7 +348,13 @@ abstract class AclHelper
 			return false;
 		}
 	}
-	// function to get userid by entering the email
+	/**
+	 * @desc method to get userid by entering the email
+	 * @param unknown $email
+	 * @return boolean
+	 * @todo Update to meet the new database schema
+	 */
+	
 	public static function getUserID($email)
 	{
 		$db   = JFactory::getDbo();
@@ -335,7 +371,13 @@ abstract class AclHelper
 			return false;
 		}
 	}
-	//Function to get Reviewer ID by email
+	
+	/**
+	 * @desc method to get Reviewer ID by email
+	 * @param unknown $email
+	 * @return mixed|boolean
+	 * @todo Update to meet the new database schema
+	 */
 	public static function getRev1ewerID($email)
 	{
 		//Obtain a database connection
@@ -358,7 +400,14 @@ abstract class AclHelper
 			return false;
 		}
 	}
-	//Function to get the number of reviewers for a given paper
+	
+	/**
+	 * @desc method to get the number of reviewers for a given paper
+	 * @param unknown $paperid
+	 * @return boolean|number
+	 * @todo Update to meet the new database schema
+	 */
+	
 	public static function getNumofRev1ewers($paperid)
 	{
 		//Obtain a database connection
@@ -385,6 +434,12 @@ abstract class AclHelper
 			return false;
 		}
 	}
+	/**
+	 * @desc method to get authors for a given paper
+	 * @param number $paperid
+	 * @return mixed|boolean
+	 */
+	
 	public static function getAuthors($paperid = 0)
 	{
 		//Obtain a database connection
