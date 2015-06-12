@@ -63,4 +63,3 @@ class ConfmgrViewAbstract extends JViewLegacy
 		parent::display($tpl);
 	}
 }
-?>

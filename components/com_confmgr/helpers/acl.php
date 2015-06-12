@@ -10,38 +10,73 @@ defined('_JEXEC') or die;
 
 /**
  * @desc		Abstract ACL helper class for the confmgt. Using a specific ACL for the component as the Joomla ACL does not serve the purpose
+ * @package     Confmgr
+ * @subpackage  Helpers
  */
 
 abstract class AclHelper
 {
 	
 	/**
+	 * @since		0.0.5
 	 * @desc		Method to check if the logged in user the author for a given paper id
 	 * @param		Paper ID (default 0)
 	 * @return		true / false 
 	 */
-	// Check if the logged in user is the author for the given paper id
+	
 	public static function isAuthor($paperid = 0)
 	{
-		//Obtain a database connection
-		$db   = JFactory::getDbo();
-		$user = JFactory::getUser();
-		if ($user->id == 0) {
-			return false;
+		if (!$paperid ==0)
+		{
+			//Get the current user object
+			$user = JFactory::getUser();
+			
+			//Obtain a database connection
+			$db   = JFactory::getDbo();
+
+			if ($user->id == 0) 
+			{
+				return false;
+			}
+			
+			//Build the query
+			$query = $db->getQuery(true)	
+			->select($db->quoteName('created_by'))
+			->from($db->quoteName('#__confmgr_paper'))
+			->where('id = ' . (int) $paperid);
+				
+			try
+			{
+				$db->setQuery($query);
+				$result = $db->getNumRows();
+				// If it fails, it will throw a RuntimeException
+			}
+			catch (RuntimeException $e)
+			{
+				throw new Exception($e->getMessage());
+			}
+			
+			if ($result > 0) 
+			{
+				return true;
+			
+			} 
+			else 
+			{
+				return false;
+			}
 		}
-		//Build the query
-		$query = $db->getQuery(true)	
-		->select($db->quoteName('created_by'))
-		->from($db->quoteName('#__confmgr_paper'))
-		->where('id = ' . (int) $paperid);
-		// get the number of records
-		$db->setQuery($query);
-		$db->execute();
-		$num_rows = $db->getNumRows();
-		if ($num_rows > 0) {
-			return true;
-		} else {
-			return false;
+		else //No paper id given, hence only check if the user logged in. All logged in users can be an author
+		{
+			if ($user->guest)
+			{
+				return FALSE;
+			}
+			else 
+			{
+				return TRUE;
+			}
+			
 		}
 	}
 	public static function isThemeleader($themeid = 0, $paperid = 0)

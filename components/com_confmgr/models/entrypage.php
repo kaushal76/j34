@@ -4,18 +4,20 @@
  * @copyright	Dr Kaushal Keraminiyage
  * @license		GNU General Public License version 2 or later
  */
+// No direct access.
+defined('_JEXEC') or die;
 
-defined("_JEXEC") or die("Restricted access");
 
 /**
- * Item Model for camera_ready_paper.
+ * Item Model for the entry page.
  *
  * @package     Confmgr
  * @subpackage  Models
  */
-class ConfmgrModelCamera_ready_paper extends JModelAdmin
-{
-	/**
+
+class ConfmgrModelEntrypage extends JModelAdmin
+{  
+/**
 	 * @var     string    The prefix to use with controller messages.
 	 * @since   1.6
 	 */
@@ -27,7 +29,7 @@ class ConfmgrModelCamera_ready_paper extends JModelAdmin
 	 * @var      string
 	 * @since    3.2
 	 */
-	public $typeAlias = 'com_confmgr.camera_ready_paper';
+	public $typeAlias = 'com_confmgr.entrypage';
 
 	/**
 	 * Method to test whether a record can be deleted.
@@ -85,6 +87,9 @@ class ConfmgrModelCamera_ready_paper extends JModelAdmin
 		// Load the User state.
 		$pk = $app->input->getInt('id');
 		$this->setState($this->getName() . '.id', $pk);
+		
+		print_r($this->getName()); die();
+		
 
 		// Load the parameters.
 		$params = JComponentHelper::getParams('com_confmgr');
@@ -100,7 +105,7 @@ class ConfmgrModelCamera_ready_paper extends JModelAdmin
 	 *
 	 * @return  mixed    A JTable object if found or boolean false if one could not be found.
 	 */
-	public function getTable($type = 'Camera_ready_paper', $prefix = 'ConfmgrTable', $config = array())
+	public function getTable($type = 'Entrypage', $prefix = 'ConfmgrTable', $config = array())
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
@@ -187,7 +192,7 @@ class ConfmgrModelCamera_ready_paper extends JModelAdmin
 
 		if ($hitcount)
 		{
-			$pk = (!empty($pk)) ? $pk : (int) $this->getState('camera_ready_paper.id');
+			$pk = (!empty($pk)) ? $pk : (int) $this->getState('entrypage.id');
 
 			$table = $this->getTable();
 			$table->load($pk);
@@ -196,5 +201,5 @@ class ConfmgrModelCamera_ready_paper extends JModelAdmin
 
 		return true;
 	}
+    
 }
-?>
