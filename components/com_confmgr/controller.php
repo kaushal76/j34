@@ -35,9 +35,9 @@ class ConfmgrController extends JControllerLegacy
 		$document	= JFactory::getDocument();
 
 		// Set the default view name and format from the Request.
-		$vName   = $this->input->getCmd('view', 'papers');
+		$vName   = $this->input->getCmd('view', 'entrypage');
 		$vFormat = $document->getType();
-		$lName   = $this->input->getCmd('layout', 'default');
+		$lName   = $this->input->getCmd('layout', 'entry_options');
 		
 		// Get the model and the view
 		$model = $this->getModel($vName);

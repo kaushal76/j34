@@ -19,6 +19,7 @@ class ConfmgrViewEntrypage extends JViewLegacy
 	{
 		$app	= JFactory::getApplication();
 		$user	= JFactory::getUser();
+		$config = JFactory::getConfig();
 		
 		// check the user's role and define role as an array; 
 		$this->role = array();	
@@ -35,7 +36,7 @@ class ConfmgrViewEntrypage extends JViewLegacy
 		$this->role['isRev1ewer'] = AclHelper::isRev1ewer();
 			
 		// get the sitename to make a part of the heading
-		$this->sitename = $config->getValue( 'config.sitename' );
+		$this->sitename = $config->get( 'sitename' );
 		
 		parent::display($tpl);
 	}

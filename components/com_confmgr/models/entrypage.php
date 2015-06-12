@@ -32,46 +32,6 @@ class ConfmgrModelEntrypage extends JModelAdmin
 	public $typeAlias = 'com_confmgr.entrypage';
 
 	/**
-	 * Method to test whether a record can be deleted.
-	 *
-	 * @param   object    $record    A record object.
-	 *
-	 * @return  boolean  True if allowed to delete the record. Defaults to the permission set in the component.
-	 * @since   1.6
-	 */
-	protected function canDelete($record)
-	{
-		if (!empty($record->id))
-		{
-			if ($record->published != -2)
-			{
-				return false;
-			}
-			
-
-			$user = JFactory::getUser();
-			return $user->authorise('core.delete', $this->typeAlias . '.' . (int) $record->id);
-		}
-	}		
-
-	/**
-	 * Prepare and sanitise the table data prior to saving.
-	 *
-	 * @param   JTable    A JTable object.
-	 *
-	 * @return  void
-	 * @since   1.6
-	 */
-	protected function prepareTable($table)
-	{
-		// Set the publish date to now
-		$db = $this->getDbo();
-
-		// Increment the content version number.
-		$table->version++;
-	}
-
-	/**
 	 * Auto-populate the model state.
 	 *
 	 * Note. Calling getState in this method will result in recursion.
@@ -87,9 +47,6 @@ class ConfmgrModelEntrypage extends JModelAdmin
 		// Load the User state.
 		$pk = $app->input->getInt('id');
 		$this->setState($this->getName() . '.id', $pk);
-		
-		print_r($this->getName()); die();
-		
 
 		// Load the parameters.
 		$params = JComponentHelper::getParams('com_confmgr');

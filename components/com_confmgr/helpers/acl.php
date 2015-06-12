@@ -25,10 +25,11 @@ abstract class AclHelper
 	
 	public static function isAuthor($paperid = 0)
 	{
+		//Get the current user object
+		$user = JFactory::getUser();
+		
 		if (!$paperid ==0)
 		{
-			//Get the current user object
-			$user = JFactory::getUser();
 			
 			//Obtain a database connection
 			$db   = JFactory::getDbo();
@@ -84,7 +85,7 @@ abstract class AclHelper
 	 * @param number $themeid
 	 * @param number $paperid
 	 * @return boolean
-	 * @todo Update to meet the new database schema @author Kaushal
+	 * @todo Update to meet the new database schema 
 	 */
 
 	public static function isThemeleader($themeid = 0, $paperid = 0)
@@ -93,63 +94,94 @@ abstract class AclHelper
 		//Obtain a database connection
 		$db   = JFactory::getDbo();
 		$user = JFactory::getUser();
-		if ($user->id == 0) {
-			return false;
-		} //$user->id == 0
+		
+		if ($user->id == 0) 
+		{
+			return FALSE;
+		} 
+		
 		if ($paperid == 0 && $themeid == 0) {
-			if (self::isStudentCoordinator()) {
-				return true;
+			
+			if (self::isStudentCoordinator()) 
+			{
+				return TRUE;
 			}
 				
-			if (self::isSuperCoordinator()) {
-				return true;
+			if (self::isSuperCoordinator()) 
+			{
+				return TRUE;
 			}
-			// - no paper id given, hence checking if any of the theme leaders
-			//Build the query
-			$query = $db->getQuery(true)->select('userid')->from($db->quoteName('#__confmgr_theme'))->where('userid = ' . (int) $user->id);
-		} //$paperid == 0 && $themeid == 0
-		else {
-			//- paper id given, hence checking if the themeleader for the given paper
+			
+			//Building the query for the generic theme leader check. 
+			$query = $db->getQuery(true)
+			->select('user_id')
+			->from($db->quoteName('#__confmgr_theme_leader'))
+			->where('user_id = ' . (int) $user->id);
+		}	
+		else // either paperid and/or themeid provided
+		{			
 			//Build the query
 			$query = $db->getQuery(true);
 			$query->select($db->quoteName(array(
-					'a.theme',
+					'a.theme_id',
 					'a.id',
-					'b.userid',
+					'b.user_id',
 					'b.id'
 			)));
 			$query->from($db->quoteName('#__confmgr_paper', 'a'));
-			$query->join('INNER', $db->quoteName('#__confmgt_themes', 'b') . ' ON (' . $db->quoteName('a.theme') . ' = ' . $db->quoteName('b.id') . ')');
-			$query->where('b.userid = ' . (int) $user->id);
-			if ($paperid) {
-				if (self::isSuperCoordinator()) {
-					return true;
-				}elseif (self::isStudentPaper($paperid)) {
-					if (self::isStudentCoordinator()) {
-						return true;
+			$query->join('INNER', $db->quoteName('#__confmgr_theme_leader', 'b') . ' ON (' . $db->quoteName('a.theme_id') . ' = ' . $db->quoteName('b.id') . ')');
+			$query->where('b.user_id = ' . (int) $user->id);
+			
+			if ($paperid) 
+			{
+				if (self::isSuperCoordinator()) 
+				{
+					return TRUE;
+				}
+				elseif (self::isStudentPaper($paperid)) 
+				{
+					if (self::isStudentCoordinator()) 
+					{
+						return TRUE;
 					}
-				}else{
+				}
+				else
+				{
 					$query->where('a.id = ' . (int) $paperid);
 				}
 
-			} //$paperid
-			if ($themeid) {
-				if (self::isSuperCoordinator()) {
-					return true;
-				}else{
+			} 
+			if ($themeid) 
+			{
+				if (self::isSuperCoordinator()) 
+				{
+					return TRUE;
+				}
+				else
+				{
 					$query->where('b.id = ' . (int) $themeid);
 				}
-			} //$themeid
+			} 
+		}	
+		try
+		{
+			$db->setQuery($query);
+			$result = $db->getNumRows();
+			// If it fails, it will throw a RuntimeException
 		}
-		// get the number of records
-		$db->setQuery($query);
-		$db->execute();
-		$num_rows = $db->getNumRows();
-		if ($num_rows > 0) {
-			return true;
-		} //$num_rows > 0
-		else {
-			return false;
+		catch (RuntimeException $e)
+		{
+			throw new Exception($e->getMessage());
+		}
+		
+		if ($result > 0) 
+		{
+			return TRUE;
+		
+		} 
+		else 
+		{
+			return FALSE;
 		}
 	}
 
@@ -164,31 +196,45 @@ abstract class AclHelper
 		//Obtain a database connection
 		$db   = JFactory::getDbo();
 		$user = JFactory::getUser();
-		if ($user->id == 0) {
-			return false;
+		
+		if ($user->id == 0) 
+		{
+			return FALSE;
 		}
 
-		if (self::isSuperCoordinator()) {
-			return true;
+		if (self::isSuperCoordinator()) 
+		{
+			return TRUE;
 		}
 		//Build the query
 		$query = $db->getQuery(true);
 		$query->select($db->quoteName(array(
-				'a.userid',
-				'a.themeid',
+				'a.role',
+				'a.user_id',
 		)));
-		$query->from($db->quoteName('#__confmgt_coordinators', 'a'));
-		$query->where('a.userid = ' . (int) $user->id);
-		$query->where('a.themeid = 0');
-		// get the number of records
-		$db->setQuery($query);
-		$db->execute();
-		$num_rows = $db->getNumRows();
-		if ($num_rows > 0) {
-			return true;
-		} //$num_rows > 0
-		else {
-			return false;
+		$query->from($db->quoteName('#__confmgt_theme_leader', 'a'));
+		$query->where('a.user_id = ' . (int) $user->id);
+		$query->where('a.role ='.(int)1); // role(0) themeleader, role(1) studentcordinator role(2) supercordinator
+		
+		try
+		{
+			$db->setQuery($query);
+			$result = $db->getNumRows();
+			// If it fails, it will throw a RuntimeException
+		}
+		catch (RuntimeException $e)
+		{
+			throw new Exception($e->getMessage());
+		}
+		
+		if ($result > 0) 
+		{
+			return TRUE;
+		
+		} 
+		else 
+		{
+			return FALSE;
 		}
 	}
 
@@ -202,31 +248,46 @@ abstract class AclHelper
 		//Obtain a database connection
 		$db   = JFactory::getDbo();
 		$user = JFactory::getUser();
-		if ($user->id == 0) {
-			return false; 
+		
+		if ($user->id == 0) 
+		{
+			return FALSE; 
 		}
 
-		if(!(isset($user->groups[8]) || isset($user->groups[7]))){
-			return false;
+		if(!$user->authorise('core.admin'))
+		{
+			return FALSE;
 		}
+		
 		//Build the query
 		$query = $db->getQuery(true);
 		$query->select($db->quoteName(array(
-				'a.userid',
-				'a.themeid',
+				'a.user_id',
+				'a.role',
 		)));
-		$query->from($db->quoteName('#__confmgt_coordinators', 'a'));
-		$query->where('a.userid = ' . (int) $user->id);
-		$query->where('a.themeid = -1');
-		// get the number of records
-		$db->setQuery($query);
-		$db->execute();
-		$num_rows = $db->getNumRows();
-		if ($num_rows > 0) {
-			return true;
-		} //$num_rows > 0
-		else {
-			return false;
+		$query->from($db->quoteName('#__confmgr_theme_leader', 'a'));
+		$query->where('a.user_id = ' . (int) $user->id);
+		$query->where('a.role ='.(int)2); // role(0) themeleader, role(1) studentcordinator role(2) supercordinator
+		
+		try
+		{
+			$db->setQuery($query);
+			$result = $db->getNumRows();
+			// If it fails, it will throw a RuntimeException
+		}
+		catch (RuntimeException $e)
+		{
+			throw new Exception($e->getMessage());
+		}
+		
+		if ($result > 0) 
+		{
+			return TRUE;
+		
+		} 
+		else 
+		{
+			return FALSE;
 		}
 	}
 	
@@ -242,24 +303,36 @@ abstract class AclHelper
 		//Obtain a database connection
 		$db   = JFactory::getDbo();
 		$user = JFactory::getUser();
-		if ($user->id == 0) {
-			return false;
-		} //$user->id == 0
+		if ($user->id == 0) 
+		{
+			return FALSE;
+		} 
 
 		$query = $db->getQuery(true)->select($db->quoteName(array(
 				'a.id',
-				'a.student_submission'
-		)))->from($db->quoteName('#__confmgt_papers', 'a'));
+				'a.student_paper'
+		)))->from($db->quoteName('#__confmgr_paper', 'a'));
+		$query->where('a.student_paper = ' . (int) 1);
 
-		// get the number of records
-		$db->setQuery($query);
-		$db->execute();
-		$num_rows = $db->getNumRows();
-		if ($num_rows > 0) {
-			return true;
-		} //$num_rows > 0
-		else {
-			return false;
+		try
+		{
+			$db->setQuery($query);
+			$result = $db->getNumRows();
+			// If it fails, it will throw a RuntimeException
+		}
+		catch (RuntimeException $e)
+		{
+			throw new Exception($e->getMessage());
+		}
+		
+		if ($result > 0) 
+		{
+			return TRUE;
+		
+		} 
+		else 
+		{
+			return FALSE;
 		}
 	}
 	
