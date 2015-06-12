@@ -85,7 +85,7 @@ abstract class AclHelper
 	 * @param number $themeid
 	 * @param number $paperid
 	 * @return boolean
-	 * @todo Update to meet the new database schema 
+	 * 
 	 */
 
 	public static function isThemeleader($themeid = 0, $paperid = 0)
@@ -188,7 +188,7 @@ abstract class AclHelper
 	/**
 	 * @desc function to check if the logged in user is a Student Paper Coordinator
 	 * @return boolean
-	 * @todo Update to meet the new database schema
+	 * 
 	 */
 	
 	public static function isStudentCoordinator()
@@ -295,7 +295,7 @@ abstract class AclHelper
 	 * @desc Method to check if a paper is a student submission
 	 * @param int $paperid
 	 * @return boolean
-	 * @todo Update to meet the new database schema
+	 * 
 	 */
 
 	public static function isStudentPaper($paperid)
