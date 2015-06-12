@@ -54,4 +54,3 @@ class ConfmgrController extends JControllerLegacy
 		$view->display();
     }
 }
-?>

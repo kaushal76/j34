@@ -9,6 +9,7 @@ defined("_JEXEC") or die("Restricted access");
 
 require_once JPATH_COMPONENT_ADMINISTRATOR.'/helpers/confmgr.php';
 require_once JPATH_COMPONENT_SITE.'/helpers/route.php';
+require_once JPATH_COMPONENT_SITE.'/helpers/acl.php';
 
 $controller	= JControllerLegacy::getInstance('Confmgr');
 $input = JFactory::getApplication()->input;

@@ -24,6 +24,7 @@ class ConfmgrViewAuthor extends JViewLegacy
 		$this->state 	= $this->get('State');
 		$this->item 	= $this->get('Item');
 		$this->form 	= $this->get('Form');
+		$this->paper	= $this->get('Paper');
 
 		$app = JFactory::getApplication();
 		$user = JFactory::getUser();
@@ -35,7 +36,15 @@ class ConfmgrViewAuthor extends JViewLegacy
 		}
 			
 		// Is the user allowed to create an item?
-		if (!$this->item->id && !$user->authorise("core.create", "com_confmgr"))
+		if ($this->item->id)
+		{
+			$authorised = AclHelper::isAuthor($this->paper->id);
+		}
+		else
+		{	
+			$authorised = (!$user->guest);
+		}
+		if (!$authorised)
 		{
 			throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'));
 		}
@@ -63,4 +72,3 @@ class ConfmgrViewAuthor extends JViewLegacy
 		parent::display($tpl);
 	}
 }
-?>
