@@ -79,6 +79,15 @@ abstract class AclHelper
 			
 		}
 	}
+	
+	/**
+	 * 
+	 * @param number $themeid
+	 * @param number $paperid
+	 * @return boolean
+	 */
+	
+	//TODO Update to meet the new database schema
 	public static function isThemeleader($themeid = 0, $paperid = 0)
 	{
 
