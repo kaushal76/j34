@@ -5,7 +5,6 @@ dwsync.xml
 #Eclipse added files and folder
 .settings
 .buildpath
-.gitignore
 .project
 configuration.php
 # New for J34
