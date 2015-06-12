@@ -1,0 +1,359 @@
+/**
+* @author    JoomlaShine.com http://www.joomlashine.com
+* @copyright Copyright (C) 2008 - 2011 JoomlaShine.com. All rights reserved.
+* @license   JoomlaShine.com Proprietary License
+*/
+/* ============================== DEFAULT HTML ============================== */
+a {
+	color: #D52727;
+}
+/* ============================== LAYOUT ============================== */
+/* =============== LAYOUT - OVERALL PAGE =============== */
+#jsn-master {
+	background-color: #E6E6E6;
+}
+/* =============== LAYOUT - HEADER AREA =============== */
+#jsn-header,
+#jsn-menu.jsn-menu-sticky {
+	background: #4E443B url(../../images/colors/red/bg-header.png) left bottom repeat-x; 
+}
+/* =============== LAYOUT - CONTENT TOP AREA =============== */
+#jsn-content-top {
+	color: #FBDAD9;
+}
+#jsn-promo {
+	background-color: #D52727;
+}
+#jsn-pos-promo-left,
+#jsn-pos-promo-right {
+	border-top: 5px solid #B12121;
+}
+/* =============== LAYOUT - CONTENT AREA =============== */
+#jsn-pos-breadcrumbs {
+	background: url(../../images/colors/red/bg-box-style-dark.png) left bottom no-repeat;
+}
+#jsn-pos-breadcrumbs_inner {
+	background: url(../../images/colors/red/bg-box-style-dark.png) right 98% no-repeat;
+}
+#jsn-gotoplink {
+	background-color: #999;
+}
+#jsn-gotoplink:hover {
+	background-color: #D52727;
+}
+/* ============================== TYPOGRAPHY ============================== */
+/* =============== TYPOGRAPHY - LINK STYLES =============== */
+/* ----- ACTION LINK ----- */
+.link-action {
+	border-bottom: 1px solid #D52727;
+}
+.link-action:hover {
+	background-color: #D52727;
+}
+#jsn-promo .link-action:hover,
+div[class*="richbox-"] .link-action:hover {
+	color: #D52727;
+}
+/* =============== TYPOGRAPHY - TABLE STYLES =============== */
+table.table-style tbody .highlight {
+	background-color: #AEAEAE;
+}
+table.table-style tbody tr.odd .highlight {
+	background-color: #999;
+}
+table.table-style tbody tr:hover .highlight {
+	background: #737373;
+}
+table.table-style tfoot th,
+table.table-style tfoot td {
+	background-color: #D9D9D9;
+}
+/* ----- COLOR HEADER TABLE ----- */
+table.style-colorheader .highlight {
+	border-bottom: 1px solid #CCC;
+	border-right: 1px groove #F8F8F8;
+}
+table.style-colorheader thead th {
+	background-color: #D52727;
+	border-right: 1px groove #DEDEDE;
+}
+table.style-colorheader thead th.highlight {
+	background-color: #8A8A8A;
+}
+table.style-colorheader tbody th,
+table.style-colorheader tbody td {
+	border-left: 1px solid #F8F8F8;
+	border-right: 1px solid #F8F8F8;
+}
+/* ----- COLOR STRIPES TABLE ----- */
+table.style-colorstripes td,
+table.style-colorstripes th {
+	border-bottom: 1px solid #FFF;
+	border-right: 1px groove #F3F3F3;
+}
+table.style-colorstripes thead th {
+	background-color: #D52727;
+}
+table.style-colorstripes thead th.highlight {
+	background-color: #DE4B4B;
+}
+table.style-colorstripes tbody tr {
+	background-color: #E36666;
+}
+table.style-colorstripes tbody td,
+table.style-colorstripes tbody th {
+	border-right: 1px solid #F3F3F3;
+}
+table.style-colorstripes tbody .highlight {
+	background-color: #F8E4E4;
+}
+table.style-colorstripes tbody tr.odd {
+	background-color: #DE4B4B;
+}
+table.style-colorstripes tbody tr.odd .highlight {
+	background-color: #F1C9C9;
+}
+table.style-colorstripes tbody tr:hover th,
+table.style-colorstripes tbody tr:hover td {
+	background-color: #D82727;
+}
+table.style-colorstripes tbody tr:hover .highlight {
+	background-color: #EDB8B8;
+}
+table.style-colorstripes tfoot th,
+table.style-colorstripes tfoot td {
+	background-color: #D52727;
+}
+.sectiontableheader {
+	background-color: #B12121;
+}
+/* ----- GREY STRIPES TABLE ----- */
+table.style-greystripes .highlight {
+	border-bottom: 1px solid #CCC;
+	border-right: 1px groove #F8F8F8;
+}
+table.style-greystripes thead th {
+	background: #999;
+	border-right: 1px groove #EBEBEB;
+}
+table.style-greystripes thead th.highlight {
+	background-color: #D52727;
+}
+table.style-greystripes tbody th,
+table.style-greystripes tbody td {
+	border-left: 1px solid #EBEBEB;
+	border-right: 1px solid #EBEBEB;
+}
+/* ============================== MENU ============================== */
+#jsn-pos-mainmenu .jsn-menu-toggle:hover, 
+#jsn-pos-mainmenu .jsn-menu-toggle.active {
+    background-color: #D52727;
+}
+/* =============== MENU - MAIN MENU =============== */
+div.jsn-modulecontainer ul.menu-mainmenu > li > a,
+#jsn-menu .jsn-modulecontainer[class*="display-"] .jsn-modulecontainer_inner h3.jsn-moduletitle {
+	background-color: #999999;
+}
+/* ----- 1st LEVEL ----- */
+div.jsn-modulecontainer ul.menu-mainmenu ul,
+#jsn-menu div.display-dropdown.jsn-modulecontainer .jsn-modulecontent {
+	background-color: #D52727;
+}
+body.jsn-mmtransparency div.jsn-modulecontainer ul.menu-mainmenu ul {
+	background: url(../../images/colors/red/bg-mainmenu.png);
+}
+div.jsn-modulecontainer ul.menu-mainmenu ul li a {
+	border-bottom: 1px solid #DF6666;
+	border-left: 1px solid #DF6666;
+	border-right: 1px solid #DF6666;
+}
+#jsn-menu div.display-dropdown.jsn-modulecontainer .jsn-modulecontent {
+	border: 1px solid #DF6666;
+}
+/* ----- HOVER STATE ----- */
+div.jsn-modulecontainer ul.menu-mainmenu li:hover > a,
+#jsn-menu .jsn-modulecontainer.display-dropdown .jsn-modulecontainer_inner:hover h3.jsn-moduletitle {
+	background-color: #D52727;
+}
+div.jsn-modulecontainer ul.menu-mainmenu ul li:hover > a {
+	background-color: #A51E1B;
+}
+/* ----- ACTIVE STATE ----- */
+div.jsn-modulecontainer ul.menu-mainmenu li.active > a {
+	background-color: #D52727;
+}
+div.jsn-modulecontainer ul.menu-mainmenu ul li.active > a {
+	background-color: #A51E1B;
+}
+/* =============== MENU - TREE MENU =============== */
+/* ----- GENERAL ----- */
+div.richbox-1 ul.menu-treemenu li {
+	border-bottom-color: #EFA5A5;
+}
+div.richbox-2 ul.menu-treemenu li {
+	border-bottom-color: #DADADA;
+}
+/* ----- CURRENT / HOVER STATE ----- */
+div.richbox-1 ul.menu-treemenu li a:hover,
+div.richbox-1 ul.menu-treemenu li a.current {
+	background-color: #BB2222;
+}
+div.richbox-2 ul.menu-treemenu li a:hover,
+div.richbox-2 ul.menu-treemenu li a.current {
+	background-color: #A8A8A8;
+}
+/* =============== MENU - SIDE MENU =============== */
+/* ----- GENERAL ----- */
+div.richbox-1 ul.menu-sidemenu li {
+	border-bottom-color: #EFA5A5;
+}
+div.richbox-2 ul.menu-sidemenu li {
+	border-bottom-color: #DADADA;
+}
+/* ---------- 1st LEVEL ---------- */
+div.jsn-modulecontainer ul.menu-sidemenu ul {
+	background-color: #D52727;
+}
+body.jsn-smtransparency div.jsn-modulecontainer ul.menu-sidemenu ul {
+	background: url(../../images/colors/red/bg-mainmenu.png);
+}
+div.jsn-modulecontainer ul.menu-sidemenu ul li a {
+	border-bottom: 1px solid #DF6666;
+	border-left: 1px solid #DF6666;
+	border-right: 1px solid #DF6666;
+}
+/* ----- HOVER STATE ----- */
+div.jsn-modulecontainer ul.menu-sidemenu ul li:hover > a {
+	background-color: #A51E1B;
+}
+/* ----- HOVER STATE IN SPECIFIC MODULE BOXES ----- */
+div.richbox-1 ul.menu-sidemenu > li:hover > a {
+	background-color: #BB2222;
+}
+div.richbox-2 ul.menu-sidemenu > li:hover > a {
+	background-color: #A8A8A8;
+}
+/* ----- ACTIVE STATE ----- */
+div.jsn-modulecontainer ul.menu-sidemenu ul li.active > a {
+	background-color: #A51E1B;
+}
+/* ----- ACTIVE STATE IN SPECIFIC MODULE BOXES ----- */
+div.richbox-1 ul.menu-sidemenu > li.active > a {
+	background-color: #BB2222;
+}
+div.richbox-2 ul.menu-sidemenu > li.active > a {
+	background-color: #A8A8A8;
+}
+/* =============== MENU - TOP MENU =============== */
+ul.menu-topmenu li a {
+	color: #ccc;
+}
+/* ============================== SITE TOOLS ============================== */
+/* =============== SITE TOOLS - GENERAL PRESENTATION =============== */
+ul#jsn-sitetools-menu > li:hover {
+	background-color: #736559;
+}
+/* ============================== MODULE STYLES ============================== */
+/* =============== MODULE STYLES - MODULE BOXES =============== */
+div.richbox-1 .jsn-moduletitle,
+div.lightbox-1 .jsn-moduletitle {
+	background: url(../../images/colors/red/bg-box-style-light.png) left bottom no-repeat;
+}
+div.richbox-1 .jsn-moduletitle .jsn-moduletitle_inner1,
+div.lightbox-1 .jsn-moduletitle .jsn-moduletitle_inner1 {
+	background: url(../../images/colors/red/bg-box-style-light.png) right bottom no-repeat;
+}
+div.richbox-2 .jsn-moduletitle,
+div.lightbox-2 .jsn-moduletitle {
+	background: url(../../images/colors/red/bg-box-style-dark.png) left bottom no-repeat;
+}
+div.richbox-2 .jsn-moduletitle .jsn-moduletitle_inner1,
+div.lightbox-2 .jsn-moduletitle .jsn-moduletitle_inner1 {
+	background: url(../../images/colors/red/bg-box-style-dark.png) right bottom no-repeat;
+}
+div.richbox-1 .jsn-moduletitle .jsn-moduletitle_inner2 {
+	background-color: #B12121;
+}
+div.solid-1 .jsn-moduletitle .jsn-moduletitle_inner2,
+div.lightbox-1 .jsn-moduletitle .jsn-moduletitle_inner2 {
+	background-color: #D52727;
+}
+div.solid-2 .jsn-moduletitle .jsn-moduletitle_inner2,
+div.richbox-2 .jsn-moduletitle .jsn-moduletitle_inner2,
+div.lightbox-2 .jsn-moduletitle .jsn-moduletitle_inner2 {
+	background-color: #999;
+}
+/* ----- RICHBOX ----- */
+div.richbox-1 .jsn-modulecontent {
+	border-top-color: #DE4B4B;
+	background-color: #D52727;
+}
+div.richbox-2 .jsn-modulecontent {
+	border-top-color: #AEAEAE;
+	background-color: #B9B9B9;
+}
+/* ----- LIGHTBOX ----- */
+div.lightbox-1 .jsn-modulecontent {
+	border-top-color: #CFCFCF;
+}
+div.lightbox-2 .jsn-modulecontent {
+	border-top-color: #D4D4D4;
+}
+/* ----- SOLIDBOX ----- */
+div.solid-1 .jsn-modulecontent {
+	border-top-color: #D52727;
+}
+div.solid-2 .jsn-modulecontent {
+	border-top-color: #999;
+}
+/* ----- CUSTOM BOX STYLE IN SPECIFIC POSITION ----- */
+#jsn-pos-innerleft div.richbox-1 .jsn-modulecontent,
+#jsn-pos-innerright div.richbox-1 .jsn-modulecontent {
+	border-top-color: #CFCFCF;
+}
+#jsn-pos-innerleft div.richbox-2 .jsn-modulecontent,
+#jsn-pos-innerright div.richbox-2 .jsn-modulecontent {
+	border-top-color: #D4D4D4;
+}
+/* ============================== JOOMLA! DEFAULT EXTENSIONS ============================== */
+/* =============== JOOMLA! EXTENSIONS - COM_CONTENT =============== */
+/* ----- SECTION / CATEGORY BLOG LAYOUT ----- */
+/* PAGE PAGINATION */
+ul.jsn-pagination li.navigation-page span {
+	background-color: #D52727;
+}
+/* =============== JOOMLA! EXTENSIONS - MOD_BREADCRUMB =============== */
+span.breadcrumbs {
+	background-color: #999999;
+}
+span.breadcrumbs a,
+span.breadcrumbs span {
+	color: #E4E4E4;
+}
+/* ============================== MOBILE VERSION ============================== */
+/* ============================== MENU ============================== */
+/* =============== MENU - MOBILE MAIN MENU =============== */
+/* ----- GENERAL ----- */
+body.jsn-mobile div.jsn-modulecontainer ul.menu-mainmenu {
+	background: #D6D6D6;
+}
+body.jsn-mobile div.jsn-modulecontainer ul.menu-mainmenu > li {
+	background: #999;
+}
+/* ----- ACTIVE STATE ----- */
+body.jsn-mobile div.jsn-modulecontainer ul.menu-mainmenu > li.active {
+	background: #D52727;
+}
+/* ============================== TYPOGRAPHY ============================== */
+/* =============== TYPOGRAPHY - LINK STYLES =============== */
+/* ----- ACTION LINK ----- */
+/* ============================== MOBILE TOOLS ============================== */
+#jsn-mobiletools ul li a {
+	background: #999;
+}
+/* ============================== CSS3 EFFECTS ============================== */
+div.jsn-modulecontainer ul.menu-mainmenu ul,
+div.jsn-modulecontainer ul.menu-sidemenu ul,
+#jsn-menu div.display-dropdown.jsn-modulecontainer .jsn-modulecontent {
+	background-color:rgba(195,38,38,0.95);
+}

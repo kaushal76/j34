@@ -1,0 +1,31 @@
+/**
+* @author    JoomlaShine.com http://www.joomlashine.com
+* @copyright Copyright (C) 2008 - 2011 JoomlaShine.com. All rights reserved.
+* @license   JoomlaShine.com Proprietary License
+*/
+/************************************************************************************
+ desktop layout (larger than 1200): common settings for wide desktop screen
+*************************************************************************************/
+@media only screen and (min-width: 1200px) {
+	#jsn-pos-topbar,
+	#jsn-menu.jsn-menu-sticky,
+	#jsn-header_inner, 
+	#jsn-body, 
+	#jsn-footer_inner {
+		width: 1170px;
+	}
+	#jsn-maincontent.span12[class*="order"],
+	#jsn-content.jsn-hasleft.jsn-hasright #jsn-maincontent.order2 {
+		padding: 0;
+	}
+	#jsn-maincontent.span12 #jsn-centercol.span12 {
+		padding: 0 20px;
+	}
+	#jsn-content.jsn-hasinnerleft:not([class="jsn-hasinnerright"]) #jsn-maincontent.span12 #jsn-centercol {
+		padding-right: 20px;
+	}
+	#jsn-content.jsn-hasinnerright:not([class="jsn-hasinnerleft"]) #jsn-maincontent.span12 #jsn-centercol {
+		padding-left: 20px;
+	}
+
+}

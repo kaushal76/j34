@@ -1,0 +1,101 @@
+/**
+* @author    JoomlaShine.com http://www.joomlashine.com
+* @copyright Copyright (C) 2008 - 2011 JoomlaShine.com. All rights reserved.
+* @license   JoomlaShine.com Proprietary License
+*/
+/* ============================== CUSTOM CSS ============================== */
+/* =============== HOMEPAGE SLIDESHOW =============== */
+.jsn-demo-page .galleria-info {
+	position: absolute;
+	max-width: 100% !important;
+	width: 500px !important;
+	height: 100%;
+	left: 150px !important;
+	top: 150px !important;
+	right: auto;
+	margin: auto;
+}
+.jsn-demo-page .galleria-info .galleria-info-text {
+	background-color: transparent !important;
+}
+.jsn-demo-page .galleria-info .galleria-info-text .galleria-info-title {
+	display: inline-block;
+	text-transform: uppercase;
+	font-size: 1.6em !important;
+	background-color: rgba(0,0,0,0.6);
+	margin: 0;
+	padding: 10px 20px;
+}
+.jsn-color-blue.jsn-demo-page .galleria-info .galleria-info-text .galleria-info-title {
+	color: #009aca !important;
+}
+.jsn-color-red.jsn-demo-page .galleria-info .galleria-info-text .galleria-info-title {
+	color: #D52722 !important;
+}
+.jsn-color-green.jsn-demo-page .galleria-info .galleria-info-text .galleria-info-title {
+	color: #6AA019 !important;
+}
+.jsn-color-orange.jsn-demo-page .galleria-info .galleria-info-text .galleria-info-title {
+	color: #E08A00 !important;
+}
+.jsn-color-pink.jsn-demo-page .galleria-info .galleria-info-text .galleria-info-title {
+	color: #ED6C6A !important;
+}
+.jsn-color-cyan.jsn-demo-page .galleria-info .galleria-info-text .galleria-info-title {
+	color: #4B7E6A !important;
+}
+.jsn-demo-page .galleria-info .galleria-info-text .galleria-info-description {
+	display: inline-block;
+	background-color: rgba(0,0,0,0.4);
+	padding: 15px 20px;
+	color: #eee !important;
+	font-size: 13px !important;
+}
+
+/* =============== TOP PROMO =============== */
+.jsn-demo-page .demo-top-promo .top-promo-item .grid-col_inner {
+	padding: 0 15px;
+}
+.jsn-demo-page .demo-top-promo .top-promo-item h4 {
+	padding: 10px 10px 10px 40px;
+	text-transform: uppercase;
+	color: #222;
+}
+.jsn-demo-page .demo-top-promo .item1 h4 {
+	background: url(../../../media/joomlashine/jsn-teki/custom-html/top-promo/icon1.png) left center no-repeat;
+}
+.jsn-demo-page .demo-top-promo .item2 h4 {
+	background: url(../../../media/joomlashine/jsn-teki/custom-html/top-promo/icon2.png) left center no-repeat;
+}
+.jsn-demo-page .demo-top-promo .item3 h4 {
+	background: url(../../../media/joomlashine/jsn-teki/custom-html/top-promo/icon3.png) left center no-repeat;
+}
+.jsn-demo-page .demo-top-promo .item4 h4 {
+	background: url(../../../media/joomlashine/jsn-teki/custom-html/top-promo/icon4.png) left center no-repeat;
+}
+
+/* =============== MAIN CONTENT =============== */
+.demo-main-content {
+	padding: 40px 0 0;
+}
+.demo-main-content .img {
+	text-align: center;
+}
+.demo-main-content .left-col .content-item {
+	text-align: right;
+}
+.demo-main-content .content-item {
+	margin-bottom: 50px;
+	clear: both;
+}
+
+/* =============== RESPONSIVE =============== */
+@media only screen and (max-width: 480px), (max-device-width: 480px) {
+	.jsn-demo-page .galleria-info {
+		left: 0 !important;
+		top: 0 !important;
+	}
+	.jsn-demo-page .galleria-info .galleria-info-text .galleria-info-title {
+		font-size: 1.2em !important;
+	}
+}
