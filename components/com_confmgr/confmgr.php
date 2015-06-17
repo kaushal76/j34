@@ -23,7 +23,7 @@ JHtml::_('bootstrap.framework');
 // Get the document object.
 $document	= JFactory::getDocument();
 // Add a custom CSS for the frontend
-$url = 'components/com_confmgr/assets/css/custom.css';
+$url = 'components/com_confmgr/assets/css/confmgr.css';
 $document->addStyleSheet($url);
 
 try 
