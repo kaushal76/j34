@@ -20,6 +20,12 @@ $lang->load('joomla', JPATH_ADMINISTRATOR);
 JHtml::_('bootstrap.loadCss');
 JHtml::_('bootstrap.framework');
 
+// Get the document object.
+$document	= JFactory::getDocument();
+// Add a custom CSS for the frontend
+$url = 'components/com_confmgr/assets/css/custom.css';
+$document->addStyleSheet($url);
+
 try 
 {
 	$controller->execute($input->get('task'));

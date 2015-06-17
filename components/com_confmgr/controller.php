@@ -32,8 +32,8 @@ class ConfmgrController extends JControllerLegacy
 		JForm::addFieldPath(JPATH_COMPONENT_ADMINISTRATOR . '/models/fields');
 
         // Get the document object.
-		$document	= JFactory::getDocument();
-
+		$document	= JFactory::getDocument();				
+		
 		// Set the default view name and format from the Request.
 		$vName   = $this->input->getCmd('view', 'entrypage');
 		$vFormat = $document->getType();

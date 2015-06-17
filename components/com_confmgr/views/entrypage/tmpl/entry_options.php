@@ -1,12 +1,12 @@
 <?php
 /**
- * @version     2.5.8.1
- * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
- * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
+ * @author		Dr Kaushal Keraminiyage
+ * @copyright	Dr Kaushal Keraminiyage
+ * @license		GNU General Public License version 2 or later
  */
+
 // no direct access
+
 defined('_JEXEC') or die;
 ?>
 <div class="panel panel-default">
@@ -23,7 +23,7 @@ defined('_JEXEC') or die;
             <?php echo JHtml::_('form.token'); ?>
             <button class="btn btn-entry btn-default" type="submit"> 
 			<?php echo '<span class="centre"><img src="'.JURI::root().
-			'components/com_confmgt/assets/img/Login-icon.png" alt="Login" 
+			'components/com_confmgr/assets/img/Login-icon.png" alt="Login" 
 			height="42" width="42"></span><br />';?> <?php echo JText::_("COM_CONFMGT_VIEW_ENTRYPAGE_ENTRY_OPTIONS_LOGIN"); ?> 
             </button>
             <input type="hidden" name="option" value="com_confmgt" />
@@ -40,7 +40,7 @@ defined('_JEXEC') or die;
             <input type="hidden" name="layout" value="leader_default" />
             <button class="btn btn-entry btn-default" type="submit"> 
 			<?php echo '<span class="centre"><img src="'.JURI::root().
-			'components/com_confmgt/assets/img/Register-icon.png" 
+			'components/com_confmgr/assets/img/Register-icon.png" 
 			alt="Create an account" height="42" width="42"></span><br />';?> 
 			<?php echo JText::_("COM_CONFMGT_VIEW_ENTRYPAGE_ENTRY_OPTIONS_CREATE"); ?>
             </button>
