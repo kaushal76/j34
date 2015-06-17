@@ -26,5 +26,21 @@ Entry Btn
 	width: 100px;
     height: 100px;
     float: left;
+    margin:2px;
 }
+
+#loginmodalbtn.btn {
+	padding:0px;
+}
+
+#registermodalbtn.btn {
+	padding:0px;
+}
+
+span.centre {
+	display:block;
+	vertical-align:middle;
+	margin-top:10px;
+}
+
 

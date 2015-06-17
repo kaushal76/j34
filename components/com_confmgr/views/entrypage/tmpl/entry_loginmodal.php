@@ -25,12 +25,12 @@
             <div class="reg-edit front-end-edit">
               <form id="form-login-1" role="form" action="<?php echo JRoute::_('index.php?option=com_confmgt&task=loginform.login'); ?>" method="post" class="form-validate form-horizontal" enctype="multipart/form-data">
                 <div class="form-group">
-                  <div class="control-label"> <?php echo $this->form->getLabel('username'); ?> </div>
-                  <div class="controls"> <?php echo $this->form->getInput('username'); ?> </div>
+                  <div class="control-label"> <?php //echo $this->form->getLabel('username'); ?> </div>
+                  <div class="controls"> <?php //echo $this->form->getInput('username'); ?> </div>
                 </div>
                 <div class="form-group">
-                  <div class="control-label"> <?php echo $this->form->getLabel('pw'); ?> </div>
-                  <div class="controls"> <?php echo $this->form->getInput('pw'); ?> </div>
+                  <div class="control-label"> <?php //echo $this->form->getLabel('pw'); ?> </div>
+                  <div class="controls"> <?php //echo $this->form->getInput('pw'); ?> </div>
                 </div>
                 <div class="form-group">
                   <div class="form-actions modal-footer">

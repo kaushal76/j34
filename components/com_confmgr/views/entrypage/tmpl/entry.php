@@ -17,4 +17,5 @@ $lang = JFactory::getLanguage();
 $lang->load('com_confmgt', JPATH_ADMINISTRATOR);
 
 echo $this->loadTemplate('options');
+echo $this->loadTemplate('loginmodal');
 ?>

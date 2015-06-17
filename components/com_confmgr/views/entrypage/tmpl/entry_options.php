@@ -6,51 +6,47 @@
  */
 
 // no direct access
-
 defined('_JEXEC') or die;
+JHtml::_('behavior.modal');
 ?>
+
 <div class="panel panel-default">
-  <div class="panel-heading">
-    <h1><?php echo JText::sprintf('COM_CONFMGT_VIEW_ENTRYPAGE_ENTRY_OPTIONS_PANEL_HEADING', $this->sitename); ?></h1>
-  </div>
-  <div class="panel-body">
-    <p><?php echo JText::_('COM_CONFMGT_VIEW_ENTRYPAGE_ENTRY_OPTIONS_PANEL_DETAILS'); ?></p>
-    <div align="center">
-      <div class="button-container">
-        <div class="inline">
-          <form id="form-enrty-1" action="<?php echo JRoute::_('index.php'); ?>" 
-          method="post" enctype="multipart/form-data" class="form-inline form-entry">
-            <?php echo JHtml::_('form.token'); ?>
-            <button class="btn btn-entry btn-default" type="submit"> 
-			<?php echo '<span class="centre"><img src="'.JURI::root().
-			'components/com_confmgr/assets/img/Login-icon.png" alt="Login" 
-			height="42" width="42"></span><br />';?> <?php echo JText::_("COM_CONFMGT_VIEW_ENTRYPAGE_ENTRY_OPTIONS_LOGIN"); ?> 
-            </button>
-            <input type="hidden" name="option" value="com_confmgt" />
-            <input type="hidden" name="view" value="loginform" />
-            <input type="hidden" name="layout" value="default" />
-          </form>
-        </div>
-        <div class="inline">
-          <form id="form-enrty-2" action="<?php echo JRoute::_('index.php'); ?>" 
-          method="post" enctype="multipart/form-data"  class="form-inline form-entry">
-            <?php echo JHtml::_('form.token'); ?>
-            <input type="hidden" name="option" value="com_confmgt" />
-            <input type="hidden" name="view" value="regform" />
-            <input type="hidden" name="layout" value="leader_default" />
-            <button class="btn btn-entry btn-default" type="submit"> 
-			<?php echo '<span class="centre"><img src="'.JURI::root().
-			'components/com_confmgr/assets/img/Register-icon.png" 
-			alt="Create an account" height="42" width="42"></span><br />';?> 
+	<div class="panel-heading">
+		<h1><?php echo JText::sprintf('COM_CONFMGT_VIEW_ENTRYPAGE_ENTRY_OPTIONS_PANEL_HEADING', $this->sitename); ?></h1>
+	</div>
+	<div class="panel-body">
+		<p><?php echo JText::_('COM_CONFMGT_VIEW_ENTRYPAGE_ENTRY_OPTIONS_PANEL_DETAILS'); ?></p>
+		<div align="center">
+			<div class="button-container">
+				<div class="inline">
+					<a href="#loginmodal" role="button"
+						class="btn btn-default btn-entry" id="loginmodalbtn"
+						data-toggle="modal"> <span class="centre"> <img
+							src="components/com_confmgr/assets/img/Login-icon.png"
+							alt="Login" height="42" width="42">
+					</span>
+			<?php echo JText::_("COM_CONFMGT_VIEW_ENTRYPAGE_ENTRY_OPTIONS_LOGIN"); ?>
+			</a> <a href="#registermodal" role="button"
+						class="btn btn-default btn-entry" id="registermodalbtn"
+						data-toggle="modal"> <span class="centre"> <img
+							src="components/com_confmgr/assets/img/Register-icon.png"
+							alt="Login" height="42" width="42">
+					</span>
 			<?php echo JText::_("COM_CONFMGT_VIEW_ENTRYPAGE_ENTRY_OPTIONS_CREATE"); ?>
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-    <div align="center">
-      <p><a href="index.php?option=com_users&view=reset"><?php echo JText::_('Forgot your password?'); ?></a></p>
-      <p><a href="index.php?option=com_users&view=remind"><?php echo JText::_('Forgot your username?'); ?></a></p>
-    </div>
-  </div>
+			</a>
+				</div>
+				<div align="center">
+					<p>
+						<a href="index.php?option=com_users&view=reset"><?php echo JText::_('Forgot your password?'); ?></a>
+					</p>
+					<p>
+						<a href="index.php?option=com_users&view=remind"><?php echo JText::_('Forgot your username?'); ?></a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
+
+
+
