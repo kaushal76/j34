@@ -66,7 +66,7 @@ class ConfmgrModelEntrypage extends JModelAdmin
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
-	
+		
 	/**
 	 * Method for getting the form from the model.
 	 *
@@ -79,17 +79,41 @@ class ConfmgrModelEntrypage extends JModelAdmin
 	{
 		JForm::addFormPath(JPATH_COMPONENT_ADMINISTRATOR.'/models/forms');
 		JForm::addFieldPath(JPATH_COMPONENT_ADMINISTRATOR.'/models/fields');
-
-		JForm::addRulePath(JPATH_COMPONENT_ADMINISTRATOR.'/models/rules');		
-		
+		JForm::addRulePath(JPATH_COMPONENT_ADMINISTRATOR.'/models/rules');
+	
 		$options = array('control' => 'jform', 'load_data' => $loadData);
 		$form = $this->loadForm($this->typeAlias, $this->name, $options);
-		
+	
 		if(empty($form))
 		{
 			return false;
 		}
-
+	
+		return $form;
+	}
+	
+	/**
+	 * Method for getting the form from the model.
+	 *
+	 * @param   array    $data      Data for the Loginform.
+	 * @param   boolean  $loadData  True if the form is to load its own data (default case), false if not.
+	 *
+	 * @return  mixed  A JForm object on success, false on failure
+	 */
+	public function getloginForm($data = array(), $loadData = true)
+	{
+		JForm::addFormPath(JPATH_COMPONENT_ADMINISTRATOR.'/models/forms');
+		JForm::addFieldPath(JPATH_COMPONENT_ADMINISTRATOR.'/models/fields');
+		JForm::addRulePath(JPATH_COMPONENT_ADMINISTRATOR.'/models/rules');
+	
+		$options = array('control' => 'jform', 'load_data' => $loadData);
+		$form = $this->loadForm($this->typeAlias, 'loginform', $options);
+	
+		if(empty($form))
+		{
+			return false;
+		}
+	
 		return $form;
 	}
 	

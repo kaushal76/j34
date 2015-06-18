@@ -15,11 +15,18 @@ defined("_JEXEC") or die("Restricted access");
  */
 class ConfmgrViewEntrypage extends JViewLegacy
 {	
+	protected $form;
+	
 	public function display($tpl = null)
 	{
+
+		
 		$app	= JFactory::getApplication();
 		$user	= JFactory::getUser();
 		$config = JFactory::getConfig();
+		
+		//Get the login form
+		$this->loginform = $this->get('LoginForm');
 		
 		// check the user's role and define role as an array; 
 		$this->role = array();	

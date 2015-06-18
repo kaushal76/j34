@@ -4,24 +4,24 @@
 
 	   <field name="pw" type="password"
 
-            label="COM_CONFMGT_FORM_LBL_REG_PASS"
+            label="COM_CONFMGR_VIEW_ENTRYPAGE_ENTRY_LOGINMODAL_LBL_PASS"
 			labelclass = "control-label"
-            description="COM_CONFMGT_FORM_DESC_REG_PASS"        
+            description="COM_CONFMGR_VIEW_ENTRYPAGE_ENTRY_LOGINMODAL_DESC_PASS"        
             required="true" 
-			class="form-control input-block-level"
-			message = "Please enter your password"
+			class="input-block-level"
+			message = "COM_CONFMGR_VIEW_ENTRYPAGE_ENTRY_LOGINMODAL_DESC_PASS"
 			 
 		/>
 		 
    
    <field name="username" type="text"
                 
-            label="COM_CONFMGT_FORM_LBL_REG_USERNAME"
+            label="COM_CONFMGR_VIEW_ENTRYPAGE_ENTRY_LOGINMODAL_LBL_USERNAME"
 			labelclass = "control-label"
-            description="COM_CONFMGT_FORM_DESC_REG_USERNAME"        
+            description="COM_CONFMGR_VIEW_ENTRYPAGE_ENTRY_LOGINMODAL_DESC_USERNAME"        
             required="true" 
-			class="form-control input-block-level"
-			message = "Please enter your username"
+			class="input-block-level"
+			message = "COM_CONFMGR_VIEW_ENTRYPAGE_ENTRY_LOGINMODAL_DESC_USERNAME"
 			 
 		/>
 		

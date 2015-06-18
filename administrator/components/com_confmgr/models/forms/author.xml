@@ -20,27 +20,32 @@
 		<field name="first_name" label="COM_CONFMGR_AUTHOR_FIELD_FIRST_NAME_LABEL" description="COM_CONFMGR_AUTHOR_FIELD_FIRST_NAME_DESC"
 			type="text"
 			maxlength="255"
+			class="input-xxlarge input-large-text"
 			filter="STRING"
 		/>
 		<field name="surname" label="COM_CONFMGR_AUTHOR_FIELD_SURNAME_LABEL" description="COM_CONFMGR_AUTHOR_FIELD_SURNAME_DESC"
 			type="text"
 			maxlength="255"
+			class="input-xxlarge input-large-text"
 			filter="STRING"
 		/>
 		<field name="email" label="COM_CONFMGR_AUTHOR_FIELD_EMAIL_LABEL" description="COM_CONFMGR_AUTHOR_FIELD_EMAIL_DESC"
 			type="email"
 			maxlength="255"
 			validate="email"
+			class="input-xxlarge input-large-text"
 			filter="STRING"
 		/>
 		<field name="affiliation" label="COM_CONFMGR_AUTHOR_FIELD_AFFILIATION_LABEL" description="COM_CONFMGR_AUTHOR_FIELD_AFFILIATION_DESC"
 			type="text"
 			maxlength="255"
+			class="input-xxlarge input-large-text"
 			filter="STRING"
 		/>
 		<field name="country" label="COM_CONFMGR_AUTHOR_FIELD_COUNTRY_LABEL" description="COM_CONFMGR_AUTHOR_FIELD_COUNTRY_DESC"
 			type="text"
 			maxlength="255"
+			class="input-xxlarge input-large-text"
 			filter="STRING"
 		/>
 		<field name="attending" label="COM_CONFMGR_AUTHOR_FIELD_ATTENDING_LABEL" description="COM_CONFMGR_AUTHOR_FIELD_ATTENDING_DESC"

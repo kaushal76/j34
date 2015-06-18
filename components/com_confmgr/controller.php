@@ -1,5 +1,7 @@
 <?php
 /**
+ * @version		0.0.5
+ * @package		com_confmgr
  * @author		Dr Kaushal Keraminiyage
  * @copyright	Dr Kaushal Keraminiyage
  * @license		GNU General Public License version 2 or later
@@ -37,7 +39,7 @@ class ConfmgrController extends JControllerLegacy
 		// Set the default view name and format from the Request.
 		$vName   = $this->input->getCmd('view', 'entrypage');
 		$vFormat = $document->getType();
-		$lName   = $this->input->getCmd('layout', 'entry_options');
+		$lName   = $this->input->getCmd('layout', 'entry');
 		
 		// Get the model and the view
 		$model = $this->getModel($vName);

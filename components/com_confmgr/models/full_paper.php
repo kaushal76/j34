@@ -117,7 +117,6 @@ class ConfmgrModelFull_paper extends JModelAdmin
 	{
 		JForm::addFormPath(JPATH_COMPONENT_ADMINISTRATOR.'/models/forms');
 		JForm::addFieldPath(JPATH_COMPONENT_ADMINISTRATOR.'/models/fields');
-
 		JForm::addRulePath(JPATH_COMPONENT_ADMINISTRATOR.'/models/rules');		
 		
 		$options = array('control' => 'jform', 'load_data' => $loadData);
