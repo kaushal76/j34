@@ -22,7 +22,7 @@
         <div class = "form-horizontal well">
           <fieldset>
             <div class="reg-edit front-end-edit">
-              <form id="form-login-1" role="form" action="<?php echo JRoute::_('index.php?option=com_confmgt&task=enrtyform.login'); ?>" method="post" class="form-validate form-horizontal" enctype="multipart/form-data">
+              <form id="form-login-1" role="form" action="<?php echo JRoute::_('index.php?option=com_confmgr&task=entrypage.login'); ?>" method="post" class="form-validate form-horizontal" enctype="multipart/form-data">
                 <div class="control-group">
                   <div class="control-label"> <?php echo $this->loginform->getLabel('username'); ?> </div>
                   <div class="controls"> <?php echo $this->loginform->getInput('username'); ?> </div>
@@ -34,10 +34,10 @@
                 <div class="control-group">
                   <div class="form-actions modal-footer">
                     <button type="submit" class="btn btn-primary"><?php echo JText::_('LOGIN'); ?> </button>
-                    <?php echo JText::_('or'); ?> <a href="<?php echo JRoute::_('index.php?option=com_confmgt&task=enrtyform.cancel'); ?>" title="<?php echo JText::_('JCANCEL'); ?> 
+                    <?php echo JText::_('or'); ?> <a href="<?php echo JRoute::_('index.php?option=com_confmgr&task=entrypage.cancel'); ?>" title="<?php echo JText::_('JCANCEL'); ?> 
 				"><?php echo JText::_('JCANCEL'); ?> </a>
-                    <input type="hidden" name="option" value="com_confmgt"/>
-                    <input type="hidden" name="task" value="loginform.login"/> 
+                    <input type="hidden" name="option" value="com_confmgr"/>
+                    <input type="hidden" name="task" value="entrypage.login"/> 
                     <?php echo JHtml::_('form.token'); ?> </div>
                 </div>
               </form>
