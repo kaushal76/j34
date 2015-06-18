@@ -348,36 +348,62 @@ abstract class AclHelper
 		//Obtain a database connection
 		$db   = JFactory::getDbo();
 		$user = JFactory::getUser();
-		if ($user->id == 0) {
-			return false;
-		} //$user->id == 0
-		if ($paperid == 0) {
+		
+		if ($user->id == 0) 
+		{
+			return FALSE;
+		} 
+		
+		if ($paperid == 0) 
+		{
 			//Build the query
-			$query = $db->getQuery(true)->select($db->quoteName(array(
-					'a.id',
-					'a.userid',
-					'a.agreed'
-			)))->from($db->quoteName('#__confmgt_rev1ewers', 'a'))->where('a.userid = ' . (int) $user->id)->where('a.agreed = 1');
-		} //$paperid == 0
-		else {
+			$query = $db->getQuery(true);
+			$query->select($db->quoteName(array(
+			'a.id',
+			'a.user_id',
+			'a.agreed'
+			)))->from($db->quoteName('#__confmgr_rev1ewer', 'a'))
+			->where('a.user_id = ' . (int) $user->id)
+			->where('a.agreed = 1');
+		} 
+		else 
+		{
 			//Build the query
-			$query = $db->getQuery(true)->select($db->quoteName(array(
-					'a.reviewerid',
-					'a.paperid',
-					'b.agreed',
-					'b.userid',
-					'c.id'
-			)))->from($db->quoteName('#__confmgt_rev1ewers_papers', 'a'))->join('INNER', $db->quoteName('#__confmgt_rev1ewers', 'b') . ' ON (' . $db->quoteName('a.reviewerid') . ' = ' . $db->quoteName('b.id') . ')')->join('INNER', $db->quoteName('#__users', 'c') . ' ON (' . $db->quoteName('b.userid') . ' = ' . $db->quoteName('c.id') . ')')->where('c.id = ' . (int) $user->id)->where('a.paperid = ' . (int) $paperid)->where('b.agreed = 1');
+			$query = $db->getQuery(true);
+			$query->select($db->quoteName(array(
+			'a.rev1ewer_id',
+			'a.paper_id',
+			'b.agreed',
+			'b.user_id',
+			'c.id'
+			)))->from($db->quoteName('#__confmgr_rev1ewer_for_paper', 'a'))
+			->join('INNER', $db->quoteName('#__confmgr_rev1ewer', 'b') . ' ON (' . $db->quoteName('a.rev1ewer_id') . ' = ' . $db->quoteName('b.id') . ')')
+			->join('INNER', $db->quoteName('#__users', 'c') . ' ON (' . $db->quoteName('b.user_id') . ' = ' . $db->quoteName('c.id') . ')')
+			->where('c.id = ' . (int) $user->id)
+			->where('a.paper_id = ' . (int) $paperid)
+			->where('b.agreed = 1');
 		}
 		// get the number of records
-		$db->setQuery($query);
-		$db->execute();
-		$num_rows = $db->getNumRows();
-		if ($num_rows > 0) {
-			return true;
-		} //$num_rows > 0
-		else {
-			return false;
+		
+		try
+		{
+			$db->setQuery($query);
+			$result = $db->getNumRows();
+			// If it fails, it will throw a RuntimeException
+		}
+		catch (RuntimeException $e)
+		{
+			throw new Exception($e->getMessage());
+		}
+		
+		if ($result > 0) 
+		{
+			return TRUE;
+		
+		} 
+		else 
+		{
+			return FALSE;
 		}
 	}
 	
