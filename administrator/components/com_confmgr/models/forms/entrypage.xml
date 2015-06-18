@@ -3,7 +3,7 @@
   <fieldset name = "Login page">
 
 	   <field name="pw" type="password"
-
+                
             label="COM_CONFMGT_FORM_LBL_REG_PASS"
 			labelclass = "control-label"
             description="COM_CONFMGT_FORM_DESC_REG_PASS"        
