@@ -1,14 +1,12 @@
 <?php
 /**
- * @version     2.5.7
- * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
- * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
+ * @author		Dr Kaushal Keraminiyage
+ * @copyright	Dr Kaushal Keraminiyage
+ * @license		GNU General Public License version 2 or later
  */
+
 //no direct access 
  defined('_JEXEC') or die; 
- 
 ?>
 
   <div class="modal fade" id="regmodal" tabindex="-1" role="dialog" aria-labelledby="regModalLabel" aria-hidden="true">
@@ -16,13 +14,13 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-          <h4 class="modal-title" id="regModalLabel"><?php echo JText::_('Create an Account'); ?></h4>
+          <h2 class="modal-title" id="regModalLabel"><?php echo JText::_('Create an Account'); ?></h2>
         </div>
         <div class="modal-body">
           <div class = "form-horizontal well">
             <fieldset>
               <div class="reg-edit front-end-edit">
-                <form id="form-reg" role="form" action="<?php echo JRoute::_('index.php?option=com_confmgt&task=regform.save'); ?>
+                <form id="form-reg" role="form" action="<?php echo JRoute::_('index.php?option=com_confmgr&task=regform.save'); ?>
 		" method="post" class="form-validate" enctype="multipart/form-data">
                   
                   <div class="control-group">
@@ -67,7 +65,7 @@
                       <button type="submit" class="btn btn-primary"><?php echo JText::_('JSUBMIT'); ?> </button>
                       <?php echo JText::_('or'); ?> <a href="<?php echo jroute::_('index.php?option=com_confmgr&task=regform.cancel'); ?>" title="<?php echo JText::_('JCANCEL'); ?>
 				"><?php echo JText::_('JCANCEL'); ?> </a>
-                      <input type="hidden" name="option" value="com_confmgt"/>
+                      <input type="hidden" name="option" value="com_confmgr"/>
                       <input type="hidden" name="task" value="regform.save"/>
                       <?php echo JHtml::_('form.token'); ?> </div>
                   </div>
