@@ -25,11 +25,11 @@ defined('_JEXEC') or die;
 							alt="Login" height="42" width="42">
 					</span>
 			<?php echo JText::_("COM_CONFMGT_VIEW_ENTRYPAGE_ENTRY_OPTIONS_LOGIN"); ?>
-			</a> <a href="#registermodal" role="button"
+			</a> <a href="#regmodal" role="button"
 						class="btn btn-default btn-entry" id="registermodalbtn"
 						data-toggle="modal"> <span class="centre"> <img
 							src="components/com_confmgr/assets/img/Register-icon.png"
-							alt="Login" height="42" width="42">
+							alt="New account" height="42" width="42">
 					</span>
 			<?php echo JText::_("COM_CONFMGT_VIEW_ENTRYPAGE_ENTRY_OPTIONS_CREATE"); ?>
 			</a>

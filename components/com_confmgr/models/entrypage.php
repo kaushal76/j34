@@ -93,21 +93,46 @@ class ConfmgrModelEntrypage extends JModelAdmin
 	}
 	
 	/**
-	 * Method for getting the form from the model.
+	 * Method for getting the Loginform from the model.
 	 *
 	 * @param   array    $data      Data for the Loginform.
 	 * @param   boolean  $loadData  True if the form is to load its own data (default case), false if not.
 	 *
 	 * @return  mixed  A JForm object on success, false on failure
 	 */
-	public function getloginForm($data = array(), $loadData = true)
+	public function getLoginForm($data = array(), $loadData = true)
 	{
 		JForm::addFormPath(JPATH_COMPONENT_ADMINISTRATOR.'/models/forms');
 		JForm::addFieldPath(JPATH_COMPONENT_ADMINISTRATOR.'/models/fields');
 		JForm::addRulePath(JPATH_COMPONENT_ADMINISTRATOR.'/models/rules');
 	
 		$options = array('control' => 'jform', 'load_data' => $loadData);
-		$form = $this->loadForm($this->typeAlias, 'loginform', $options);
+		$form = $this->loadForm($this->typeAlias.'loginform', 'loginform', $options);
+	
+		if(empty($form))
+		{
+			return false;
+		}
+	
+		return $form;
+	}
+	
+	/**
+	 * Method for getting the Regform from the model.
+	 *
+	 * @param   array    $data      Data for the Loginform.
+	 * @param   boolean  $loadData  True if the form is to load its own data (default case), false if not.
+	 *
+	 * @return  mixed  A JForm object on success, false on failure
+	 */
+	public function getRegForm($data = array(), $loadData = true)
+	{
+		JForm::addFormPath(JPATH_COMPONENT_ADMINISTRATOR.'/models/forms');
+		JForm::addFieldPath(JPATH_COMPONENT_ADMINISTRATOR.'/models/fields');
+		JForm::addRulePath(JPATH_COMPONENT_ADMINISTRATOR.'/models/rules');
+	
+		$options = array('control' => 'jform', 'load_data' => $loadData);
+		$form = $this->loadForm($this->typeAlias.'regform', 'regform', $options);
 	
 		if(empty($form))
 		{

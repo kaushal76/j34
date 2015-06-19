@@ -9,5 +9,6 @@
 // no direct access
 defined('_JEXEC') or die;
 echo $this->loadTemplate('loginmodal');
+echo $this->loadTemplate('regmodal');
 echo $this->loadTemplate('options');
 ?>

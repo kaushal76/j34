@@ -64,7 +64,7 @@
                   <div class="form-group form-horizontal ">
                     <div class="form-actions modal-footer">
                       <button type="submit" class="btn btn-primary"><?php echo JText::_('JSUBMIT'); ?> </button>
-                      <?php echo JText::_('or'); ?> <a href="<?php echo jroute::_('index.php?option=com_confmgt&task=regform.cancel'); ?>" title="<?php echo JText::_('JCANCEL'); ?>
+                      <?php echo JText::_('or'); ?> <a href="<?php echo jroute::_('index.php?option=com_confmgr&task=regform.cancel'); ?>" title="<?php echo JText::_('JCANCEL'); ?>
 				"><?php echo JText::_('JCANCEL'); ?> </a>
                       <input type="hidden" name="option" value="com_confmgt"/>
                       <input type="hidden" name="task" value="regform.save"/>

@@ -20,13 +20,13 @@ class ConfmgrViewEntrypage extends JViewLegacy
 	public function display($tpl = null)
 	{
 
-		
 		$app	= JFactory::getApplication();
 		$user	= JFactory::getUser();
 		$config = JFactory::getConfig();
 		
 		//Get the login form
 		$this->loginform = $this->get('LoginForm');
+		$this->regform = $this->get('RegForm');
 		
 		// check the user's role and define role as an array; 
 		$this->role = array();	
