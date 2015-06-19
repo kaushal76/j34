@@ -2,7 +2,7 @@
 <form role="form">
   <fieldset name = "New Author Register">
     <field name="id" type="hidden" default="0"/>
-    <field name="title" type="list" label="COM_CONFMGT_FORM_LBL_REG_TITLE" description="COM_CONFMGT_FORM_DESC_REG_TITLE">
+    <field name="title" type="list" label="COM_CONFMGR_VIEW_ENTRYPAGE_ENTRY_REGMODAL_LBL_TITLE" description="COM_CONFMGR_VIEW_ENTRYPAGE_ENTRY_REGMODAL_DESC_TITLE">
       <option value="Prof">Professor</option>
 	  <option value="Associate Prof">Associate Professor</option>
 	  <option value="Assistant Prof">Assistant Professor</option>
@@ -14,29 +14,29 @@
     </field>
     <field name="firstname" type="text"
                 
-            label="COM_CONFMGT_FORM_LBL_REG_FIRSTNAME"
-            description="COM_CONFMGT_FORM_DESC_REG_FIRSTNAME"        
+            label="COM_CONFMGR_VIEW_ENTRYPAGE_ENTRY_REGMODAL_LBL_FIRSTNAME"
+            description="COM_CONFMGR_VIEW_ENTRYPAGE_ENTRY_REGMODAL_DESC_FIRSTNAME"        
             required="true" 
             filter="string" 
-			hint="First Name" 
+			hint="COM_CONFMGR_VIEW_ENTRYPAGE_ENTRY_REGMODAL_LBL_FIRSTNAME" 
 			message="Please enter your First name"
 			
 		/>
     <field name="surname" type="text"
                  
-            label="COM_CONFMGT_FORM_LBL_REG_SURNAME"
-            description="COM_CONFMGT_FORM_DESC_REG_SURNAME"        
+            label="COM_CONFMGR_VIEW_ENTRYPAGE_ENTRY_REGMODAL_LBL_SURNAME"
+            description="CCOM_CONFMGR_VIEW_ENTRYPAGE_ENTRY_REGMODAL_DESC_SURNAME"        
             required="true" 
             filter="string" 
-			hint="Surname"
+			hint="COM_CONFMGR_VIEW_ENTRYPAGE_ENTRY_REGMODAL_LBL_SURNAME"
 			message="Please enter your Surname"
 		
 			
 		/>
     <field name="email" type="email"
                 
-            label="COM_CONFMGT_FORM_LBL_REG_EMAIL"
-            description="COM_CONFMGT_FORM_DESC_REG_EMAIL"        
+            label="COM_CONFMGR_VIEW_ENTRYPAGE_ENTRY_REGMODAL_LBL_EMAIL"
+            description="COM_CONFMGR_VIEW_ENTRYPAGE_ENTRY_REGMODAL_DESC_EMAIL"        
             required="true" 
 			class="validate-email input-block-level" 
             validate="email" 
@@ -45,8 +45,8 @@
 		/>
     <field name="password" type="password"
                 
-            label="COM_CONFMGT_FORM_LBL_REG_PASS"
-            description="COM_CONFMGT_FORM_DESC_REG_PASS"        
+            label="COM_CONFMGR_VIEW_ENTRYPAGE_ENTRY_REGMODAL_LBL_PASS"
+            description="COM_CONFMGR_VIEW_ENTRYPAGE_ENTRY_REGMODAL_DESC_PASS"        
             required="true" 
 			class="input-block-level"
 			message="Please enter a password"
@@ -54,8 +54,8 @@
 		/>
     <field name="password2" type="password"
                 
-            label="COM_CONFMGT_FORM_LBL_REG_PASS2"
-            description="COM_CONFMGT_FORM_DESC_REG_PASS2"        
+            label="COM_CONFMGR_VIEW_ENTRYPAGE_ENTRY_REGMODAL_LBL_PASS2"
+            description="COM_CONFMGR_VIEW_ENTRYPAGE_ENTRY_REGMODAL_DESC_PASS2"        
             required="true" 
 			class="input-block-level"
             validate = "equals" field="password"
@@ -66,8 +66,8 @@
  
    <field name="username" type="text"
                 
-            label="COM_CONFMGT_FORM_LBL_REG_USERNAME"
-            description="COM_CONFMGT_FORM_DESC_REG_USERNAME"        
+            label="COM_CONFMGR_VIEW_ENTRYPAGE_ENTRY_REGMODAL_LBL_USERNAME"
+            description="COM_CONFMGR_VIEW_ENTRYPAGE_ENTRY_REGMODAL_DESC_USERNAME"        
             required="true" 
 			class="input-block-level"
 			message="Please enter a Username for your your account" 
