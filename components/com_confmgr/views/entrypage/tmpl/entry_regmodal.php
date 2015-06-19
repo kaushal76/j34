@@ -44,7 +44,7 @@
                     <div class="controls"> <?php echo $this->
 				regform->getInput('email'); ?> </div>
                   </div>
-                  <div class="control-group>
+                  <div class="control-group" >
                     <div class="control-label"> <?php echo $this->
 				regform->getLabel('username'); ?> </div>
                     <div class="controls"> <?php echo $this->
