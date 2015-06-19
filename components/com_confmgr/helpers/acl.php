@@ -48,7 +48,7 @@ abstract class AclHelper
 			try
 			{
 				$db->setQuery($query);
-				$result = $db->getNumRows();
+				$result = $db->execute();
 				// If it fails, it will throw a RuntimeException
 			}
 			catch (RuntimeException $e)
@@ -56,7 +56,7 @@ abstract class AclHelper
 				throw new Exception($e->getMessage());
 			}
 			
-			if ($result > 0) 
+			if ($db->getNumRows() > 0) 
 			{
 				return TRUE;
 			
@@ -166,7 +166,7 @@ abstract class AclHelper
 		try
 		{
 			$db->setQuery($query);
-			$result = $db->getNumRows();
+			$result = $db->execute();
 			// If it fails, it will throw a RuntimeException
 		}
 		catch (RuntimeException $e)
@@ -174,7 +174,7 @@ abstract class AclHelper
 			throw new Exception($e->getMessage());
 		}
 		
-		if ($result > 0) 
+		if ($db->getNumRows() > 0)  
 		{
 			return TRUE;
 		
@@ -212,14 +212,14 @@ abstract class AclHelper
 				'a.role',
 				'a.user_id',
 		)));
-		$query->from($db->quoteName('#__confmgt_theme_leader', 'a'));
+		$query->from($db->quoteName('#__confmgr_theme_leader', 'a'));
 		$query->where('a.user_id = ' . (int) $user->id);
 		$query->where('a.role ='.(int)1); // role(0) themeleader, role(1) studentcordinator role(2) supercordinator
 		
 		try
 		{
 			$db->setQuery($query);
-			$result = $db->getNumRows();
+			$result = $db->execute();
 			// If it fails, it will throw a RuntimeException
 		}
 		catch (RuntimeException $e)
@@ -227,7 +227,7 @@ abstract class AclHelper
 			throw new Exception($e->getMessage());
 		}
 		
-		if ($result > 0) 
+		if ($db->getNumRows() > 0) 
 		{
 			return TRUE;
 		
@@ -272,7 +272,7 @@ abstract class AclHelper
 		try
 		{
 			$db->setQuery($query);
-			$result = $db->getNumRows();
+			$result = $db->execute();
 			// If it fails, it will throw a RuntimeException
 		}
 		catch (RuntimeException $e)
@@ -280,7 +280,7 @@ abstract class AclHelper
 			throw new Exception($e->getMessage());
 		}
 		
-		if ($result > 0) 
+		if ($db->getNumRows() > 0) 
 		{
 			return TRUE;
 		
@@ -317,7 +317,7 @@ abstract class AclHelper
 		try
 		{
 			$db->setQuery($query);
-			$result = $db->getNumRows();
+			$result = $db->execute();
 			// If it fails, it will throw a RuntimeException
 		}
 		catch (RuntimeException $e)
@@ -325,7 +325,7 @@ abstract class AclHelper
 			throw new Exception($e->getMessage());
 		}
 		
-		if ($result > 0) 
+		if ($db->getNumRows() > 0) 
 		{
 			return TRUE;
 		
@@ -388,7 +388,7 @@ abstract class AclHelper
 		try
 		{
 			$db->setQuery($query);
-			$result = $db->getNumRows();
+			$result = $db->execute();
 			// If it fails, it will throw a RuntimeException
 		}
 		catch (RuntimeException $e)
@@ -396,7 +396,7 @@ abstract class AclHelper
 			throw new Exception($e->getMessage());
 		}
 		
-		if ($result > 0) 
+		if ($db->getNumRows() > 0) 
 		{
 			return TRUE;
 		
