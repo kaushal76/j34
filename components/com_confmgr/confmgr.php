@@ -13,14 +13,14 @@ require_once JPATH_COMPONENT_ADMINISTRATOR.'/helpers/confmgr.php';
 require_once JPATH_COMPONENT_SITE.'/helpers/route.php';
 require_once JPATH_COMPONENT_SITE.'/helpers/acl.php';
 
+JHtml::_('bootstrap.loadCss', 'true', 'ltr');
+JHtml::_('bootstrap.framework');
+
 $controller	= JControllerLegacy::getInstance('Confmgr');
 $input = JFactory::getApplication()->input;
 
 $lang = JFactory::getLanguage();
 $lang->load('joomla', JPATH_ADMINISTRATOR);
-
-JHtml::_('bootstrap.loadCss');
-JHtml::_('bootstrap.framework');
 
 // Get the document object.
 $document	= JFactory::getDocument();

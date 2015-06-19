@@ -7,10 +7,9 @@
 
 // no direct access
 defined('_JEXEC') or die;
-JHtml::_('behavior.modal');
 ?>
 
-<div class="panel panel-default">
+<div class="container-fluid well">
 	<div class="panel-heading">
 		<h1><?php echo JText::sprintf('COM_CONFMGT_VIEW_ENTRYPAGE_ENTRY_OPTIONS_PANEL_HEADING', $this->sitename); ?></h1>
 	</div>
@@ -47,6 +46,3 @@ JHtml::_('behavior.modal');
 		</div>
 	</div>
 </div>
-
-
-

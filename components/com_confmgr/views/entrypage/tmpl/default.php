@@ -10,10 +10,8 @@
 // no direct access
 defined('_JEXEC') or die;
 
-JHtml::_('behavior.modal');
 JHtml::_('bootstrap.loadCss', 'true', 'ltr');
 JHtml::_('bootstrap.framework');
-JHtml::_('jquery.framework');
 
 //Load admin language file
 $lang = JFactory::getLanguage();
