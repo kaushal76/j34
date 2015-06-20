@@ -160,6 +160,7 @@ class ConfmgrModelEntrypage extends JModelAdmin
 		return $data;
 	}
 	
+	
 	/**
 	 * Method to get a single record.
 	 *

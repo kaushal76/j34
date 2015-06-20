@@ -25,9 +25,9 @@ defined('_JEXEC') or die;
 							alt="Login" height="42" width="42">
 					</span>
 			<?php echo JText::_("COM_CONFMGT_VIEW_ENTRYPAGE_ENTRY_OPTIONS_LOGIN"); ?>
-			</a> <a href="#regmodal" role="button"
+			</a> <a href="index.php?option=com_confmgr&view=regform&layout=entry_regmodal&tmpl=component" role="button"
 						class="btn btn-default btn-entry" id="registermodalbtn"
-						data-toggle="modal"> <span class="centre"> <img
+						data-toggle="modal" data-target="#regmodal"> <span class="centre"> <img
 							src="components/com_confmgr/assets/img/Register-icon.png"
 							alt="New account" height="42" width="42">
 					</span>

@@ -82,7 +82,7 @@ class ConfmgrControllerRegForm extends JControllerForm
 	
 			// Redirect back to the edit screen.
 			$id = (int) $app->getUserState('com_confmgr.edit.regform.id');
-			$this->setRedirect(JRoute::_('index.php?option=com_confmgr&view=entrypage&layout=regedit&id='.$id, false));
+			$this->setRedirect(JRoute::_('index.php?option=com_confmgr&view=regform&layout=edit&id='.$id, false));
 			return false;
 		}
 	
@@ -114,7 +114,7 @@ class ConfmgrControllerRegForm extends JControllerForm
 				}
 			}
 			
-			$this->setRedirect(JRoute::_('index.php?option=com_confmgr&view=entrypage&layout=regedit&id='.$id, false));
+			$this->setRedirect(JRoute::_('index.php?option=com_confmgr&view=regform&layout=edit&id='.$id, false));
 			return false;
 		}
 	

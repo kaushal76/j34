@@ -31,7 +31,8 @@ class ConfmgrControllerEntrypage extends JControllerForm
 		//@TODO remove the reference to JERROR and use PHP error handling
 		 
 		$form = $model->getLoginForm();
-		if (!$form) {
+		if (!$form) 
+		{
 			JError::raiseError(500, $model->getError());
 			return false;
 		}
@@ -41,15 +42,20 @@ class ConfmgrControllerEntrypage extends JControllerForm
 	
 		// Check for errors.
 	
-		if ($data === false) {
+		if ($data === false) 
+		{
 			// Get the validation messages.
 			$errors	= $model->getErrors();
 	
 			// Push up to three validation messages out to the user.
-			for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++) {
-				if ($errors[$i] instanceof Exception) {
+			for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++) 
+			{
+				if ($errors[$i] instanceof Exception) 
+				{
 					$app->enqueueMessage($errors[$i]->getMessage(), 'error');
-				} else {
+				} 
+				else 
+				{
 					$app->enqueueMessage($errors[$i], 'error');
 				}
 			}
@@ -69,10 +75,13 @@ class ConfmgrControllerEntrypage extends JControllerForm
 		$options = array();
 		$response = $auth->authenticate($credentials, $options);
 	
-		if ($response->status != JAuthentication::STATUS_SUCCESS) {
+		if ($response->status != JAuthentication::STATUS_SUCCESS) 
+		{
 			$app->enqueueMessage(JText::_('COM_CONFMGR_CONTROLLER_ENTRYPAGE_LOGIN_FAILED'), 'error');
 			$this->setRedirect(JRoute::_('index.php?option=com_confmgr&view=entrypage', false));
-		}else{
+		}
+		else
+		{
 			$app->login($credentials);
 			$this->setRedirect(JRoute::_('index.php?option=com_confmgr&view=entrypage', false));
 		}
@@ -80,7 +89,7 @@ class ConfmgrControllerEntrypage extends JControllerForm
 	
 	/**
 	 * @desc	Method to process if the user login cancelled at the modal screen
-	 * @return	Null
+	 * @return	void
 	 */
 	
 	public function cancel() {

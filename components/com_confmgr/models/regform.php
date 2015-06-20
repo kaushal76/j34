@@ -104,7 +104,6 @@ class ConfmgrModelRegform extends JModelAdmin
 		{
 			return false;
 		}
-
 		return $form;
 	}
 
@@ -122,7 +121,6 @@ class ConfmgrModelRegform extends JModelAdmin
 		{
 			$data = $this->getItem();
 		}	
-
 		return $data;
 	}
 
