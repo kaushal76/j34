@@ -211,7 +211,8 @@ class ConfmgrModelRegform extends JModelAdmin
 		}
 	
 		if (!$user->save()) 
-		{ // now check if the new user is saved
+		{ 
+			// now check if the new user is saved
 			$app->enqueueMessage(JText::_( $user->getError()),'Error');
 			return false;
 		}
