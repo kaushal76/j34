@@ -11,6 +11,7 @@
 
   <div id="regmodal">
         <div class="modal-body">
+        <div class="info"> <jdoc:include type="message" /> </div>
           <div class = "form-horizontal well">
             <fieldset>
               <div class="reg-edit front-end-edit">
