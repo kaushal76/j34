@@ -30,12 +30,16 @@ class ConfmgrControllerEntrypage extends JControllerForm
 		// Validate the posted data.
 		//@TODO remove the reference to JERROR and use PHP error handling
 		 
-		$form = $model->getLoginForm();
-		if (!$form) 
+		try
 		{
-			JError::raiseError(500, $model->getError());
+			$form = $model->getLoginForm();
+		}
+		catch (Exception $e)
+		{
+			throw new Exception($e->getMessage(),500);
 			return false;
 		}
+		
 	
 		// Validate the posted data.
 		$data = $model->validate($form, $data);

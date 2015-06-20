@@ -25,7 +25,7 @@
     <field name="surname" type="text"
                  
             label="COM_CONFMGR_VIEW_ENTRYPAGE_ENTRY_REGMODAL_LBL_SURNAME"
-            description="CCOM_CONFMGR_VIEW_ENTRYPAGE_ENTRY_REGMODAL_DESC_SURNAME"        
+            description="COM_CONFMGR_VIEW_ENTRYPAGE_ENTRY_REGMODAL_DESC_SURNAME"        
             required="true" 
             filter="string" 
 			hint="COM_CONFMGR_VIEW_ENTRYPAGE_ENTRY_REGMODAL_LBL_SURNAME"

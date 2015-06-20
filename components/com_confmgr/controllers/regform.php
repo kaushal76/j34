@@ -106,11 +106,11 @@ class ConfmgrControllerRegForm extends JControllerForm
 			{
 				if ($errors[$i] instanceof Exception)
 				{
-					$app->enqueueMessage($errors[$i]->getMessage().' '.JText::_('CONFMGR_CONTROLLER_REGFORM_AUTHOR_SAVE_FAILED'), 'Error');
+					$app->enqueueMessage($errors[$i]->getMessage().' '.JText::_('COM_CONFMGR_CONTROLLER_REGFORM_AUTHOR_SAVE_FAILED'), 'Error');
 				}
 				else
 				{
-					$app->enqueueMessage($errors[$i].' '.JText::_('CONFMGR_CONTROLLER_REGFORM_AUTHOR_SAVE_FAILED'), 'Error');
+					$app->enqueueMessage($errors[$i].' '.JText::_('COM_CONFMGR_CONTROLLER_REGFORM_AUTHOR_SAVE_FAILED'), 'Error');
 				}
 			}
 			
