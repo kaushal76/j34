@@ -246,4 +246,71 @@ class ConfmgrModelPaper extends JModelAdmin
 			return false;
 		}
 	}
+	
+	/**
+	 * Method to save the form data.
+	 *
+	 * @param	array		The form data.
+	 * @return	mixed		The id on success, false on failure.
+	 * @since	1.6
+	 */
+	public function save($data)
+	{
+		$id = (!empty($data['id'])) ? $data['id'] : (int)$this->getState('paper.id');
+		$state = (!empty($data['state'])) ? 1 : 0;
+		$user = JFactory::getUser();
+		$app = JFactory::getApplication();
+	
+		//preparing abstract data intially
+		$data_prepared = $data;
+		$data_prepared['paper_id'] = $id;
+		$data_prepared['id'] = (int)0;
+	
+	
+		if($id) 
+		{
+			//Check the user can edit this item
+			$authorised = AclHelper::isAuthor($id);
+		} 
+		else 
+		{
+			//Check the user can create new items in this section
+			$authorised = ($user->id > 0);
+		}
+			
+		if (!$authorised) 
+		{
+			throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 403);
+			return false;
+		}
+	
+		$table = $this->getTable();
+		$abstract_table = $this->getTable('Abstract', 'ConfmgrTable');
+		
+	
+		//save abstract data first
+		$abstract_data = $abstract_table->save($data_prepared);
+	
+		if ($abstract_data) 
+		{
+			//set the abstractid data for the papers table
+			$data['abstract_id'] = $abstract_table->id;
+				
+			if (!$table->save($data)) 
+			{
+				//something wrong saving to the abstract table
+				$app->enqueueMessage($table->getError(),'error');
+				return false;
+			}
+			// all fine, return true
+			return true;
+		}
+		else
+		{		
+			//something wrong with saving to the papers table.
+			$app->enqueueMessage($abstract_table->getError(),'error');
+			return false;
+		}
+	
+	}
 }
