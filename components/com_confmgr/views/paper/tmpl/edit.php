@@ -58,9 +58,9 @@ JHtml::_('formbehavior.chosen', 'select');
         </div>
          <div class="control-group">
           <div class="control-label"> <?php echo $this->
-				form->getLabel('student_submission'); ?> </div>
+				form->getLabel('student_paper'); ?> </div>
           <div class="controls"> <?php echo $this->
-				form->getInput('student_submission'); ?> </div>
+				form->getInput('student_paper'); ?> </div>
         </div>
         <div class="control-group">
           <div class="control-label"> <?php echo $this->

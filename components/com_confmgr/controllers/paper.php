@@ -194,7 +194,16 @@ class ConfmgrControllerPaper extends JControllerForm
 	
 		// Flush the data from the session.
 		$app->setUserState('com_confmgr.edit.paper.data', null);
-		$app->setUserState('com_confmgr.new.abstract.id', null);
+		$app->setUserState('com_confmgr.edit.paper.id', null);
+	}
+	
+	public function cancel()
+	{
+		$app	= JFactory::getApplication();
+		// Flush the data from the session.
+		$app->setUserState('com_confmgr.edit.paper.data', null);
+		$app->setUserState('com_confmgr.edit.paper.id', null);
+		$this->setRedirect(JRoute::_('index.php?option=com_confmgr&view=papers', false));
 	}
 	
 }

@@ -264,9 +264,8 @@ class ConfmgrModelPaper extends JModelAdmin
 		//preparing abstract data intially
 		$data_prepared = $data;
 		$data_prepared['paper_id'] = $id;
-		$data_prepared['id'] = (int)0;
-	
-	
+		$data_prepared['id'] = $data['abstract_id'];
+
 		if($id) 
 		{
 			//Check the user can edit this item
@@ -295,7 +294,8 @@ class ConfmgrModelPaper extends JModelAdmin
 		{
 			//set the abstractid data for the papers table
 			$data['abstract_id'] = $abstract_table->id;
-				
+
+			// Then save the paper data
 			if (!$table->save($data)) 
 			{
 				//something wrong saving to the abstract table
