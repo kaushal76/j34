@@ -34,7 +34,6 @@ class ConfmgrTablePaper extends JTable
         if (property_exists($this, 'ordering') && $this->id == 0) {
             $this->ordering = self::getNextOrder();
         }
-
 		
 		return parent::store($updateNulls);
 	}

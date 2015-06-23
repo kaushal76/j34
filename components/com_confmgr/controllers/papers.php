@@ -58,8 +58,8 @@ class ConfmgrControllerPapers extends JControllerAdmin
 			//Check if there is an authors list; if not redierct to create one
 			if (!$authors->getItems())
 			{
-				$this->setMessage(JText::_('You need to create a list of authors for your abstracts first', 'warning'));
-				$this->setRedirect(JRoute::_('index.php?option=com_confmgr&view=authors', false));
+				$app->enqueueMessage(JText::_('You need to create a list of authors for your abstracts first', 'warning'));
+				$this->setRedirect(JRoute::_('index.php?option=com_confmgr&task=paper.edit&id='.$return, false));
 			}
 			else
 			{
@@ -73,12 +73,6 @@ class ConfmgrControllerPapers extends JControllerAdmin
 			$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=papers', false));
 		}
 	
-		// Clear the profile id from the session.
-		$app->setUserState('com_confmgt.edit.paper.id', null);
-	
-	
-		// Flush the data from the session.
-		$app->setUserState('com_confmgt.edit.paper.data', null);
 	}
 }
 ?>
