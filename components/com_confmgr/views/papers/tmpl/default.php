@@ -58,3 +58,27 @@ $trashed	= $this->state->get('filter.published') == -2 ? true : false;
 		</tr>
 	</tfoot>
 </table>
+
+<div class="inline">
+  <form id="form-entrypage-<?php echo $item->id ?>" action="<?php echo JRoute::_('index.php'); ?>" method="post" class="form-validate form-entry" enctype="multipart/form-data">
+    <?php echo JHtml::_('form.token'); ?>
+    <button class="btn btn-default btn-lg" type="submit">
+    <i class="icon-home"></i>
+	<?php echo JText::_("COM_CONFMGR_HOME"); ?>
+    </button>
+    <input type="hidden" name="option" value="com_confmgr" />
+    <input type="hidden" name="view" value="entrypage" />
+  </form>
+ </div>
+ <div class="inline">
+  <form id="form-paper-new-<?php echo $item->id ?>" action="<?php echo JRoute::_('index.php'); ?>" method="post" class="form-validate form-entry" enctype="multipart/form-data">
+    <?php echo JHtml::_('form.token'); ?>
+    <button class="btn btn-default btn-lg" type="submit">
+    <i class="icon-plus"></i>
+	<?php echo JText::_("COM_CONFMGR_VIEW_PAPERS_ADD_PAPER"); ?>
+    </button>
+    <input type="hidden" name="option" value="com_confmgr" />
+    <input type="hidden" name="task" value="papers.newabstract" />
+  </form>
+</div>
+

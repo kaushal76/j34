@@ -147,6 +147,8 @@ class ConfmgrModelPapers extends JModelList
 			// Only show items with state 'published' / 'unpublished'
 			$query->where('(a.published IN (0, 1))');
 		}
+		//list on the papers created by the logged in user
+		$query->where('a.created_by = '.(int)(JFactory::getUser()->id));
 
 		// Add list oredring and list direction to SQL query
 		$sort = $this->getState('list.ordering', 'abstract_id');
@@ -165,11 +167,31 @@ class ConfmgrModelPapers extends JModelList
 	 */
 	public function getItems()
 	{
+		//remove temporarily cerated records
+		$this->_tmpRemoveQuery();
+		
 		if ($items = parent::getItems()) {
 			//Do any procesing on fields here if needed
 		}
-
 		return $items;
 	}
+	
+	/**
+	 * Method to remove temporary papers created by users
+	 * @ return void
+	 */
+	private function _tmpRemoveQuery() {
+		// Create a new query object.
+		$db = $this->getDbo();
+		$query = $db->getQuery(true);
+		$user = JFactory::getUser();
+	
+		// Select the required fields from the table.
+		$query->delete($db->quoteName('#__confmgr_paper'));
+		$query->where('title ='.$db->quote(''));
+		$query->where('created_by = '.$user->id);
+	
+		$db->setQuery($query);
+		$result = $db->query();
+	}
 }
-?>

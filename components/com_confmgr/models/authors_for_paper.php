@@ -22,17 +22,6 @@ class ConfmgrModelAuthors_for_paper extends JModelList
 	 */
 	public function __construct($config = array())
 	{
-		if (empty($config['filter_fields']))
-		{
-			$config['filter_fields'] = array(
-				'a.paper_id', 'paper_id',
-				'a.checked_out', 'checked_out',
-				'a.checked_out_time', 'checked_out_time',
-				'a.published', 'published',
-				'a.created', 'created',
-				'a.ordering', 'ordering','state'
-			);
-		}
 		parent::__construct($config);
 	}
 	
@@ -52,26 +41,6 @@ class ConfmgrModelAuthors_for_paper extends JModelList
 	 */
 	protected function populateState($ordering = 'paper_id', $direction = 'ASC')
 	{
-		// Get the Application
-		$app = JFactory::getApplication();
-		$menu = $app->getMenu();
-		
-		// Set filter state for search
-        $search = $app->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
-        $this->setState('filter.search', $search);
-
-		// Set filter state for publish state
-        $published = $app->getUserStateFromRequest($this->context . '.filter.published', 'filter_published', '', 'string');
-        $this->setState('filter.published', $published);
-
-
-		// Load the parameters.
-		$params = JComponentHelper::getParams('com_confmgr');
-		$active = $menu->getActive();
-		empty($active) ? null : $params->merge($active->params);
-		$this->setState('params', $params);
-
-		// List state information.
 		parent::populateState($ordering, $direction);
 	}
 	
@@ -90,11 +59,39 @@ class ConfmgrModelAuthors_for_paper extends JModelList
 	 */
 	protected function getStoreId($id = '')
 	{
-		// Compile the store id.
-		$id .= ':' . $this->getState('filter.search');
-		$id .= ':' . $this->getState('filter.published');
 
 		return parent::getStoreId($id);
+	}
+	
+	/**
+	 * Method to get Authors assigned for a particular paper
+	 * @param	int	$paper_id
+	 * @return	mixed  An Indexed array of PHP objects on success, false on failure. 
+	 */
+	
+	public function getAuthorsForPaper($paper_id)
+	{
+
+		$db = $this->getDbo();
+		$query = $db->getQuery(true);
+		$query->select('a.*')->from('#__confmgr_author_for_paper AS a');
+		
+		$query->select($query->concatenate(array('uc.title','uc.firstname','uc surname'),' '))
+		->join('LEFT', '#__confmgr_authors AS uc ON uc.id = a.author_id');
+		$query->where('a.paper_id = '.(int)($paper_id));
+		$db->setQuery($query);
+		try 
+		{
+			$row = $db->loadObjectList();
+		}
+		catch (exception $e)
+		{
+			throw new exception ($e->getMessage().' COM_CONFMGR_MODEL_AUTHORS_FOR_PAPER_DB_ERROR');
+			
+		}
+		
+		return $row;
+		
 	}
 
 	/**
@@ -107,52 +104,11 @@ class ConfmgrModelAuthors_for_paper extends JModelList
 		// Get database object
 		$db = $this->getDbo();
 		$query = $db->getQuery(true);
-		$query->select('a.*')->from('#__confmgr_author_for_paper AS a');				
-		
-		
-		// Join over the users for the checked out user.
-		$query->select('uc.name AS editor')
-			->join('LEFT', '#__users AS uc ON uc.id = a.checked_out');
+		$query->select('a.*')->from('#__confmgr_author_for_paper AS a');						
 
-		// Filter by search
-		$search = $this->getState('filter.search');
-		$s = $db->quote('%'.$db->escape($search, true).'%');
-		
-		if (!empty($search))
-		{
-			if (stripos($search, 'id:') === 0)
-			{
-				$query->where('a.id = ' . (int) substr($search, strlen('id:')));
-			}
-			elseif (stripos($search, 'paper_id:') === 0)
-			{
-				$search = $db->quote('%' . $db->escape(substr($search, strlen('paper_id:')), true) . '%');
-				$query->where('(a.paper_id LIKE ' . $search);
-			}
-			else
-			{
-				$search = $db->quote('%' . $db->escape($search, true) . '%');
-				
-			}
-		}
-		
-		// Filter by published state.
-		$published = $this->getState('filter.published');
-		if (is_numeric($published))
-		{
-			$query->where('a.published = ' . (int) $published);
-		}
-		elseif ($published === '')
-		{
-			// Only show items with state 'published' / 'unpublished'
-			$query->where('(a.published IN (0, 1))');
-		}
-
-		// Add list oredring and list direction to SQL query
-		$sort = $this->getState('list.ordering', 'paper_id');
-		$order = $this->getState('list.direction', 'ASC');
-		$query->order($db->escape($sort).' '.$db->escape($order));
-		
+		$query->select($query->concatenate(array('uc.title','uc.firstname','uc surname'),' '))
+			->join('LEFT', '#__authors AS uc ON uc.id = a.author_id');
+		$query->where('a.paper_id = '.(int)($paper_id));
 		return $query;
 	}
 	
@@ -171,5 +127,6 @@ class ConfmgrModelAuthors_for_paper extends JModelList
 
 		return $items;
 	}
+	
 }
 ?>

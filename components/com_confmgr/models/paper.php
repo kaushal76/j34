@@ -48,7 +48,7 @@ class ConfmgrModelPaper extends JModelAdmin
 			
 
 			$user = JFactory::getUser();
-			return $user->authorise('core.delete', $this->typeAlias . '.' . (int) $record->id);
+			return AclHelper::isAuthor($record->id);
 		}
 	}		
 
@@ -194,5 +194,59 @@ class ConfmgrModelPaper extends JModelAdmin
 
 		return true;
 	}
+	
+	/**
+	 * Method to create a new abstract on template
+	 * @param array() $data
+	 * @TODO update the method to depriciate JERROR
+	 */
+	public function newAbstract($data)	{
+		$user = JFactory::getUser();
+		$data = array();
+	
+		//insert the author ID
+		$data['created_by'] = $user->id;
+	
+		//get the table
+		$table = $this->getTable();
+	
+		//save an empty record to reserve the paper id
+		try  
+		{
+			$table->save($data);
+				
+			//get the last created paper id
+			$id = $table->id;
+			//check the author and return the last paper id
+			try 
+			{
+				$table->created_by == $user->id;
+				//make the abstract active
+				$data_new['active'] = 1;
+				//save the row once more
+				if ($table->save($data_new) === true) 
+				{
+					// return the new ID
+					$id_new = $table->id;
+					return $id_new;
+				}
+				else
+				{
+					return false;
+				}
+	
+			}
+			catch (exception $e)
+			{
+				throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'),403);
+				return false;
+			}
+				
+		}
+		catch (exception $e)
+		{
+			throw new exception ($e->getMessage().' '.$table->getError());
+			return false;
+		}
+	}
 }
-?>

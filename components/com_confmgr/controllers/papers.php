@@ -36,5 +36,49 @@ class ConfmgrControllerPapers extends JControllerAdmin
 		$model = parent::getModel($name, $prefix, $config);
 		return $model;
 	}
+	
+	public function newAbstract()
+	{
+		// Check for request forgeries.
+		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+	
+		// Initialise variables.
+		$app	= JFactory::getApplication();
+		$model = $this->getModel('Paper', 'ConfmgrModel');
+		$authors = $this->getModel ('Authors_for_paper', 'ConfmgrModel');
+	
+		// create a new data array.
+		$data = array();
+	
+		// Attempt to save the data and get the last saved record by the user
+		$return	= $model->newAbstract($data);
+	
+		if ($return) 
+		{
+			//Check if there is an authors list; if not redierct to create one
+			if (!$authors->getItems())
+			{
+				$this->setMessage(JText::_('You need to create a list of authors for your abstracts first', 'warning'));
+				$this->setRedirect(JRoute::_('index.php?option=com_confmgr&view=authors', false));
+			}
+			else
+			{
+				// redirect to the new abstract page
+				$this->setRedirect(JRoute::_('index.php?option=com_confmgr&task=paper.edit&id='.$return, false));
+			}
+		}
+		else
+		{
+			// Redirect to the list screen.
+			$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=papers', false));
+		}
+	
+		// Clear the profile id from the session.
+		$app->setUserState('com_confmgt.edit.paper.id', null);
+	
+	
+		// Flush the data from the session.
+		$app->setUserState('com_confmgt.edit.paper.data', null);
+	}
 }
 ?>
