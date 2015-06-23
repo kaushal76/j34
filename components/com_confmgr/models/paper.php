@@ -45,8 +45,6 @@ class ConfmgrModelPaper extends JModelAdmin
 			{
 				return false;
 			}
-			
-
 			$user = JFactory::getUser();
 			return AclHelper::isAuthor($record->id);
 		}
@@ -117,7 +115,6 @@ class ConfmgrModelPaper extends JModelAdmin
 	{
 		JForm::addFormPath(JPATH_COMPONENT_ADMINISTRATOR.'/models/forms');
 		JForm::addFieldPath(JPATH_COMPONENT_ADMINISTRATOR.'/models/fields');
-
 		JForm::addRulePath(JPATH_COMPONENT_ADMINISTRATOR.'/models/rules');		
 		
 		$options = array('control' => 'jform', 'load_data' => $loadData);
@@ -222,7 +219,7 @@ class ConfmgrModelPaper extends JModelAdmin
 			{
 				$table->created_by == $user->id;
 				//make the abstract active
-				$data_new['active'] = 1;
+				$data_new['published'] = 1;
 				//save the row once more
 				if ($table->save($data_new) === true) 
 				{
