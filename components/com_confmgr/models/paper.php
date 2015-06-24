@@ -140,7 +140,7 @@ class ConfmgrModelPaper extends JModelAdmin
 		
 		if(empty($data))
 		{
-			$data = $this->getItem();
+			$data = $this->getData();
 		}
 		
 		return $data;
@@ -166,6 +166,34 @@ class ConfmgrModelPaper extends JModelAdmin
 		}
 		
 		return $item;
+	}
+	
+	/**
+	 * @desc	Method to get the paper details and abstract details using a joint query
+	 * @return	mixed object on success, false on faliure
+	 * @param	(int) primary key (paper_id)
+	 */
+	
+	public function getData($pk = NULL)
+	{
+		$pk = (!empty($pk)) ? $pk : (int) $this->getState($this->getName() . '.id');
+		// Create a new query object.
+		$db = $this->getDbo();
+		$query = $db->getQuery(true);
+	
+		// Construct the query
+		$query->select('a.paper_id AS paper_id, a.abstract AS abstract, a.keywords AS keywords, a.theme AS theme')
+		->from('#__confmgr_abstract AS a')
+		->select('p.id AS id, p.title AS title, p.student_paper AS student_paper, p.created_by AS created_by ')
+			->join('INNER', '#__confmgr_paper AS p ON p.id = a.paper_id')
+		->where('p.id = '.(int)$pk);
+		
+	
+		// Setup the query
+		$db->setQuery($query);
+	
+		// Return the result
+		return $db->loadObject();
 	}
 	
 	/**
