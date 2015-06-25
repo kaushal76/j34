@@ -83,7 +83,7 @@ class ConfmgrModelPaper extends JModelAdmin
 		// Load the User state.
 		$pk = $app->input->getInt('id');
 		$this->setState($this->getName() . '.id', $pk);
-
+		
 		// Load the parameters.
 		$params = JComponentHelper::getParams('com_confmgr');
 		$this->setState('params', $params);
@@ -140,7 +140,7 @@ class ConfmgrModelPaper extends JModelAdmin
 		
 		if(empty($data))
 		{
-			$data = $this->getData();
+			$data = $this->getItem();
 		}
 		
 		return $data;
@@ -156,13 +156,21 @@ class ConfmgrModelPaper extends JModelAdmin
 	 */
 	public function getItem($pk = null)
 	{
+		$pk = (!empty($pk)) ? $pk : (int) $this->getState($this->getName() . '.id');
 		if (!$item = parent::getItem($pk))
 		{			
-			throw new Exception('Failed to load item');
+			throw new Exception(JText::_('COM_CONFMGR_FAILED_TO_LOAD_ITEM'));
 		}
 
 		if (!$item->id)
 		{
+		}
+		else 
+		{
+			$data = $this->_getData($item->id);
+			$item->abstract = $data->abstract;
+			$item->theme = $data->theme;
+			$item->keywords = $data->keywords;
 		}
 		
 		return $item;
@@ -171,10 +179,10 @@ class ConfmgrModelPaper extends JModelAdmin
 	/**
 	 * @desc	Method to get the paper details and abstract details using a joint query
 	 * @return	mixed object on success, false on faliure
-	 * @param	(int) primary key (paper_id)
+	 * @param	(int) primary key ($pk)
 	 */
 	
-	public function getData($pk = NULL)
+	private function _getData($pk = NULL)
 	{
 		$pk = (!empty($pk)) ? $pk : (int) $this->getState($this->getName() . '.id');
 		// Create a new query object.
@@ -185,9 +193,9 @@ class ConfmgrModelPaper extends JModelAdmin
 		$query->select('a.paper_id AS paper_id, a.abstract AS abstract, a.keywords AS keywords, a.theme AS theme')
 		->from('#__confmgr_abstract AS a')
 		->select('p.id AS id, p.title AS title, p.student_paper AS student_paper, p.created_by AS created_by ')
-			->join('INNER', '#__confmgr_paper AS p ON p.id = a.paper_id')
+			->join('INNER', '#__confmgr_paper AS p ON p.abstract_id = a.id')
 		->where('p.id = '.(int)$pk);
-		
+
 	
 		// Setup the query
 		$db->setQuery($query);
@@ -225,7 +233,8 @@ class ConfmgrModelPaper extends JModelAdmin
 	 * @param array() $data
 	 * @TODO update the method to depriciate JERROR
 	 */
-	public function newAbstract($data)	{
+	public function newAbstract($data)	
+	{
 		$user = JFactory::getUser();
 		$data = array();
 	
@@ -243,11 +252,13 @@ class ConfmgrModelPaper extends JModelAdmin
 			//get the last created paper id
 			$id = $table->id;
 			//check the author and return the last paper id
-			try 
+
+			if ($table->created_by == $user->id)
 			{
-				$table->created_by == $user->id;
 				//make the abstract active
-				$data_new['published'] = 1;
+				$data_new['published'] = (int)1;
+				$data_new['id'] = $id;
+				
 				//save the row once more
 				if ($table->save($data_new) === true) 
 				{
@@ -261,7 +272,7 @@ class ConfmgrModelPaper extends JModelAdmin
 				}
 	
 			}
-			catch (exception $e)
+			else
 			{
 				throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'),403);
 				return false;
@@ -290,9 +301,9 @@ class ConfmgrModelPaper extends JModelAdmin
 		$app = JFactory::getApplication();
 	
 		//preparing abstract data intially
-		$data_prepared = $data;
-		$data_prepared['paper_id'] = $id;
-		$data_prepared['id'] = $data['abstract_id'];
+		$data_abstract = $data;
+		$data_abstract['paper_id'] = $id;
+		$data_abstract['id'] = $data['abstract_id'];
 
 		if($id) 
 		{
@@ -316,7 +327,7 @@ class ConfmgrModelPaper extends JModelAdmin
 		
 	
 		//save abstract data first
-		$abstract_data = $abstract_table->save($data_prepared);
+		$abstract_data = $abstract_table->save($data_abstract);
 	
 		if ($abstract_data) 
 		{

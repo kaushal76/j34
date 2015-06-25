@@ -8,9 +8,11 @@
 defined("_JEXEC") or die("Restricted access");
 
 JHtml::_('behavior.keepalive');
-JHtml::_('behavior.tooltip');
-JHtml::_('behavior.calendar');
-JHtml::_('formbehavior.chosen', 'select');
+JHtml::_('behavior.formvalidation');
+JHtml::_('bootstrap.loadCss', 'true', 'ltr');
+JHtml::_('bootstrap.framework');
+JHtml::_('jquery.framework');
+
 ?>
 
 <div class = 'form-horizontal well'>
@@ -18,7 +20,7 @@ JHtml::_('formbehavior.chosen', 'select');
     <div class="paper-edit front-end-edit">
       <legend><?php echo JText::_('COM_CONFMGR_VIEW_PAPER_EDIT_PAPER_ID:'); echo $this->item->id; ?></legend>
 
-      <form id="form-paper" role="form" action="<?php echo JRoute::_('index.php?option=com_confmgt&task=paper.save'); ?> 
+      <form id="form-paper" role="form" action="<?php echo JRoute::_('index.php?option=com_confmgr&task=paper.save'); ?> 
 		" method="post" class="form-validate form-horizontal" enctype="multipart/form-data">
         <div class="control-group">
           <div class="control-label"> <?php echo $this->
@@ -74,7 +76,6 @@ JHtml::_('formbehavior.chosen', 'select');
             <?php echo JText::_('or'); ?> <a href="<?php echo jroute::_('index.php?option=com_confmgr&task=paper.cancel'); ?>" title="<?php echo JText::_('JCANCEL'); ?>
 				"><?php echo JText::_('JCANCEL'); ?> </a>
             <input type="hidden" name="option" value="com_confmgr"/>
-            <input type="hidden" name="paper_id" value="<?php echo $this->paper_id; ?>" />
             <input type="hidden" name="task" value="paper.save"/>
             <?php echo JHtml::_('form.token'); ?> </div>
         </div>

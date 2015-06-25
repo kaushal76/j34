@@ -8,4 +8,9 @@
  */
 // no direct access
 defined('_JEXEC') or die;
+JHtml::_('behavior.keepalive');
+JHtml::_('behavior.formvalidation');
+JHtml::_('bootstrap.loadCss', 'true', 'ltr');
+JHtml::_('bootstrap.framework');
+JHtml::_('jquery.framework');
 echo $this->loadTemplate('regmodal');

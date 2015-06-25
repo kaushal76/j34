@@ -59,12 +59,12 @@ class ConfmgrControllerPapers extends JControllerAdmin
 			if (!$authors->getItems())
 			{
 				$app->enqueueMessage(JText::_('You need to create a list of authors for your abstracts first', 'warning'));
-				$this->setRedirect(JRoute::_('index.php?option=com_confmgr&task=paper.edit&id='.$return, false));
+				$this->setRedirect(JRoute::_('index.php?option=com_confmgr&view=paper&layout=edit&id='.$return, false));
 			}
 			else
 			{
 				// redirect to the new abstract page
-				$this->setRedirect(JRoute::_('index.php?option=com_confmgr&task=paper.edit&id='.$return, false));
+				$this->setRedirect(JRoute::_('index.php?option=com_confmgr&view=paper&layout=edit&id='.$return, false));
 			}
 		}
 		else

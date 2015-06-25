@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>
 	<fieldset addfieldpath="/administrator/components/com_categories/models/fields" name = "Abstract Submission">    
-		<field name="id" type="hidden" default="0"/> 
-		<field name="abstract_id" type="hidden" default="0"/> 
 		<field name="student_paper" type="list" label="COM_CONFMGR_FORM_LBL_STUDENT" description="COM_CONFMGR_FORM_DESC_STUDENT" class="form-control"> 			
 		<option value="0">No</option>
   		<option value="1">Yes</option>	
-		</field>	
+		</field>
+		
+		<field name="id" type="hidden" default="0"/> 
 			
 		<field name="title" type="text"
                 
@@ -14,8 +14,7 @@
             description="COM_CONFMGR_FORM_DESC_PAPER_TITLE"        
             required="true" 
 			class="input-block-level"
-            filter="string" 
-			
+            filter="string" 			
 			/> 
 
        	<field name="abstract" type="textarea"
@@ -27,8 +26,7 @@
             menu_published="0"
             cols="100"
             rows="8"
-            filter="safehtml" 
-			
+            filter="safehtml" 			
 			/> 
 
        <field name="keywords" type="text"
@@ -43,7 +41,15 @@
             label="COM_CONFMGR_FORM_LBL_PAPER_CREATED_BY"
             description="COM_CONFMGR_FORM_DESC_PAPER_CREATED_BY"  /> 
 			
-		<field name="theme" type="sql" label="COM_CONFMGR_FORM_LBL_PAPER_THEME" query="SELECT id, title FROM #__confmgr_theme" key_field="id" value_field="title" class="input-block-level" required="true">
+		<field name="theme" type="sql" 
+			label="COM_CONFMGR_FORM_LBL_PAPER_THEME" 
+			query="SELECT id, title FROM #__confmgr_theme" 
+			key_field="id" 
+			value_field="title" 
+			class="input-block-level" 
+			description = "COM_CONFMGR_FORM_DESC_PAPER_THEME"
+			required="true">
+			<option value="">COM_CONFMGR_FORM_DESC_PAPER_THEME</option>
 		</field>
 
        <field name="checked_out" type="hidden" filter="unset" />
