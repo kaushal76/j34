@@ -56,9 +56,9 @@ class ConfmgrControllerPapers extends JControllerAdmin
 		if ($return) 
 		{
 			//Check if there is an authors list; if not redierct to create one
-			if (!$authors->getItems())
+			if (empty($authors->getAuthorsForPaper($return)))
 			{
-				$app->enqueueMessage(JText::_('You need to create a list of authors for your abstracts first', 'warning'));
+				$app->enqueueMessage(JText::_('COM_CONFMGR_CONTROLLER_AUTHORS_NEEDED', 'warning'));
 				$this->setRedirect(JRoute::_('index.php?option=com_confmgr&view=paper&layout=edit&id='.$return, false));
 			}
 			else
