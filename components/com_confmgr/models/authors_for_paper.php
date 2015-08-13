@@ -76,8 +76,8 @@ class ConfmgrModelAuthors_for_paper extends JModelList
 		$query = $db->getQuery(true);
 		$query->select('a.*')->from('#__confmgr_author_for_paper AS a');
 		
-		$query->select($query->concatenate(array('uc.title','uc.firstname','uc surname')))
-		->join('LEFT', '#__confmgr_authors AS uc ON uc.id = a.author_id');
+		$query->select($query->concatenate(array('uc.title','uc.first_name','uc.surname')))
+		->join('LEFT', '#__confmgr_author AS uc ON uc.id = a.author_id');
 		$query->where('a.paper_id = '.(int)($paper_id));
 		$db->setQuery($query);
 		
