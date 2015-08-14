@@ -59,7 +59,7 @@ class ConfmgrControllerPapers extends JControllerAdmin
 			if (empty($authors->getAuthorsForPaper($return)))
 			{
 				$app->enqueueMessage(JText::_('COM_CONFMGR_CONTROLLER_AUTHORS_NEEDED', 'warning'));
-				$this->setRedirect(JRoute::_('index.php?option=com_confmgr&view=paper&layout=edit&id='.$return, false));
+				$this->setRedirect(JRoute::_('index.php?option=com_confmgr&view=author&layout=edit&id=0', false));
 			}
 			else
 			{
