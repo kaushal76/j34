@@ -34,11 +34,13 @@ class ConfmgrViewAuthor extends JViewLegacy
 		{
 			$app->redirect(JRoute::_('index.php?option=com_confmgr&view=authors'), JText::_('JERROR_NO_ITEMS_SELECTED'));
 		}
+		
 			
 		// Is the user allowed to create an item?
 		if ($this->item->id)
 		{
 			$authorised = AclHelper::isAuthor($this->paper->id);
+
 		}
 		else
 		{	

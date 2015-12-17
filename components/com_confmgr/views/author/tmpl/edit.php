@@ -100,5 +100,6 @@ JHtml::_('formbehavior.chosen', 'select');
 	</div>
 	
 	<input type="hidden" name="task" value="" />
+	<input type="hidden" name="paper_id" value=<?php echo $this->paper->id; ?> />
 	<?php echo JHtml::_('form.token'); ?>
 </form>
