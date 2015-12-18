@@ -234,6 +234,8 @@ class ConfmgrModelAuthor extends JModelAdmin
 		$state = (!empty($data['state'])) ? 1 : 0;
 		$user = JFactory::getUser();
 		$app = JFactory::getApplication();
+		
+		$paper_id = $this->getPaper();
 	
 		if($paper_id)
 		{
@@ -242,7 +244,6 @@ class ConfmgrModelAuthor extends JModelAdmin
 		}
 		else
 		{
-
 			$authorised = false;
 		}
 			
@@ -260,13 +261,11 @@ class ConfmgrModelAuthor extends JModelAdmin
 	
 		if ($author_data)
 		{
-
 			$author_for_paper_data['author_id'] = $table->id;
 			$author_for_paper_data['paper_id'] = $data['paper_id'];
 	
 			if (!$author_for_paper_table->save($author_for_paper_data))
 			{
-
 				$app->enqueueMessage($table->getError(),'error');
 				return false;
 			}
@@ -275,11 +274,9 @@ class ConfmgrModelAuthor extends JModelAdmin
 		}
 		else
 		{
-
 			$app->enqueueMessage($abstract_table->getError(),'error');
 			return false;
-		}
-	
+		}	
 	}
 }
 ?>
