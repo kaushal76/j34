@@ -40,7 +40,6 @@ class ConfmgrViewAuthor extends JViewLegacy
 		if ($this->item->id)
 		{
 			$authorised = AclHelper::isAuthor($this->paper->id);
-
 		}
 		else
 		{	
