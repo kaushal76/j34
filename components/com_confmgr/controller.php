@@ -46,7 +46,7 @@ class ConfmgrController extends JControllerLegacy
 		if ($lName == 'entry')
 		{
 			if (!$user->guest) {
-				$lName = 'dafualt';
+				$lName = 'default';
 			}
 			
 		}

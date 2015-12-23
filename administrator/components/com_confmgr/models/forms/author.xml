@@ -78,6 +78,7 @@
 			description="COM_CONFMGR_AUTHOR_FIELD_CHECKED_OUT_DESC"
 			filter="UNSET"
 		/>
+
 		<field
 			name="created"
 			type="calendar"

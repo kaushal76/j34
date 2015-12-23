@@ -167,7 +167,7 @@ class ConfmgrModelPapers extends JModelList
 	 */
 	public function getItems()
 	{
-		//remove temporarily cerated records
+		//remove temporarily created records
 		$this->_tmpRemoveQuery();
 		
 		if ($items = parent::getItems()) {

@@ -51,6 +51,6 @@ class ConfmgrControllerAuthor extends JControllerForm
 		$this->setRedirect(JRoute::_('index.php?option=com_confmgr&view=authors' . $this->getRedirectToListAppend(), false));
 
 		return parent::batch($model);
-	}
+	}	
 }
 ?>

@@ -168,9 +168,12 @@ class ConfmgrModelPaper extends JModelAdmin
 		else 
 		{
 			$data = $this->_getData($item->id);
-			$item->abstract = $data->abstract;
-			$item->theme = $data->theme;
-			$item->keywords = $data->keywords;
+			if ($data)
+			{
+				$item->abstract = $data->abstract;
+				$item->theme = $data->theme;
+				$item->keywords = $data->keywords;
+			}
 		}
 		
 		return $item;

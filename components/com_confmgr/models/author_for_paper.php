@@ -194,5 +194,6 @@ class ConfmgrModelAuthor_for_paper extends JModelAdmin
 
 		return true;
 	}
+	
 }
 ?>

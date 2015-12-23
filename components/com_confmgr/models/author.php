@@ -82,10 +82,10 @@ class ConfmgrModelAuthor extends JModelAdmin
 	{
 		$app = JFactory::getApplication('administrator');
 
-		// Load the User state.
+		// Load the Author state.
 		$pk = $app->input->getInt('id');
 		$this->setState($this->getName() . '.id', $pk);
-
+		
 		// Load the parameters.
 		$params = JComponentHelper::getParams('com_confmgr');
 		$this->setState('params', $params);
@@ -193,6 +193,63 @@ class ConfmgrModelAuthor extends JModelAdmin
 		}
 
 		return true;
+	}
+	
+	
+	/**
+	 * Method to save the form data.
+	 *
+	 * @param	array		The form data.
+	 * @return	mixed		The id on success, false on failure.
+	 * @since	1.6
+	 */
+	public function save($data)
+	{
+		$id = (!empty($data['id'])) ? $data['id'] : (int)$this->getState('author.id');
+		$state = (!empty($data['state'])) ? 1 : 0;
+		$user = JFactory::getUser();
+		$app = JFactory::getApplication();	
+	
+		if($paper_id > 0)
+		{
+			//Check the user can edit this item
+			$authorised = AclHelper::isAuthor($paper_id);
+		}
+		else
+		{
+			$authorised = false;
+		}
+			
+		if (!$authorised)
+		{
+			throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 403);
+			return false;
+		}
+	
+		$table = $this->getTable();
+		$author_for_paper_table = $this->getTable('author_for_paper', 'ConfmgrTable');
+	
+	
+		$author_data = $table->save($data);
+	
+		if ($author_data)
+		{
+			$author_for_paper_data['author_id'] = $table->id;
+			$author_for_paper_data['paper_id'] = $paper_id;
+	
+			if (!$author_for_paper_table->save($author_for_paper_data))
+			{
+				$app->enqueueMessage($table->getError(),'error');
+				return false;
+			}
+
+			return true;
+		}
+		else
+		{
+			$app->enqueueMessage($abstract_table->getError(),'error');
+			return false;
+		}	
 	}
 }
 ?>

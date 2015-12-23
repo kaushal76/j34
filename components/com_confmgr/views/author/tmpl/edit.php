@@ -64,6 +64,7 @@ JHtml::_('formbehavior.chosen', 'select');
 				<div class="control-group">
 					<div class="control-label"><?php echo $this->form->getLabel('id'); ?></div>
 					<div class="controls"><?php echo $this->form->getInput('id'); ?></div>
+					<input type="hidden" name="jform[paper_id]" id="jform_paper_id" value="<?php echo $this->paper->id; ?>" />
 				</div>
 			</div>
 		</div>
@@ -98,7 +99,6 @@ JHtml::_('formbehavior.chosen', 'select');
 		<?php echo JLayoutHelper::render('joomla.edit.params', $this); ?>
 	<?php echo JHtml::_('bootstrap.endTabSet'); ?>
 	</div>
-	
 	<input type="hidden" name="task" value="" />
 	<?php echo JHtml::_('form.token'); ?>
 </form>

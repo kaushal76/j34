@@ -38,7 +38,7 @@ class ConfmgrViewEntrypage extends JViewLegacy
 		$this->role['isThemeleader'] = AclHelper::isThemeleader();
 		
 		// if the user has been invited (and agreed) to be a reviwer, 
-		// he needs to be autheticate as a reviewer
+		// he needs to be autheticated as a reviewer
 		$this->role['isRev1ewer'] = AclHelper::isRev1ewer();
 			
 		// get the sitename to make a part of the heading
