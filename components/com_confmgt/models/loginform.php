@@ -15,7 +15,7 @@ jimport('joomla.event.dispatcher');
 /**
  * Confmgt login form model.
  */
-class ConfmgtModelLoginForm extends JModelForm
+class ConfmgtModelLoginForm extends JModelAdmin
 {
     
     var $_item = null;

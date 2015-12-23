@@ -217,5 +217,4 @@ class ConfmgtControllerThemeForm extends ConfmgtController
 		$app->setUserState('com_confmgt.edit.theme.data', null);
 	}
     
-    
 }

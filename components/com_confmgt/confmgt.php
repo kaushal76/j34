@@ -21,7 +21,7 @@ JLoader::register ( 'UploadHelper', JPATH_COMPONENT . '/helpers/upload.php' );
 $url = "components/com_confmgt/assets/css/confmgt.css";
 $document = JFactory::getDocument ();
 $document->addStyleSheet ( $url );
-$input = JFactory::getApplication ();
+$input = JFactory::getApplication ()->input;
 ?>
 
 <?php
