@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     2.5.8
+ * @version     3.4.1
  * @package     com_confmgt
  * @copyright   Copyright (C) 2015. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -21,11 +21,19 @@ JLoader::register ( 'UploadHelper', JPATH_COMPONENT . '/helpers/upload.php' );
 $url = "components/com_confmgt/assets/css/confmgt.css";
 $document = JFactory::getDocument ();
 $document->addStyleSheet ( $url );
+$input = JFactory::getApplication ();
 ?>
 
 <?php
 // Execute the task.
 $controller = JControllerLegacy::getInstance ( 'Confmgt' );
 $controller->registerDefaultTask ( 'displayDefault' );
-$controller->execute ( JFactory::getApplication ()->input->get ( 'task' ) );
+try
+{
+	$controller->execute($input->get('task'));
+}
+catch (Exception $e)
+{
+	$controller->setRedirect(JURI::base(), $e->getMessage(), 'error');
+}
 $controller->redirect (); 
