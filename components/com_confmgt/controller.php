@@ -15,6 +15,7 @@ jimport('joomla.application.component.controller');
 
 class ConfmgtController extends JControllerLegacy
 {
+	
 	public function displayDefault() {
 		$user=JFactory::getuser();
 		
