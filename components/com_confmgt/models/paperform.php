@@ -271,6 +271,7 @@ class ConfmgtModelPaperForm extends JModelForm
 			
 			//set the abstractid data for the papers table 
 			$data['abstractid'] = $abstract_table->id;
+			$data['state'] = (int)1;
 			
 			if (!$table->save($data) === true) {
 				//something wrong saving to the abstract table

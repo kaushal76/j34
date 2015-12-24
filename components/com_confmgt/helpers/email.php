@@ -22,8 +22,8 @@ abstract class EmailHelper
 		$config = JFactory::getConfig();
 		if ($sender ===0) {
 		$sender = array( 
-			$config->getValue( 'config.mailfrom' ),
-			$config->getValue( 'config.fromname' ) ); 
+			$config->get( 'config.mailfrom' ),
+			$config->get( 'config.fromname' ) ); 
 		}
 		$mailer->setSender($sender);
 		$mailer->addRecipient($recipient);
@@ -112,7 +112,7 @@ abstract class EmailHelper
 	
 	private static function getTable($type = 'Email_log', $prefix = 'ConfmgtTable', $config = array())
 	{   
-        JModel::addTablePath(JPATH_COMPONENT_ADMINISTRATOR.'/tables');
+        JModelLegacy::addTablePath(JPATH_COMPONENT_ADMINISTRATOR.'/tables');
         return JTable::getInstance($type, $prefix, $config);
 	}    
 	

@@ -76,7 +76,7 @@ class ConfmgtModelPapers extends JModelList {
    		$query->join('LEFT', '#__confmgt_themes AS b ON b.id=a.theme');
    
 		$query->order('a.id ASC');
-        
+
         return $query;
     }
 	

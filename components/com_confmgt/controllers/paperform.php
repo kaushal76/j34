@@ -149,7 +149,7 @@ class ConfmgtControllerPaperForm extends ConfmgtController
 			$title = $data ['title'];
 			$keywords = $data ['keywords'];
 			$title = $data['title'];
-			$sitename = $config->getValue( 'config.sitename' );
+			$sitename = $config->get( 'config.sitename' );
 			$authorname = JFactory::getUser()->name;
 			$authoremail = JFactory::getUser()->email;
 			$site_url=JURI::base();

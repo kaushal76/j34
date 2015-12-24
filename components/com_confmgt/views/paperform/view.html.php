@@ -13,7 +13,7 @@ jimport('joomla.application.component.view');
 /**
  * View to edit
  */
-class ConfmgtViewPaperform extends JView
+class ConfmgtViewPaperform extends JViewLegacy
 
 {
 	protected $state;
