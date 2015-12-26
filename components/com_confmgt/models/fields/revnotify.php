@@ -56,7 +56,7 @@ class  JFormFieldRevnotify extends JFormField
 		  $rev1ewername = $rev1ewer->title.' '.$rev1ewer->firstname.' '.$rev1ewer->surname;
 		  $papers = $rev1ewer->papers;
 		  $config = JFactory::getConfig();
-		  $sitename = $config->getValue( 'config.sitename' );
+		  $sitename = $config->get( 'config.sitename' );
 		  $site_url=JURI::base();
 		  $login_url = JURI::base()."index.php/component/confmgt/";
 		  $directlinktoken = $rev1ewer->token;

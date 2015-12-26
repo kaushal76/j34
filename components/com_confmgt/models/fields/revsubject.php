@@ -55,7 +55,7 @@ class  JFormFieldRevsubject extends JFormField
 		  $rev1ewer = ConfmgtHelper::getRev1ewer($revid);
 		  $rev1ewername = $rev1ewer->title.' '.$rev1ewer->firstname.' '.$rev1ewer->surname;
 		  $config = JFactory::getConfig();
-		  $sitename = $config->getValue( 'config.sitename' );
+		  $sitename = $config->get( 'config.sitename' );
 		  $site_url=JURI::base();
 		  $directlinktoken = $rev1ewer->token;
 		  

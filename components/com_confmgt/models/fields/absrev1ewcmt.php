@@ -51,7 +51,7 @@ class  JFormFieldAbsrev1ewcmt extends JFormField
 		  $paper = ConfmgtHelper::getPaper($linkid);
 		  
 		  $config = JFactory::getConfig();
-		  $sitename = $config->getValue( 'config.sitename' );
+		  $sitename = $config->get( 'config.sitename' );
 		  $site_url=JURI::base();
 		  
 		  $authorname = JFactory::getUser((int)$paper->created_by)->name;;
