@@ -15,7 +15,7 @@ jimport('joomla.application.component.view');
 /**
  * View to edit
  */
-class ConfmgtViewThemeleader extends JView {
+class ConfmgtViewThemeleader extends JViewLegacy {
 
     protected $state;
     protected $item;

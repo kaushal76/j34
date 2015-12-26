@@ -14,7 +14,7 @@ jimport('joomla.application.component.view');
 /**
  * View class for a list of Confmgt.
  */
-class ConfmgtViewRev1ews extends JView
+class ConfmgtViewRev1ews extends JViewLegacy
 {
 	protected $items_completed;
 	protected $items_pending;

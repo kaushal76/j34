@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version     2.5.7
+ * @version     3.4.1
  * @package     com_confmgt
  * @copyright   Copyright (C) 2015. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -15,7 +15,7 @@ jimport('joomla.application.component.view');
 /**
  * View to edit
  */
-class ConfmgtViewAbrev1ewoutcomeform extends JView {
+class ConfmgtViewAbrev1ewoutcomeform extends JViewLegacy {
 
     protected $state;
     protected $item;

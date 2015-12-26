@@ -14,7 +14,7 @@ jimport('joomla.application.component.view');
 /**
  * View class for a list of Confmgt.
  */
-class ConfmgtViewFullpapers extends JView
+class ConfmgtViewFullpapers extends JViewLegacy
 {
 	protected $items;
 	protected $pagination;

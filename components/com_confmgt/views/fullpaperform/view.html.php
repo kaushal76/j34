@@ -15,7 +15,7 @@ jimport('joomla.application.component.view');
 /**
  * View to edit
  */
-class ConfmgtViewFullpaperform extends JView {
+class ConfmgtViewFullpaperform extends JViewLegacy {
 
     protected $state;
     protected $item;
