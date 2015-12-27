@@ -22,9 +22,7 @@ $url = "components/com_confmgt/assets/css/confmgt.css";
 $document = JFactory::getDocument ();
 $document->addStyleSheet ( $url );
 $input = JFactory::getApplication ()->input;
-?>
 
-<?php
 // Execute the task.
 $controller = JControllerLegacy::getInstance ( 'Confmgt' );
 $controller->registerDefaultTask ( 'displayDefault' );

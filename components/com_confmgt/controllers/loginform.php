@@ -9,10 +9,12 @@
 // No direct access
 defined('_JEXEC') or die;
 
+require_once JPATH_COMPONENT.'/controller.php';
+
 /**
  * Login controller class.
  */
-class ConfmgtControllerLoginForm extends JControllerForm
+class ConfmgtControllerLoginForm extends ConfmgtController
 {
 
 	/**

@@ -8,9 +8,9 @@
  */
 // no direct access
 defined('_JEXEC') or die;
-JHtml::_('bootstrap.loadCss', 'true', 'ltr');
-JHtml::_('bootstrap.framework');
-JHtml::_('jquery.framework');
+//JHtml::_('bootstrap.loadCss', 'true', 'ltr');
+//JHtml::_('bootstrap.framework');
+//JHtml::_('jquery.framework');
 
 $url = "components/com_confmgt/assets/js/bootbox.min.js";
 $document = JFactory::getDocument ();

@@ -8,15 +8,15 @@
  */
 // no direct access
 defined('_JEXEC') or die;
-JHtml::_('behavior.keepalive');
-JHtml::_('behavior.formvalidation');
-JHtml::_('bootstrap.loadCss', 'true', 'ltr');
-JHtml::_('bootstrap.framework');
-JHtml::_('jquery.framework');
+//JHtml::_('behavior.keepalive');
+//JHtml::_('behavior.formvalidation');
+//JHtml::_('bootstrap.loadCss', 'true', 'ltr');
+//JHtml::_('bootstrap.framework');
+//JHtml::_('jquery.framework');
 
 //Load admin language file
-$lang = JFactory::getLanguage();
-$lang->load('com_confmgt', JPATH_ADMINISTRATOR);
+//$lang = JFactory::getLanguage();
+//$lang->load('com_confmgt', JPATH_ADMINISTRATOR);
 ?>
 
 <div class = 'form-horizontal well'>

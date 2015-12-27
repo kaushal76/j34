@@ -8,11 +8,11 @@
  */
 // no direct access
 defined('_JEXEC') or die;
-JHtml::_('bootstrap.loadCss', 'true', 'ltr');
-JHtml::_('bootstrap.framework');
-JHtml::_('jquery.framework');
-JHtml::_('bootstrap.modal');
-JHtml::_('bootstrap.alert', 'error');
+//JHtml::_('bootstrap.loadCss', 'true', 'ltr');
+//JHtml::_('bootstrap.framework');
+//JHtml::_('jquery.framework');
+//JHtml::_('bootstrap.modal');
+//JHtml::_('bootstrap.alert', 'error');
 ?>
 <script type="text/javascript">
     function deleteItem(item_id){

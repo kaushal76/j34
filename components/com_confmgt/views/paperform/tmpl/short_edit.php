@@ -15,8 +15,8 @@ JHtml::_('bootstrap.framework');
 JHtml::_('jquery.framework'); 
 
  //Load admin language file 
- $lang = JFactory::getLanguage(); 
- $lang->load('com_confmgt', JPATH_ADMINISTRATOR); ?>
+ //$lang = JFactory::getLanguage(); 
+// $lang->load('com_confmgt', JPATH_ADMINISTRATOR); ?>
 
 <div class = 'form-horizontal well'>
   <fieldset>

@@ -8,12 +8,11 @@
  */
 // no direct access
 defined('_JEXEC') or die;
-JHtml::_('behavior.tooltip');
-JHtml::_('bootstrap.loadCss', 'true', 'ltr');
-JHtml::_('bootstrap.framework');
-JHtml::_('jquery.framework');
-JHtml::_('jquery.ui');
-
+//JHtml::_('behavior.tooltip');
+//JHtml::_('bootstrap.loadCss', 'true', 'ltr');
+//JHtml::_('bootstrap.framework');
+//JHtml::_('jquery.framework');
+//JHtml::_('jquery.ui');
 
 ?>
 <script type="text/javascript">
