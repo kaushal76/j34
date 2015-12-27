@@ -8,25 +8,7 @@
  */
 // no direct access
 defined('_JEXEC') or die;
-//JHtml::_('behavior.keepalive');
-//JHtml::_('behavior.formvalidation');
-//JHtml::_('bootstrap.loadCss', 'true', 'ltr');
-//JHtml::_('bootstrap.framework');
-//JHtml::_('jquery.framework');
-
-//Load admin language file
-//$lang = JFactory::getLanguage();
-//$lang->load('com_confmgt', JPATH_ADMINISTRATOR);
 ?>
-
-<div class = 'form-horizontal well'>
-  <fieldset>
-    <div class="author-edit front-end-edit">
-      <?php if (!empty($this->item->id)): ?>
-      <legend><h3><?php echo JText::_('Edit Author Details'); ?></h3></legend>
-      <?php else: ?>
-      <legend><h3><?php echo JText::_('Add New Author'); ?></h3></legend>
-      <?php endif; ?>
       <form id="form-author" role="form" action="<?php echo JRoute::_('index.php'); ?>" method="post" class="form-validate form-horizontal" enctype="multipart/form-data">
         <div class="control-group">
           <div class="control-label"> <?php echo $this->form->getLabel('id'); ?> </div>
@@ -65,6 +47,3 @@ defined('_JEXEC') or die;
             <?php echo JHtml::_('form.token'); ?> </div>
         </div>
       </form>
-    </div>
-  </fieldset>
-</div>

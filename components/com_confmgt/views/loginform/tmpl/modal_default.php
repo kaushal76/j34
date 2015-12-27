@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     2.5.8.1
+ * @version     3.4.1
  * @package     com_confmgt
  * @copyright   Copyright (C) 2015. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -15,10 +15,15 @@ defined('_JEXEC') or die;
 //JHtml::_('jquery.framework');
 ?>
 
-  <div class = 'form-horizontal'>
+<div class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Modal header</h3>
+  </div>
+  <div class = 'form-horizontal well'>
     <fieldset>
-    <legend><h2><?php echo JText::_('LOGIN'); ?></h2></legend>
       <div class="reg-edit front-end-edit">
+        <legend><?php echo JText::_('LOGIN'); ?></legend>
         <form id="form-reg" role="form" action="<?php echo JRoute::_('index.php'); ?>" method="post" class="form-validate form-horizontal" enctype="multipart/form-data">
           <div class="control-group">
             <?php echo $this->form->getLabel('username'); ?>
@@ -35,10 +40,10 @@ defined('_JEXEC') or die;
 				"><?php echo JText::_('JCANCEL'); ?> </a>
               <input type="hidden" name="option" value="com_confmgt"/>
               <input type="hidden" name="task" value="loginform.login"/>
-              <?php echo JHtml::_('form.token'); ?> 
-             </div>
+              <?php echo JHtml::_('form.token'); ?> </div>
           </div>
         </form>
       </div>
     </fieldset>
   </div>
+ </div>
