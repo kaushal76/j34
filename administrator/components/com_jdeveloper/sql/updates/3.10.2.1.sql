@@ -1,0 +1,1 @@
+ALTER TABLE  `#__jdeveloper_fields` CHANGE  `maxlength`  `maxlength` VARCHAR( 20 ) NOT NULL;

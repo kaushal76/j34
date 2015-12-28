@@ -1,0 +1,1 @@
+ALTER TABLE `#__jdeveloper_forms` ADD `attributes` TEXT NOT NULL AFTER `options`;

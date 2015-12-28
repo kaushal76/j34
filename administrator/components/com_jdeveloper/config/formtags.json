@@ -1,0 +1,48 @@
+[
+	{
+		"tag": "form",
+		"tag_above": [],
+		"tag_below": ["fields","fieldset","field"],
+	},
+	{
+		"tag": "config",
+		"tag_above": [],
+		"tag_below": ["fields","fieldset", "field"]
+	},
+	{
+		"tag": "fields",
+		"tag_above": ["form","config","fields","fieldset"],
+		"tag_below": ["fields","fieldset"],
+		"attributes": [
+	    	{
+	        	"name": "name",
+	        	"required": 1
+	      	}
+    	]
+	},
+	{
+		"tag": "fieldset",
+		"tag_above": ["form","config","fields","fieldset"],
+		"tag_below": ["fields","fieldset"]
+	},
+	{
+		"tag": "field",
+		"tag_above": ["form", "config", "fields", "fieldset"],
+		"tag_below": []
+	},
+	{
+		"tag": "access",
+		"tag_above": [],
+		"tag_below": ["section"]
+	},
+	{
+		"tag": "section",
+		"tag_above": ["access"],
+		"tag_below": ["action"]
+	},
+	{
+		"tag": "action",
+		"tag_above": ["section"],
+		"tag_below": []
+	}
+]

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="params" label="Params">
+		<fieldset name="params" label="Params">
+		</fieldset>
+	</fields>
+	<fields name="images" label="Images">
+		<fieldset name="images" label="Images">
+		</fieldset>
+	</fields>
+</form>

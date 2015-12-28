@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="library" method="upgrade" version="3.4">
+	<name>##name##</name>
+	<libraryname>##name##</libraryname>
+	<author>##author##</author>
+	<creationDate>##creationdate##</creationDate>
+	<copyright>##copyright##</copyright>
+	<license>##licence##</license>
+	<authorEmail>##author_email##</authorEmail>
+	<authorUrl>##author_url##</authorUrl>
+	<version>##version##</version>
+	<description>LIB_##NAME##_XML_DESCRIPTION</description>
+
+	<files>
+		<filename>##name##.php</filename>
+		<filename>index.html</filename>
+    </files>  
+
+	<languages>##languages##
+	</languages>
+
+	<updateservers>
+	</updateservers>
+</extension>
