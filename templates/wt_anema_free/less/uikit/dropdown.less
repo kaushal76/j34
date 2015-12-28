@@ -1,0 +1,62 @@
+//
+// Component: Dropdown
+//
+// ========================================================================
+
+
+// Variables
+// ========================================================================
+
+@dropdown-z-index:                              @global-z-index + 20;
+@dropdown-background:                           #fff;
+@dropdown-color:                                @global-color;
+@dropdown-divider-border:                       rgba(0,0,0,0);
+
+@dropdown-navbar-margin:                        -1px;
+@dropdown-navbar-background:                    @global-dropdown-background;
+@dropdown-navbar-color:                         @global-color;
+
+//
+// New
+//
+@dropdown-animation: 							              uk-fade;
+@dropdown-navbar-animation: 					          uk-slide-bottom-fixed;
+@dropdown-border:                               @global-border;
+@dropdown-width:								                240px;
+@dropdown-padding:								              25px;
+
+// Component
+// ========================================================================
+
+.hook-dropdown() {
+    box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+
+// Modifier: `uk-dropdown-navbar`
+// ========================================================================
+
+.hook-dropdown-navbar() {}
+
+
+// Sub-object: `uk-dropdown-overlay`
+// ========================================================================
+
+.hook-dropdown-overlay() {}
+
+// Miscellaneous
+// ========================================================================
+
+.hook-dropdown-misc() {
+    .uk-dropdown.uk-dropdown-navbar {
+    margin-left: -15px;
+    }
+    .uk-dropdown-navbar.uk-dropdown-flip { left: auto; }
+    .uk-dropdown-navbar .uk-form-row button[type*='submit'] {
+        width: 100%;
+    }
+    .uk-dropdown-navbar input[type="text"], .uk-dropdown-navbar input[type="password"] {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.08);
+    }
+}
