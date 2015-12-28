@@ -9,12 +9,10 @@
 
 defined("_JEXEC") or die("Restricted access");
 
+//Include helper files
 require_once JPATH_COMPONENT_ADMINISTRATOR.'/helpers/confmgr.php';
 require_once JPATH_COMPONENT_SITE.'/helpers/route.php';
 require_once JPATH_COMPONENT_SITE.'/helpers/acl.php';
-
-JHtml::_('bootstrap.loadCss', 'true', 'ltr');
-JHtml::_('bootstrap.framework');
 
 $controller	= JControllerLegacy::getInstance('Confmgr');
 $input = JFactory::getApplication()->input;
