@@ -9,11 +9,11 @@
 
 defined('_JEXEC') or die;
 
-require_once JDeveloperLIB . '/loader.php';
+require_once JDeveloperLIB . "/loader.php";
+require_once JPATH_COMPONENT_ADMINISTRATOR . "/config.php";
 
 jimport('joomla.filesystem.file');
 jimport('joomla.filesystem.folder');
 
 JDeveloperLoader::import("archive");
-JDeveloperLoader::import("exception");
 ?>

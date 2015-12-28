@@ -24,7 +24,7 @@ class ##Component##Controller##Singular## extends JControllerForm
 	 * @var    string
 	 * @since  12.2
 	 */
-	protected $view_item = '##Singular##';
+	protected $view_item = '##singular##';
 
 	/**
 	 * The URL view list variable.
@@ -32,7 +32,7 @@ class ##Component##Controller##Singular## extends JControllerForm
 	 * @var    string
 	 * @since  12.2
 	 */
-	protected $view_list = '##Plural##';##{start_catid}##
+	protected $view_list = '##plural##';##{start_catid}##
 
 	/**
 	 * Method override to check if you can add a new record.

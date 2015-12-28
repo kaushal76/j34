@@ -26,6 +26,7 @@ class JDeveloperModelImportDb extends JModelLegacy
 	 */
 	public function getCoreFields($table)
 	{
+		$table = str_replace("#__", "", $table);
 		$store = "corefields.$table";
 		
 		if (isset($this->cache[$store]))
@@ -83,6 +84,7 @@ class JDeveloperModelImportDb extends JModelLegacy
 			return $this->cache[$store];
 		}
 		
+		$name = str_replace("#__", "", $name);
 		$db = JFactory::getDbo();
 		$columns = $db->setQuery("SHOW FULL COLUMNS FROM #__" . $name)->loadObjectList();
 		$fields = array();

@@ -31,6 +31,9 @@ class ##Component##View##Plural## extends JViewLegacy
 		$this->state 		 = $this->get('State');
 		$this->pagination 	 = $this->get('Pagination');
 		$this->user		 	 = JFactory::getUser();
+		$this->filterForm    = $this->get('FilterForm');
+		$this->activeFilters = $this->get('ActiveFilters');
+		
 		
 		$active = $app->getMenu()->getActive();
 		if ($active)

@@ -84,30 +84,6 @@
 				<option value="0">JNO</option>
 			</field>
 			<field 
-				name="frontend_categories"
-				type="radio"
-				label="COM_JDEVELOPER_TABLE_FIELD_FRONTEND_CATEGORIES_LABEL"
-				description="COM_JDEVELOPER_TABLE_FIELD_FRONTEND_CATEGORIES_DESC"
-				class="btn-group"
-				default="0"
-				required="1"
-			>
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
-			<field 
-				name="frontend_feed"
-				type="radio"
-				label="COM_JDEVELOPER_TABLE_FIELD_FRONTEND_FEED_LABEL"
-				description="COM_JDEVELOPER_TABLE_FIELD_FRONTEND_FEED_DESC"
-				class="btn-group"
-				default="0"
-				required="1"
-			>
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
-			<field 
 				name="frontend_details"
 				type="radio"
 				label="COM_JDEVELOPER_TABLE_FIELD_FRONTEND_DETAILS_LABEL"
@@ -124,6 +100,30 @@
 				type="radio"
 				label="COM_JDEVELOPER_TABLE_FIELD_FRONTEND_EDIT_LABEL"
 				description="COM_JDEVELOPER_TABLE_FIELD_FRONTEND_EDIT_DESC"
+				class="btn-group"
+				default="0"
+				required="1"
+			>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+			<field 
+				name="frontend_categories"
+				type="radio"
+				label="COM_JDEVELOPER_TABLE_FIELD_FRONTEND_CATEGORIES_LABEL"
+				description="COM_JDEVELOPER_TABLE_FIELD_FRONTEND_CATEGORIES_DESC"
+				class="btn-group"
+				default="0"
+				required="1"
+			>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+			<field 
+				name="frontend_feed"
+				type="radio"
+				label="COM_JDEVELOPER_TABLE_FIELD_FRONTEND_FEED_LABEL"
+				description="COM_JDEVELOPER_TABLE_FIELD_FRONTEND_FEED_DESC"
 				class="btn-group"
 				default="0"
 				required="1"

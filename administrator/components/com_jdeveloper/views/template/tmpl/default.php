@@ -37,6 +37,11 @@ $input = JFactory::getApplication()->input;
 			<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'general', JText::_('COM_JDEVELOPER_TEMPLATE'), true); ?>
 				<?php echo $this->loadTemplate("info") ?>
 			<?php echo JHtml::_('bootstrap.endTab'); ?>
+			<!-- Tab forms -->
+			<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'forms', JText::_('COM_JDEVELOPER_COMPONENT_FORMS'), false); ?>
+				<?php echo $this->loadTemplate("forms") ?>
+			<?php echo JHtml::_('bootstrap.endTab'); ?>
+			<!-- Tab overrides -->
 			<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'overrides', JText::_('COM_JDEVELOPER_TEMPLATE_OVERRIDES'), false); ?>
 				<?php echo $this->loadTemplate("overrides") ?>
 			<?php echo JHtml::_('bootstrap.endTab'); ?>

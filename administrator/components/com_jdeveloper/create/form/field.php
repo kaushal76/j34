@@ -14,7 +14,7 @@ JDeveloperLoader::import("form", JDeveloperCREATE);
  * Form Create Class
  *
  * @package     JDeveloper
- * @subpackage  Create.Modue
+ * @subpackage  Create.Form
  */
 class JDeveloperCreateFormField extends JDeveloperCreateForm
 {		
@@ -23,7 +23,7 @@ class JDeveloperCreateFormField extends JDeveloperCreateForm
 	 *
 	 * @var	string
 	 */
-	protected $templateFile = "field.xml";
+	protected $templateFile = "form_field.xml";
 
 	/**
 	 * @see	JDeveloperCreate
@@ -33,7 +33,7 @@ class JDeveloperCreateFormField extends JDeveloperCreateForm
 		$this->template->addAreas(array(
 			"filter" => (bool) $this->item->filter,
 			"validation" => (bool) $this->item->validation,
-			"deactivated" => (bool) $this->item->deactivated,
+			"disabled" => (bool) $this->item->disabled,
 			"readonly" => (bool) $this->item->readonly,
 			"required" => (bool) $this->item->required,
 			"list" => !empty($this->item->options)
@@ -49,11 +49,35 @@ class JDeveloperCreateFormField extends JDeveloperCreateForm
 			"class" => $this->item->class,
 			"filter" => $this->item->filter,
 			"validation" => $this->item->validation,
-			"attributes" => "",
+			"attributes" => $this->getAttributes(),
 			"options" => $this->getOptions()
 		));
 		
 		return parent::initialize();
+	}
+	
+	/**
+	 * Create field options
+	 *
+	 * @return	string
+	 */
+	private function getAttributes()
+	{
+		$buffer = "";
+		
+		if (isset($this->item->attributes["keys"]))
+		{
+			$keys = $this->item->attributes["keys"];
+			$vals = $this->item->attributes["values"];
+			
+			for ($i = 0; $i < count($keys); $i++)
+			{
+				$value = (isset($vals[$i])) ? $vals[$i] : "";
+				$buffer .= "\n\t" . $keys[$i] . "=\"" . $value . "\"";
+			}
+		}
+		
+		return $buffer;
 	}
 	
 	/**

@@ -376,7 +376,7 @@ class ##Component##Model##Singular## extends JModelAdmin
 
 		// Alter the ##mainfield## for save as copy
 		if ($input->get('task') == 'save2copy')
-		{
+				{
 			list($##mainfield##, $alias) = $this->generateNewTitle($data['parent_id'], $data['alias'], $data['##mainfield##']);
 			$data['##mainfied##'] = $##mainfield##;
 			$data['alias'] = $alias;##{start_published}##

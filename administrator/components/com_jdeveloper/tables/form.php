@@ -62,6 +62,8 @@ class JDeveloperTableForm extends JTableNested
 		// If this table has a column named 'options', save all param fields as JSON string in this column
 		if ( isset($array['options']) && is_array($array['options']) )
 		{
+			ksort($array["options"]);
+			
 			$options = array("keys" => array(), "values" => array());
 			
 			for ($i = 0; $i < count($array["options"]["keys"]); $i++)
@@ -76,6 +78,27 @@ class JDeveloperTableForm extends JTableNested
 			$registry = new JRegistry();
 			$registry->loadArray($options);
 			$array['options'] = (string) $registry;
+		}
+
+		// If this table has a column named 'attributes', save all param fields as JSON string in this column
+		if ( isset($array['attributes']) && is_array($array['attributes']) )
+		{
+			ksort($array["attributes"]);
+			
+			$attributes = array("keys" => array(), "values" => array());
+			
+			for ($i = 0; $i < count($array["attributes"]["keys"]); $i++)
+			{
+				if ($array["attributes"]["keys"][$i] != "")
+				{
+					$attributes["keys"][] = $array["attributes"]["keys"][$i];
+					$attributes["values"][] = $array["attributes"]["values"][$i];
+				}
+			}
+			
+			$registry = new JRegistry();
+			$registry->loadArray($attributes);
+			$array['attributes'] = (string) $registry;
 		}
 
 		// If this table has a column named 'params', save all param fields as JSON string in this column

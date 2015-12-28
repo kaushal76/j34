@@ -20,7 +20,6 @@
 	<languages>##languages##
 	</languages>
 	
-	<config>
-		<fields name="params" />
+	<config>##configfields####configform##
 	</config>
 </extension>

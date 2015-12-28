@@ -8,6 +8,7 @@
  */
 
 defined('_JEXEC') or die;
+JDeveloperLoader::import("controllers.list");
 
 /**
  * JDeveloper Fields Controller
@@ -15,12 +16,6 @@ defined('_JEXEC') or die;
  * @package     JDeveloper
  * @subpackage  Controllers
  */
-class JDeveloperControllerFields extends JControllerAdmin
+class JDeveloperControllerFields extends JDeveloperControllerList
 {
-	public function getModel($name = 'Field', $prefix='JDeveloperModel', $config = array())
-	{
-		$config['ignore_request'] = true;
-		$model = parent::getModel($name, $prefix, $config);
-		return $model;
-	}
 }

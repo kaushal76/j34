@@ -35,28 +35,6 @@ class JDeveloperControllerTable extends JControllerForm
 			$this->view_list = "component";
 		}
 	}
-
-	/**
-	 * Method to run batch operations.
-	 *
-	 * @param   object  $model  The model.
-	 *
-	 * @return  boolean   True if successful, false otherwise and internal error is set.
-	 *
-	 * @since   2.5
-	 */
-	public function batch($model = null)
-	{
-		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
-
-		// Set the model
-		$model = $this->getModel('Table', 'JDeveloperModel');
-
-		// Preset the redirect
-		$this->setRedirect(JRoute::_('index.php?option=com_jdeveloper&view=tables', false));
-
-		return parent::batch($model);
-	}
 	
 	/**
 	 * Import table from dtabase
@@ -116,6 +94,29 @@ class JDeveloperControllerTable extends JControllerForm
 		
 		$this->setMessage(JText::_("COM_JDEVELOPER_TABLE_MESSAGE_FIELD_NOT_FOUND"), "error");
 		$this->setRedirect(JRoute::_("index.php?option=com_jdeveloper&view=cmponent&id=" . $table->component . "&active=tables." . $table->id, false));
+	}
+	
+	/**
+	 * Toggle jfield value
+	 */
+	public function toggleJfield()
+	{
+		$input = JFactory::getApplication()->input;
+		$id = $input->get("id", 0, "integer");
+		$jfield = $input->get("jfield", "", "string");
+		
+		$model = $this->getModel();
+		
+		if ($model->toggleJfield($id, $jfield)) {
+			$this->setMessage(JText::_("COM_JDEVELOPER_TABLE_MESSAGE_JFIELD_TOGGLE_SUCCESSFUL"));
+		} else {
+			$this->setMessage(JText::_("COM_JDEVELOPER_TABLE_ERROR_JFIELD_TOGGLE_FAILED"), "error");
+		}
+		
+		$table = $model->getItem($id);
+		$component = $this->getModel("Component")->getItem($table->component);
+		
+		$this->setRedirect(JRoute::_("index.php?option=com_jdeveloper&view=component&id=" . $component->id . "&active=tables." . $table->id, false));
 	}
 	
 	/**

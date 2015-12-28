@@ -71,7 +71,7 @@ class JDeveloperArchive
 			
 			if (version_compare( $matches[(count($matches) - 1)], $version, "<"))
 			{
-				if (!JFile::delete(JDeveloperARCHIVE.DS . $file)) throw new JDeveloperException("Wrong path - $file");
+				if (!JFile::delete(JDeveloperARCHIVE.DS . $file)) throw new Exception("Wrong path - $file");
 			}
 		}
 	}
@@ -130,17 +130,22 @@ class JDeveloperArchive
 	/**
 	 * Builds the archive direction
 	 *
-	 * @param	boolean	$url	True if path should be relative to admin base path
+	 * @param	boolean	$url		True if path should be relative to admin base path
+	 * @param	int		$user_id	The user id
 	 *
 	 * @return	string	The archive direction
 	 */
-	 public static function getArchiveDir($url = false)
+	 public static function getArchiveDir($url = false, $user_id = 0)
 	{
 		$params = JComponentHelper::getParams("com_jdeveloper");
 		$user = JFactory::getUser();
 		
-		$dir = $params->get("userarchives", 0) ? JDeveloperARCHIVE . "/user_" . $user->id : JDeveloperARCHIVE;
-		if ($url) $dir = $params->get("userarchives", 0) ? JDeveloperARCHIVEURL . "/user_" . $user->id : JDeveloperARCHIVEURL;
+		if ($user_id == 0) {
+			$user_id = $user->id;
+		}
+		
+		$dir = $params->get("userarchives", 0) ? JDeveloperARCHIVE . "/user_" . $user_id : JDeveloperARCHIVE;
+		if ($url) $dir = $params->get("userarchives", 0) ? JDeveloperARCHIVEURL . "/user_" . $user_id : JDeveloperARCHIVEURL;
 
 		return $dir;
 	}
@@ -190,12 +195,12 @@ class JDeveloperArchive
 	public static function html($folder)
 	{
 		// Get stream
-		if (empty($folder)) throw new JDeveloperException('No folder given');
+		if (empty($folder)) throw new Exception('No folder given');
 		if (!JFolder::exists($folder)) JFolder::create($folder);
 		$handle = opendir($folder);
 		
 		// Write an html file
-		if (!$file = fopen($folder .DS. "index.html","w")) throw new JDeveloperException("Couldn`t open file $folder/index.html");
+		if (!$file = fopen($folder .DS. "index.html","w")) throw new Exception("Couldn`t open file $folder/index.html");
 		$content = "<html><head></head><body></body></html>";
 		fwrite($file, $content);
 		fclose($file);

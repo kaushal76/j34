@@ -8,6 +8,7 @@
  */
 
 defined('_JEXEC') or die;
+JDeveloperLoader::import("controllers.list");
 
 /**
  * JDeveloper Components Controller
@@ -15,26 +16,8 @@ defined('_JEXEC') or die;
  * @package     JDeveloper
  * @subpackage  Controllers
  */
-class JDeveloperControllerComponents extends JControllerAdmin
+class JDeveloperControllerComponents extends JDeveloperControllerList
 {
-	/**
-	 * Method to get a model object, loading it if required.
-	 *
-	 * @param   string  $name    The model name. Optional.
-	 * @param   string  $prefix  The class prefix. Optional.
-	 * @param   array   $config  Configuration array for model. Optional.
-	 *
-	 * @return  object  The model.
-	 *
-	 * @since   12.2
-	 */
-	public function getModel($name = 'Component', $prefix='JDeveloperModel', $config = array())
-	{
-		$config['ignore_request'] = true;
-		$model = parent::getModel($name, $prefix, $config);
-		return $model;
-	}
-	
 	/**
 	 * Install components
 	 */
@@ -158,8 +141,8 @@ class JDeveloperControllerComponents extends JControllerAdmin
 			}
 			
 			// Get language files content
-			$buffer = JDeveloperLanguage::getStaticInstance("com_" . $component->name)->getINI();
-			$buffer_sys = JDeveloperLanguage::getStaticInstance("com_" . $component->name . "_sys")->getINI();
+			$buffer = JDeveloperLanguage::getInstance("com_" . $component->name)->sort()->toINI();
+			$buffer_sys = JDeveloperLanguage::getInstance("com_" . $component->name . "_sys")->sort()->toINI();
 
 			// Write language files
 			foreach ($component->params["languages"] as $lang)

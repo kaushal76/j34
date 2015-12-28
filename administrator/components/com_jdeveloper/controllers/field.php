@@ -8,6 +8,7 @@
  */
 
 defined('_JEXEC') or die;
+JDeveloperLoader::import("controllers.item");
 
 /**
  * JDeveloper Field Controller
@@ -15,7 +16,7 @@ defined('_JEXEC') or die;
  * @package     JDeveloper
  * @subpackage  Controllers
  */
-class JDeveloperControllerField extends JControllerForm
+class JDeveloperControllerField extends JDeveloperControllerItem
 {
 	/**
 	 * Constructor.
@@ -35,27 +36,26 @@ class JDeveloperControllerField extends JControllerForm
 			$this->view_list = "component";
 		}
 	}
-
+	
 	/**
-	 * Method to run batch operations.
-	 *
-	 * @param   object  $model  The model.
-	 *
-	 * @return  boolean   True if successful, false otherwise and internal error is set.
-	 *
-	 * @since   2.5
+	 * Delete field
 	 */
-	public function batch($model = null)
+	public function delete()
 	{
-		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+		$app = JFactory::getApplication();
+		$input = $app->input;
+		$model = JModelLegacy::getInstance("Field", "JDeveloperModel");
 
-		// Set the model
-		$model = $this->getModel('Field', 'JDeveloperModel');
-
-		// Preset the redirect
-		$this->setRedirect(JRoute::_('index.php?option=com_jdeveloper&view=fields', false));
-
-		return parent::batch($model);
+		$id = $input->get("id", 0, "int");
+		$field = $model->getItem($id);
+		$model_table = JModelLegacy::getInstance("Table", "JDeveloperModel");
+		$table = $model_table->getItem($field->table);
+		
+		$ids = array($id);
+		$model->delete($ids);
+		
+		$this->setRedirect(JRoute::_("index.php?option=com_jdeveloper&view=component&id=" . $table->component . "&active=tables." . $table->id, false));
+		$this->setMessage("COM_JDEVELOPER_FIELD_MESSAGE_FIELD_DELETED");
 	}
 	
 	/**
@@ -134,7 +134,7 @@ class JDeveloperControllerField extends JControllerForm
 		$table = $this->input->get('table', 0, 'int');
 		if ($table)
 		{
-			$append .= "&table=" . $table;
+			$append .= "&active=tables." . $table;
 		}
 		
 		return $append;

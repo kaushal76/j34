@@ -21,6 +21,7 @@ $listOrder	= $this->escape($this->state->get('list.ordering'));
 $listDirn	= $this->escape($this->state->get('list.direction'));
 $user = JFactory::getUser();
 ?>
+<div class="btn-group">
 <?php if ($user->authorise("core.edit")) : ?>
 	<a class="btn" href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=template.edit&id=" . $this->item->id, false); ?>"><i class="icon-edit"></i> <?php echo JText::_("JTOOLBAR_EDIT"); ?></a>
 <?php endif; ?>
@@ -44,5 +45,5 @@ $user = JFactory::getUser();
 <?php if ($user->authorise("core.delete")) : ?>
 	<button data-toggle="modal" data-target="#deleteTemplate" class="btn btn-danger"><i class="icon-delete"></i> <?php echo JText::_("JTOOLBAR_DELETE"); ?></button>
 <?php endif; ?>
-
 <button data-toggle="modal" data-target="#switchTemplate" class="btn btn-info" style="float:right"><i class="icon-list"></i> <?php echo JText::_("COM_JDEVELOPER_TEMPLATE_SWITCH"); ?></button>
+</div>

@@ -8,6 +8,7 @@
  */
 
 defined('_JEXEC') or die;
+JDeveloperLoader::import("models.admin");
 
 /**
  * JDeveloper Form Model
@@ -15,7 +16,7 @@ defined('_JEXEC') or die;
  * @package     JDeveloper
  * @subpackage  Models
  */
-class JDeveloperModelForm extends JModelAdmin
+class JDeveloperModelForm extends JDeveloperModelAdmin
 {
 	/**
 	 * @var        string    The prefix to use with controller messages.
@@ -47,15 +48,23 @@ class JDeveloperModelForm extends JModelAdmin
 			$user = JFactory::getUser();
 			return $user->authorise('core.delete', $this->typeAlias . '.' . (int) $record->id);
 		}
-	}		
+	}
 
 	/**
-	 * Prepare and sanitise the table data prior to saving.
-	 *
-	 * @param   JTable    A JTable object.
-	 *
-	 * @return  void
-	 * @since   1.6
+	 * @see JModelForm::preprocessForm()
+	 */
+	protected function preprocessForm(JForm $form, $data, $group = "content")
+	{
+		$app = JFactory::getApplication();
+		$input = $app->input;
+		
+		$form->setFieldAttribute("tag", "default", $input->get("tag", "form", "string"));
+		
+		parent::preprocessForm($form, $data, $group);
+	}
+
+	/**
+	 * @see JModelAdmin::prepareTable()
 	 */
 	protected function prepareTable($table)
 	{
@@ -64,13 +73,7 @@ class JDeveloperModelForm extends JModelAdmin
 	}
 
 	/**
-	 * Auto-populate the model state.
-	 *
-	 * Note. Calling getState in this method will result in recursion.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.6
+	 * @see JModelAdmin::populateState()
 	 */
 	protected function populateState()
 	{
@@ -87,84 +90,9 @@ class JDeveloperModelForm extends JModelAdmin
 		$params = JComponentHelper::getParams('com_jdeveloper');
 		$this->setState('params', $params);
 	}
-
-	/**
-	 * Method to perform batch operations on an item or a set of items.
-	 *
-	 * @param   array  $commands  An array of commands to perform.
-	 * @param   array  $pks       An array of item ids.
-	 * @param   array  $contexts  An array of item contexts.
-	 *
-	 * @return  boolean  Returns true on success, false on failure.
-	 *
-	 * @since   12.2
-	 */
-	public function batch($commands, $pks, $contexts)
-	{
-		// Sanitize ids.
-		$pks = array_unique($pks);
-		JArrayHelper::toInteger($pks);
-
-		// Remove any values of zero.
-		if (array_search(0, $pks, true))
-		{
-			unset($pks[array_search(0, $pks, true)]);
-		}
-
-		if (empty($pks))
-		{
-			$this->setError(JText::_('JGLOBAL_NO_ITEM_SELECTED'));
-			return false;
-		}
-
-		$done = false;
-
-		// Set some needed variables.
-		$this->user = JFactory::getUser();
-		$this->table = $this->getTable();
-		$this->tableClassName = get_class($this->table);
-		$this->contentType = new JUcmType;
-		$this->type = $this->contentType->getTypeByTable($this->tableClassName);
-		$this->batchSet = true;
-
-		if ($this->type == false)
-		{
-			$type = new JUcmType;
-			$this->type = $type->getTypeByAlias($this->typeAlias);
-
-		}
-		if ($this->type === false)
-		{
-			$type = new JUcmType;
-			$this->type = $type->getTypeByAlias($this->typeAlias);
-			$typeAlias = $this->type->type_alias;
-		}
-		else
-		{
-			$typeAlias = $this->type->type_alias;
-		}
-		$this->tagsObserver = $this->table->getObserverOfClass('JTableObserverTags');
-
-		if (!$done)
-		{
-			$this->setError(JText::_('JLIB_APPLICATION_ERROR_INSUFFICIENT_BATCH_INFORMATION'));
-			return false;
-		}
-
-		// Clear the cache
-		$this->cleanCache();
-
-		return true;
-	}
 	
 	/**
-	 * Alias for JTable::getInstance()
-	 *
-	 * @param   string  $type    The type (name) of the JTable class to get an instance of.
-	 * @param   string  $prefix  An optional prefix for the table class name.
-	 * @param   array   $config  An optional array of configuration values for the JTable object.
-	 *
-	 * @return  mixed    A JTable object if found or boolean false if one could not be found.
+	 * @see JModelLegacy::getTable()
 	 */
 	public function getTable($type = 'Form', $prefix = 'JDeveloperTable', $config = array())
 	{
@@ -172,12 +100,7 @@ class JDeveloperModelForm extends JModelAdmin
 	}
 	
 	/**
-	 * Method for getting the form from the model.
-	 *
-	 * @param   array    $data      Data for the form.
-	 * @param   boolean  $loadData  True if the form is to load its own data (default case), false if not.
-	 *
-	 * @return  mixed  A JForm object on success, false on failure
+	 * @see JModelForm::getForm()
 	 */
 	public function getForm($data = array(), $loadData = true)
 	{
@@ -206,30 +129,61 @@ class JDeveloperModelForm extends JModelAdmin
 	}
 	
 	/**
-	 * Method to get the data that should be injected in the form.
-	 *
-	 * @return  array    The default data is an empty array.
+	 * Load tree
+	 * 
+	 * @param int	$parent_id	id of parent item
+	 * @param int	$maxLevels	number of depth of search in tree
+	 * @param array $config		configuration parameters
+	 * 
+	 * @return array	The results
 	 */
-	protected function loadFormData()
-	{
-		$app = JFactory::getApplication();
-		$data = $app->getUserState($this->option . '.edit.' . $this->name . '.data', array());
+	public function getChildren($parent_id, $maxLevels = -1, $config = array()) {
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
 		
-		if (empty($data))
-		{
-			$data = $this->getItem();
+		if (!empty($parent_id)) {
+			$item = $this->getItem($parent_id);
+		} else {
+			throw new Exception("Coud not load form children, because no parent id given");
 		}
 		
-		return $data;
+		$query->select("*")
+			->from("#__jdeveloper_forms AS a")
+			->where("a.lft > " . $item->lft . " AND a.rgt < " . $item->rgt)
+			->order("a.lft ASC");
+		
+		if ($maxLevels > -1) {
+			$query->where("a.level <= " . ($item->level + $maxLevels));
+		}
+		
+		return $db->setQuery($query)->loadObjectList();
 	}
 	
 	/**
-	 * Method to get a single record.
-	 *
-	 * @param	integer	The id of the primary key.
-	 *
-	 * @return	mixed	Object on success, false on failure.
-	 * @since	1.6
+	 * Get root id of relation
+	 * 
+	 * @param string $relation	Relation name
+	 * 
+	 * @return	int  Root id
+	 */
+	public function getRootId($relation)
+	{
+		$db = JFactory::getDbo();
+		
+		// Get id of last row
+		$query = $db->getQuery(true)
+			->select("a.id")
+			->from("#__jdeveloper_forms AS a")
+			->where("a.relation = '" . $relation . "'")
+			->where("a.level = 1");
+		$db->setQuery($query);
+		$id = $db->loadAssoc()["id"];
+		
+		return $id;
+	}
+	
+	/**
+	 * @see JModelAdmin::getItem()
 	 */
 	public function getItem($pk = null)
 	{
@@ -252,23 +206,121 @@ class JDeveloperModelForm extends JModelAdmin
 		$registry->loadString($item->options);
 		$item->options = $registry->toArray();
 		
+		$registry = new JRegistry();
+		$registry->loadString($item->attributes);
+		$item->attributes = $registry->toArray();
+		
 		return $item;
+	}
+	
+	/**
+	 * Create Form from SimpleXMLElement
+	 * 
+	 * @param SimpleXMLElement	$form		The form
+	 * @param int				$parent_id	Id of parent item
+	 * @param string			$name		Root element name
+	 * @param string			$relation	Relation to other table
+	 * @param array				$config		Configuration
+	 * @param int				$incr		Increment number
+	 * 
+	 * @return	boolean	true on success, false otherwise
+	 */
+	public function importFromXML(SimpleXMLElement $form, $parent_id, $name, $relation = "", $config = array(), $incr = 1)
+	{
+		// Test for max level
+		if (isset($config["maxlevel"]) && $incr > $config["maxlevel"])
+			return true;
+		
+		// Test for ignored tags
+		if (isset($config["ignore_tags"]) && is_array($config["ignore_tags"]) && in_array($form->getName(), $config["ignore_tags"]))
+			return true;
+
+		// Element data
+		$data = array(
+				"id" => 0,
+				"parent_id" => $parent_id,
+				"tag" => $form->getName(),
+				"relation" => $relation
+		);
+		
+		// Create element name
+		$data["name"] = "";
+		
+		if ($incr > 1) {
+			if (isset($form["name"]))
+				$data["name"] .= $form["name"];
+			elseif (isset($form["value"]))
+				$data["value"] .= $form["value"];
+			elseif (isset($form["label"]))
+				$data["label"] .= $form["label"];
+		}
+		else {
+			if (empty($name)) {
+				throw new Exception("Import form from XML: No name given");
+			} else {
+				$data["name"] = $name;
+			}
+		}
+		
+		// Create element alias
+		$data["alias"] = $data["name"];
+
+		// Check if certain attributes exist
+		if (isset($form["name"]))
+			$data["name"] = $form["name"];	
+		if (isset($form["type"]))
+			$data["type"] = $form["type"];	
+		if (isset($form["label"]))
+			$data["label"] = $form["label"];
+		if (isset($form["description"]))
+			$data["description"] = $form["description"];
+		if (isset($form["default"]))
+			$data["default"] = $form["default"];
+		if (isset($form["class"]))
+			$data["class"] = $form["class"];
+		if (isset($form["maxlength"]))
+			$data["maxlength"] = $form["maxlength"];
+		if (isset($form["validation"]))
+			$data["validation"] = $form["validation"];
+		if (isset($form["filter"]))
+			$data["filter"] = $form["filter"];
+		if (isset($form["readonly"]))
+			$data["readonly"] = $form["readonly"];
+		if (isset($form["required"]))
+			$data["required"] = $form["required"];
+
+		if (!$this->save($data)) {
+			throw new Exception("Couldn't import element from XML: " . $form->getName());
+		}
+		
+		// Import children of XML element
+		if ($form->count() > 0) {
+			// Get parent_id
+			$db = JFactory::getDbo();
+			$query = $db->getQuery(true)
+				->select("a.id")
+				->from("#__jdeveloper_forms AS a")
+				->order("a.id DESC LIMIT 1");
+			
+			$parent_id = $db->setQuery($query)->loadResult();
+			
+			foreach ($form->children() as $child) {
+				$this->importFromXML($child, $parent_id, $relation, $name, $config, $incr + 1);
+			}			
+		}
+		
+		return true;
 	}
 		
 	/**
-	 * Method to save the form data.
-	 *
-	 * @param   array    $data  The form data.
-	 *
-	 * @return  boolean  True on success.
-	 *
-	 * @since   1.6
+	 * @see JModelAdmin::save()
 	 */
 	public function save($data)
 	{
 		$table = $this->getTable();
+		$table->reset();
 		$input = JFactory::getApplication()->input;
-		$pk = (!empty($data['id'])) ? $data['id'] : (int) $this->getState($this->getName() . '.id');
+		$pk = (!empty($data['id'])) ? $data['id'] : (int) $this->getState($this->getName() . '.id', '0');
 		$isNew = true;
 
 		// Load the row if saving an existing category.
@@ -336,15 +388,31 @@ class JDeveloperModelForm extends JModelAdmin
 	}
 
 	/**
-	 * Method to change the title & alias.
-	 *
-	 * @param   integer  $parent_id  The id of the parent.
-	 * @param   string   $alias      The alias.
-	 * @param   string   $title      The title.
-	 *
-	 * @return  array    Contains the modified title and alias.
-	 *
-	 * @since   1.7
+	 * @see JModelAdmin::delete()
+	 */
+	public function delete(&$pks)
+	{
+		// Look for corresponding table column and delete it
+		foreach ($pks as $pk) {
+			$model = JModelLegacy::getInstance("Field", "JDeveloperModel");
+			$table = $model->getTable();
+			$item = $this->getItem($pk);
+			
+			if ($item->tag == "field" && $item->level == "3") {
+				$table_id = explode(".", $item->relation)[1];
+				$table->load(array("table" => $table_id, "name" => $item->name), true);
+				
+				if (!empty($table->id)) {
+					$model->delete($table->id);
+				}
+			}
+		}
+		
+		return parent::delete($pks);
+	}
+	
+	/**
+	 * @see JModelAdmin::generateNewTitle()
 	 */
 	protected function generateNewTitle($parent_id, $alias, $title)
 	{

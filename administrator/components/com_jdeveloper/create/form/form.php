@@ -14,7 +14,7 @@ JDeveloperLoader::import("form", JDeveloperCREATE);
  * Form Create Class
  *
  * @package     JDeveloper
- * @subpackage  Create.Modue
+ * @subpackage  Create.Form
  */
 class JDeveloperCreateFormForm extends JDeveloperCreateForm
 {		
@@ -28,52 +28,56 @@ class JDeveloperCreateFormForm extends JDeveloperCreateForm
 	/**
 	 * @see	JDeveloperCreate
 	 */
-	protected function initialize()
-	{
+	protected function initialize() {
+		$model = $this->getModel("Forms");
+		$model->setState("parent_id", $this->item->id);
+		$children = $model->getItems(); 
+		
 		$this->template->addPlaceholders(array(
-			"fields" => $this->getFields()
+			"form" => $this->getXML($this->item->id)
 		));
 
 		return parent::initialize();
 	}
 	
 	/**
-	 * Create fields
-	 *
-	 * @return	string
+	 * Create XML
 	 */
-	private function getFields()
-	{
+	private function getXML($id) {
 		$model = $this->getModel("Form");
-		$table = $model->getTable();
+		$item = $model->getItem($id);
 		$buffer = "";
-		
-		//Form has no fields
-		if ($table->isLeaf($this->item->id))
-		{
-			return "";
-		}
-		
-		$children = $table->getTree($this->item->id);
 
-		foreach ($children as $field)
-		{
-			if ($field->level != $this->item->level + 1)
-			{
-				continue;
+		// Add attributes
+		$std_attribs = array("name", "label", "type", "description", "default", "class", "maxlength",
+				"validation", "filter", "disabled", "readonly", "required");
+		$buffer .= str_repeat("\t", $item->level) . "<" . $item->tag;
+		
+		if ($item->level > 1) {
+			foreach ($std_attribs as $attrib) {
+				if ($item->$attrib)
+					$buffer .= " " . $attrib . "=" . "\"" . $item->$attrib . "\"";
 			}
-			elseif ($field->id == $this->item->id)
-			{
-				continue;
+		}
+
+		// Get children
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true)
+			->select("*")
+			->from("#__jdeveloper_forms AS a")
+			->where("a.parent_id = " . $item->id);
+		$children = $db->setQuery($query)->loadObjectList();
+		
+		// Create XML code for children
+		if (!count($children)) {
+			$buffer .= " />";
+		}
+		else {
+			$buffer .= ">";
+			foreach ($children as $child) {
+				$buffer .= "\n" . $this->getXML($child->id);
 			}
-			elseif ($table->isLeaf($field->id))
-			{
-				$buffer .= JDeveloperCreate::getInstance("form.field", array("item_id" => $field->id))->getBuffer();
-			}
-			else
-			{
-				$buffer .= JDeveloperCreate::getInstance("form.fieldarray", array("item_id" => $field->id))->getBuffer();
-			}
+			$buffer .= "\n" . str_repeat("\t", $item->level) . "</" . $item->tag . ">";
 		}
 		
 		return $buffer;

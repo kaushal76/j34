@@ -18,21 +18,21 @@ JDeveloperLoader::import("create");
  */
 class JDeveloperCreateField extends JDeveloperCreate
 {	
-	/*
+	/**
 	 * The component data
 	 *
 	 * @var	JObject
 	 */
 	protected $component;
 	
-	/*
+	/**
 	 * The fields data
 	 *
 	 * @var	JObject
 	 */
 	protected $field;
 	
-	/*
+	/**
 	 * The current table data
 	 *
 	 * @var	JObject

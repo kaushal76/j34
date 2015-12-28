@@ -41,13 +41,13 @@ class com_jdeveloperInstallerScript
 	 * @return  void
 	 */
 	public function update($parent)
-	{
-		// Compare directories, delete files and folders which don`t exists in the new version
+	{		
+		// Compare directories, delete files and folders which don't exists in the new version
 		$src = $parent->get("parent")->getPath('source');
 		$dest = $parent->get("parent")->getPath('extension_administrator');
-		$dirs = array("assets", "controllers", "create", "helpers", "layouts", "models", "tables", "templates", "views");
+		$dirs = array("assets", "controllers", "create", "helpers", "layouts", "library", "models", "tables", "templates", "views");
 
-		// Delete folders that don`t exists in the new version any more
+		// Delete folders that don't exists in the new version any more
 		foreach ($dirs as $dir)
 		{
 			foreach (JFolder::folders($dest . "/" . $dir, ".", true, true) as $folder)
@@ -59,7 +59,7 @@ class com_jdeveloperInstallerScript
 			}
 		}
 
-		// Delete files that don`t exists in the new version any more
+		// Delete files that don't exists in the new version any more
 		foreach ($dirs as $dir)
 		{
 			foreach (JFolder::files($dest . "/" . $dir, ".", true, true) as $file)
@@ -76,6 +76,17 @@ class com_jdeveloperInstallerScript
 			if (!JFile::exists($src . "/admin" . str_replace($dest, "", $file)) && $file != "/install.php")
 			{
 				if (JFile::exists($file)) JFile::delete($file);
+			}
+		}
+		
+		// Get version specific updates
+		JFolder::create(JPATH_ADMINISTRATOR . "/components/com_jdeveloper/updates");
+		
+		foreach (JFolder::files($src . "/update", ".php", true, true) as $file){
+			$version = str_replace(".php", "", JFile::getName($file));
+			
+			if (version_compare($version, $parent->get("manifest")->version) < 1) {
+				JFile::copy($file, JPATH_ADMINISTRATOR . "/components/com_jdeveloper/updates/" . $version . ".php", null, true);
 			}
 		}
 

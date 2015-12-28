@@ -58,7 +58,7 @@
 	</fieldset>
 	<fields name="params">
 		<fieldset name="params">
-			<field 
+			<field
 				name="languages"
 				type="list"
 				label="COM_JDEVELOPER_COMPONENT_FIELD_LANGUAGES_LABEL"

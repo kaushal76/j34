@@ -8,6 +8,7 @@
  */
 
 defined('_JEXEC') or die;
+JDeveloperLoader::import("models.list");
 
 /**
  * JDeveloper Forms Model
@@ -15,7 +16,7 @@ defined('_JEXEC') or die;
  * @package     JDeveloper
  * @subpackage  Models
  */
-class JDeveloperModelForms extends JModelList
+class JDeveloperModelForms extends JDeveloperModelList
 {
 	/**
 	 * Constructor.
@@ -66,6 +67,10 @@ class JDeveloperModelForms extends JModelList
 		// Set filter state for tree level
 		$level = $this->getUserStateFromRequest($this->context . '.filter.level', 'filter_level');
 		$this->setState('filter.level', $level);
+
+		// Set filter state for tree level
+		$relation = $this->getUserStateFromRequest($this->context . '.filter.relation', 'filter_relation');
+		$this->setState('filter.relation', $relation);
 
 		// Set filter state for author
 		$authorId = $app->getUserStateFromRequest($this->context . '.filter.author_id', 'filter_author_id');
@@ -122,8 +127,13 @@ class JDeveloperModelForms extends JModelList
 		// Exclude the root category.
 		$query->where('a.id > 1');
 		
-		// Only get fields
+		// Only get children of item
 		$parent_id = $app->input->get('parent_id', 0);
+		
+		if ($this->getState("parent_id", 0)) {
+			$parent_id = $this->getState("parent_id");
+		}
+		
 		if (is_numeric($parent_id) && !empty($parent_id))
 		{
 			$parent = JModelLegacy::getInstance("Form", "JDeveloperModel")->getItem($parent_id);
@@ -161,6 +171,17 @@ class JDeveloperModelForms extends JModelList
 			}
 		}
 
+		// Filter by relation.
+		$relation = $this->getState("filter.relation", "none");
+		if ($relation == "none")
+		{
+			$query->where("a.relation = ''");
+		}
+		elseif ($relation != "")
+		{
+			$query->where("a.relation = '" . $relation . "'");
+		}
+		
 		// Filter on the level.
 		if ($level = $this->getState('filter.level'))
 		{

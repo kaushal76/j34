@@ -8,7 +8,7 @@
  */
 
 defined('_JEXEC') or die;
-JDeveloperLoader::import("template");
+JDeveloperLoader::import("models.admin");
 
 /**
  * JDeveloper Override Model
@@ -16,7 +16,7 @@ JDeveloperLoader::import("template");
  * @package     JDeveloper
  * @subpackage  Models
  */
-class JDeveloperModelOverride extends JModelAdmin
+class JDeveloperModelOverride extends JDeveloperModelAdmin
 {
 	/**
 	 * Method to get a table object, load it if necessary.
@@ -33,50 +33,6 @@ class JDeveloperModelOverride extends JModelAdmin
 	public function getTable($type = 'Override', $prefix = 'JDeveloperTable', $config = array())
 	{
 		return JTable::getInstance($type, $prefix, $config);
-	}
-	
-	/**
-	 * Method for getting the form from the model.
-	 *
-	 * @param   array    $data      Data for the form.
-	 * @param   boolean  $loadData  True if the form is to load its own data (default case), false if not.
-	 *
-	 * @return  mixed  A JForm object on success, false on failure
-	 *
-	 * @since   12.2
-	 */
-	public function getForm($data = array(), $loadData = true)
-	{
-		$options = array('control' => 'jform', 'load_data' => $loadData);
-		$form = $this->loadForm('override', 'override', $options);
-		$input = JFactory::getApplication()->input;
-		
-		if (empty($form)) {
-			return false;
-		}
-
-		$form->setFieldAttribute('source', 'syntax', JFile::getExt($input->get("name")));
-
-		return $form;
-	}
-	
-	/**
-	 * Method to get the data that should be injected in the form.
-	 *
-	 * @return  array    The default data is an empty array.
-	 *
-	 * @since   12.2
-	 */
-	protected function loadFormData()
-	{
-		$app = JFactory::getApplication();
-		$data = $app->getUserState('com_jdeveloper.edit.override.data', array());
-		
-		if (empty($data)) {
-			$data = $this->getItem();
-		}
-
-		return $data;
 	}
 
 	/**

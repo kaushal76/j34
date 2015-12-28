@@ -8,6 +8,7 @@
  */
 
 defined('_JEXEC') or die;
+JDeveloperLoader::import("controllers.item");
 
 /**
  * JDeveloper Form Controller
@@ -15,7 +16,7 @@ defined('_JEXEC') or die;
  * @package     JDeveloper
  * @subpackage  Controllers
  */
-class JDeveloperControllerForm extends JControllerForm
+class JDeveloperControllerForm extends JDeveloperControllerItem
 {
 	/**
 	 * The URL view item variable.
@@ -34,25 +35,22 @@ class JDeveloperControllerForm extends JControllerForm
 	protected $view_list = 'Forms';
 	
 	/**
-	 * Method to run batch operations.
-	 *
-	 * @param   object  $model  The model.
-	 *
-	 * @return  boolean   True if successful, false otherwise and internal error is set.
-	 *
-	 * @since   2.5
+	 * Delete field
 	 */
-	public function batch($model = null)
+	public function delete()
 	{
-		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+		$app = JFactory::getApplication();
+		$input = $app->input;
+		$model = JModelLegacy::getInstance("Form", "JDeveloperModel");
 
-		// Set the model
-		$model = $this->getModel('Form', 'JDeveloperModel', array());
-
-		// Preset the redirect
-		$this->setRedirect(JRoute::_('index.php?option=com_jdeveloper&view=forms' . $this->getRedirectToListAppend(), false));
-
-		return parent::batch($model);
+		$id = $input->get("id", 0, "int");
+		$form = $model->getItem($id);
+		
+		$ids = array($id);
+		$model->delete($ids);
+		
+		$this->setRedirect(JRoute::_("index.php?option=com_jdeveloper&view=component&id=" . $table->component . "&active=forms", false));
+		$this->setMessage(JText::_("COM_JDEVELOPER_FORM_MESSAGE_ELEMENT_DELETED"));
 	}
 	
 	/**
@@ -70,8 +68,7 @@ class JDeveloperControllerForm extends JControllerForm
 		$append = parent::getRedirectToItemAppend($recordId = null, $urlVar = 'id');
 		
 		$id = $this->input->get('id', 0, 'int');
-		if ($id)
-		{
+		if ($id) {
 			$append .= "&id=" . $id;
 		}
 		
@@ -79,6 +76,18 @@ class JDeveloperControllerForm extends JControllerForm
 		if ($parent_id)
 		{
 			$append .= "&parent_id=" . $parent_id;
+		}
+		
+		$tag = $this->input->get('tag', '', 'string');
+		if ($tag != "")
+		{
+			$append .= "&tag=" . $tag;
+		}
+		
+		$relation = $this->input->get('relation', '', 'string');
+		if ($relation != "")
+		{
+			$append .= "&relation=" . $relation;
 		}
 		
 		return $append;
@@ -94,7 +103,22 @@ class JDeveloperControllerForm extends JControllerForm
 	protected function getRedirectToListAppend()
 	{
 		$append = parent::getRedirectToListAppend();
+		$data = $this->input->get("jform", array(), "array");
 
+		// Item has relation to table
+		if (is_array($data) && isset($data["relation"]) && !empty($data["relation"])) {
+			$parts = explode(".", $data["relation"]);
+
+			if (is_array($parts) && count($parts) >= 2 && $parts[0] == "table") {
+				$component = $this->getModel("Component")->getItem(
+						$this->getModel("Table")->getItem($parts[1])->component
+						);
+				
+				$this->setRedirect(JRoute::_("index.php?option=com_jdeveloper&view=component&id=" . $component->id . "&active=forms", false));
+				$this->redirect();
+			}
+		}
+		
 		$parent_id = $this->input->get('parent_id', 0, 'int');
 		if ($parent_id)
 		{

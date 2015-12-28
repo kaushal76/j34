@@ -26,12 +26,12 @@ class ##Component##View##Plural## extends JViewLegacy
 	
 	public function display($tpl = null)
 	{
-		$this->items = $this->get('Items');
-		$this->state = $this->get('State');
-		$this->pagination = $this->get('Pagination');##{start_created_by}##
-		$this->authors = $this->get('Authors');##{end_created_by}##
-		$this->filterForm    = $this->get('FilterForm');
-		$this->activeFilters = $this->get('ActiveFilters');
+		$this->items		 = $this->getModel()->getItems();
+		$this->state		 = $this->getModel()->getState();
+		$this->pagination	 = $this->getModel()->getPagination();##{start_created_by}##
+		$this->authors		 = $this->getModel()->getAuthors();##{end_created_by}##
+		$this->filterForm    = $this->getModel()->getFilterForm();
+		$this->activeFilters = $this->getModel()->getActiveFilters();
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))

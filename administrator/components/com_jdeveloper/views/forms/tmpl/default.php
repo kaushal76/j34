@@ -100,7 +100,7 @@ if ($saveOrder)
 					<?php echo JHtml::_('grid.sort', JText::_('COM_JDEVELOPER_FORMS_FIELD_TYPE_LABEL'), 'a.type', $listDirn, $listOrder) ?>
 				</th>
 				<th class="nowrap left">
-					<?php echo JText::_('COM_JDEVELOPER_FORMS_ADD_FIELD'); ?>
+					<?php echo JText::_('COM_JDEVELOPER_FORMS_ADD_CHILD'); ?>
 				</th>
 				<th class="nowrap left">
 					XML Code
@@ -165,6 +165,7 @@ if ($saveOrder)
 				<td class="nowrap has-context">
 					<div class="pull-left">
 						<?php echo str_repeat('<span class="gi">|&mdash;</span>', $item->level - 1) ?>
+						<span class="badge badge-warning"><?php echo ucfirst($item->tag); ?> : </span>
 						<?php if ($canEdit || $canEditOwn) : ?>
 							<a href="<?php echo JRoute::_('index.php?option=com_jdeveloper&task=form.edit&id='.(int) $item->id); ?>">
 							<?php echo $this->escape($item->name); ?></a>
@@ -181,9 +182,21 @@ if ($saveOrder)
 				</td>
 				<td class="left"><?php echo $this->escape($item->type); ?></td>
 				<td>
-					<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=form.add&parent_id=" . $item->id); ?>"class="btn btn-small btn-success" style="width:45px;">
+					<?php if (in_array($item->tag, array("form", "fields"))) : ?>
+					<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=form.add&tag=fieldset&parent_id=" . $item->id); ?>"class="btn btn-small btn-success" style="width:65px; margin:1px;">
+						<i class="icon-new"></i> <?php echo JText::_("COM_JDEVELOPER_FORM_ADD_FIELDSET"); ?>
+					</a>
+					<?php endif; ?>
+					<?php if (in_array($item->tag, array("form", "fields"))) : ?>
+					<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=form.add&tag=fields&parent_id=" . $item->id); ?>"class="btn btn-small btn-success" style="width:65px; margin:1px;">
+						<i class="icon-new"></i> <?php echo JText::_("COM_JDEVELOPER_FORM_ADD_FIELDS"); ?>
+					</a>
+					<?php endif; ?>
+					<?php if (in_array($item->tag, array("fieldset"))) : ?>
+					<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=form.add&tag=field&parent_id=" . $item->id); ?>"class="btn btn-small btn-success" style="width:65px; margin:1px;">
 						<i class="icon-new"></i> <?php echo JText::_("COM_JDEVELOPER_FORM_ADD_FIELD"); ?>
 					</a>
+					<?php endif; ?>
 				</td>
 				<td>
 					<a onclick="SqueezeBox.fromElement(this, {handler:'iframe', size: {x: window.getSize().x * 0.6, y: window.getSize().y * 0.8}, url:'<?php echo JRoute::_("index.php?option=com_jdeveloper&view=form&layout=form&tmpl=component&id=" . $item->id) ?>'})" class="btn btn-small btn-info">

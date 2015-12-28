@@ -18,10 +18,11 @@ JHtml::_('formbehavior.chosen', 'select');
 
 // sort ordering and direction
 $listOrder = $this->state->get('list.ordering');
-$listDirn = $this->state->get('list.direction');
-##{start_published}##$archived	= $this->state->get('filter.published') == 2 ? true : false;
-$trashed	= $this->state->get('filter.published') == -2 ? true : false;
-##{end_published}##?>
+$listDirn = $this->state->get('list.direction');##{start_published}##
+$archived	= $this->state->get('filter.published') == 2 ? true : false;
+$trashed	= $this->state->get('filter.published') == -2 ? true : false;##{end_published}##
+$user = JFactory::getUser();
+?>
 <style>
 .row2 {
 	background-color: #e4e4e4;
@@ -30,9 +31,45 @@ $trashed	= $this->state->get('filter.published') == -2 ? true : false;
 
 <h2><?php echo JText::_('COM_##COMPONENT##_##TABLE##_VIEW_##PLURAL##_TITLE'); ?></h2>
 <form action="<?php JRoute::_('index.php?option=com_mythings&view=mythings'); ?>" method="post" name="adminForm" id="adminForm">
+	<?php
+		// Search tools bar
+		echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this));
+	?>
+	<div>
+		<p>
+			<?php if ($user->authorise("core.create", "com_##component##")##{start_catid}## || (count($user->getAuthorisedCategories('com_##component##', 'core.create'))) > 0 ##{end_catid}##) : ?>
+				<button type="button" class="btn btn-success" onclick="Joomla.submitform('##singular##.add')"><?php echo JText::_('JNEW') ?></button>
+			<?php endif; ?>
+			<?php if (($user->authorise("core.edit", "com_##component##")##{start_created_by}## || $user->authorise("core.edit.own", "com_##component##")##{end_created_by}##) && isset($this->items[0])) : ?>
+				<button type="button" class="btn" onclick="Joomla.submitform('##singular##.edit')"><?php echo JText::_('JEDIT') ?></button>
+			<?php endif; ?>##{!start_published}##
+			<?php if ($user->authorise("core.delete", "com_##component##") && isset($this->items[0])) : ?>
+				<button type="button" class="btn btn-error" onclick="Joomla.submitform('##plural##.delete')"><?php echo JText::_('JDELETE') ?></button>
+			<?php endif; ?>##{!end_published}####{start_published}##
+			<?php if ($user->authorise("core.edit.state", "com_##component##")) : ?>
+				<?php if (isset($this->items[0]->published)) : ?>
+					<button type="button" class="btn" onclick="Joomla.submitform('##plural##.publish')"><?php echo JText::_('JPUBLISH') ?></button>
+					<button type="button" class="btn" onclick="Joomla.submitform('##plural##.unpublish')"><?php echo JText::_('JUNPUBLISH') ?></button>
+					<button type="button" class="btn" onclick="Joomla.submitform('##plural##.archive')"><?php echo JText::_('JARCHIVE') ?></button>
+				<?php elseif (isset($this->items[0])) : ?>
+					<button type="button" class="btn btn-error" onclick="Joomla.submitform('##plural##.delete')"><?php echo JText::_('JDELETE') ?></button>
+				<?php endif; ?>
+				<?php if (isset($this->items[0]->published)) : ?>
+					<?php if ($this->state->get('filter.published') == -2 && $user->authorise("core.delete", "com_##component##")) : ?>
+						<button type="button" class="btn btn-error" onclick="Joomla.submitform('##plural##.delete')"><?php echo JText::_('JDELETE') ?></button>
+					<?php elseif ($this->state->get('filter.published') != -2 && $user->authorise("core.edit.state", "com_##component##")) : ?>
+						<button type="button" class="btn btn-warning" onclick="Joomla.submitform('##plural##.trash')"><?php echo JText::_('JTRASH') ?></button>
+					<?php endif; ?>
+				<?php endif; ?>
+			<?php endif; ?>##{end_published}##
+		</p>
+	</div>
 	<table class="category table table-striped table-bordered table-hover">	
 		<thead>
-			<tr>				
+			<tr>
+				<th width="1%" class="hidden-phone">
+					<?php echo JHtml::_('grid.checkall'); ?>
+				</th>
 				<th id="itemlist_header_title">
 					<?php echo JHtml::_('grid.sort', 'JGLOBAL_TITLE', 'a.##mainfield##', $listDirn, $listOrder); ?>
 				</th>##tablehead####{start_created_by}##
@@ -59,7 +96,8 @@ $trashed	= $this->state->get('filter.published') == -2 ? true : false;
 		$canCheckin	= $this->user->authorise('core.manage',     'com_checkin')##{start_checked_out}## || $item->checked_out == $this->user->id || $item->checked_out == 0##{end_checked_out}##;
 		$canChange	= $this->user->authorise('core.edit.state', 'com_##component##'##{start_asset_id}##.'.##singular##.'.$item->##pk####{end_asset_id}##) && $canCheckin;
 		?>
-			<tr class="row<?php echo $i % 2; ?>">				
+			<tr class="row<?php echo $i % 2; ?>">
+				<td class="center"><?php echo JHtml::_('grid.id', $i, $item->##pk##); ?></td>
 				<td headers="itemlist_header_title" class="list-title">##{start_table_nested}##
 					<?php echo str_repeat('<span class="gi">|&mdash;</span>', $item->level - 1) ?>##{end_table_nested}##
 					<?php if (isset($item->access) && in_array($item->access, $this->user->getAuthorisedViewLevels())) : ?>
@@ -72,6 +110,16 @@ $trashed	= $this->state->get('filter.published') == -2 ? true : false;
 					<?php if ($item->published == 0) : ?>
 						<span class="list-published label label-warning">
 							<?php echo JText::_('JUNPUBLISHED'); ?>
+						</span>
+					<?php endif; ?>
+					<?php if ($item->published == 2) : ?>
+						<span class="list-published label label-info">
+							<?php echo JText::_('JARCHIVED'); ?>
+						</span>
+					<?php endif; ?>
+					<?php if ($item->published == -2) : ?>
+						<span class="list-published label">
+							<?php echo JText::_('JTRASHED'); ?>
 						</span>
 					<?php endif; ?>##{end_published}####{start_publish_up}##
 					<?php if (strtotime($item->publish_up) > strtotime(JFactory::getDate())) : ?>
@@ -86,12 +134,8 @@ $trashed	= $this->state->get('filter.published') == -2 ? true : false;
 					<?php endif; ?>##{end_publish_down}##
 				</td>##tablebody####{start_created_by}##
 				<?php if ($this->params->get('list_show_author', 1)) : ?>
-				<td headers="itemlist_header_author" class="list-author">
-					<?php if (!empty($item->author)##{start_created_by_alias}## || !empty($item->created_by_alias)##{end_created_by_alias}##) : ?>
-						<?php $author = $item->author ?>##{start_created_by_alias}##
-						<?php $author = ($item->created_by_alias ? $item->created_by_alias : $author);?>##{end_created_by_alias}##
-						<?php echo $author; ?>
-					<?php endif; ?>
+				<td class="small hidden-phone">
+					<?php echo $this->escape($item->author_name); ?>
 				</td>
 				<?php endif; ?>##{end_created_by}####{start_hits}##
 				<?php if ($this->params->get('list_show_hits', 1)) : ?>
@@ -101,7 +145,7 @@ $trashed	= $this->state->get('filter.published') == -2 ? true : false;
 					</span>
 				</td>
 				<?php endif; ?>##{end_hits}##
-				<?php if ($this->user->authorise('core.edit') || $this->user->authorise('core.edit.own')) : ?>
+				<?php if ($this->user->authorise("core.edit") || $this->user->authorise("core.edit.own")) : ?>
 				<td headers="itemlist_header_edit" class="list-edit">
 					<?php if ($canEdit || $canEditOwn) : ?>
 						<a href="<?php echo JRoute::_("index.php?option=com_##component##&task=##singular##.edit&##pk##=" . $item->##pk##); ?>"><i class="icon-edit"></i> <?php echo JText::_("JGLOBAL_EDIT"); ?></a>

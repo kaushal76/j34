@@ -21,10 +21,13 @@ if ($input->get("tmpl") != "component") :
 			<h2 class="nav-header"><?php echo JText::_("JDEVELOPER"); ?></h2>
 			<ul class="j-links-group nav nav-list">
 			  <li>
-				<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&view=jdeveloper") ?>" style="<?php echo $active == "jdeveloper" ? $active_css : ""; ?>">
+				<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&view=cpanel") ?>" style="<?php echo $active == "jdeveloper" ? $active_css : ""; ?>">
 				  <i class="icon-cube"></i>
 				  <span class="j-links-link"><?php echo JText::_("COM_JDEVELOPER_SUBMENU_JDEVELOPER"); ?></span> 
-				  <?php if (null !== $item = JDeveloperHelper::getUpdate()) : ?><span class="label label-info"><?php echo JText::_("COM_JDEVELOPER_SUBMENU_UPDATE"); ?></span><?php endif; ?>
+				  <?php if (null !== $item = JDeveloperHelper::getUpdate()) : ?>
+				  	<br>
+				  	<span class="label label-info"><?php echo JText::sprintf("COM_JDEVELOPER_SUBMENU_UPDATE", $item->version); ?></span>
+				  <?php endif; ?>
 				</a>
 			  </li>
 			</ul>
@@ -60,6 +63,12 @@ if ($input->get("tmpl") != "component") :
 				  <span class="j-links-link"><?php echo JText::_("COM_JDEVELOPER_SUBMENU_PACKAGES"); ?></span>
 				</a>
 			  </li>
+			  <li>
+				<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&view=libraries") ?>" style="<?php echo $active == "libraries" ? $active_css : ""; ?>">
+				  <i class="icon-cube"></i>
+				  <span class="j-links-link"><?php echo JText::_("COM_JDEVELOPER_SUBMENU_LIBRARIES"); ?></span>
+				</a>
+			  </li>
 			</ul>
 			<h2 class="nav-header"><?php echo JText::_("COM_JDEVELOPER_SUBMENU_FORMS"); ?></h2>
 			<ul class="j-links-group nav nav-list">
@@ -85,12 +94,6 @@ if ($input->get("tmpl") != "component") :
 			<h2 class="nav-header"><?php echo JText::_("COM_JDEVELOPER_SUBMENU_FUNCTIONS"); ?></h2>
 			<ul class="j-links-group nav nav-list">
 			  <li>
-				<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&view=overrides") ?>" style="<?php echo $active == "overrides" ? $active_css : ""; ?>">
-				  <i class="icon-pencil-2"></i>
-				  <span class="j-links-link"><?php echo JText::_("COM_JDEVELOPER_SUBMENU_OVERRIDES"); ?></span>
-				</a>
-			  </li>
-			  <li>
 				<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&view=import") ?>" style="<?php echo $active == "import" ? $active_css : ""; ?>">
 				  <i class="icon-download"></i>
 				  <span class="j-links-link"><?php echo JText::_("COM_JDEVELOPER_SUBMENU_IMPORT"); ?></span>
@@ -112,7 +115,7 @@ if ($input->get("tmpl") != "component") :
 				</a>
 			  </li>
 			  <li>
-				<a href="http://www.joommaster.bplaced.net/index.php/contact" target="blank">
+				<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&view=mail") ?>">
 				  <i class="icon-comments-2"></i>
 				  <span class="j-links-link"><?php echo JText::_("COM_JDEVELOPER_SUBMENU_CONTACT"); ?></span>
 				</a>

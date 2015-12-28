@@ -18,7 +18,7 @@ JDeveloperLoader::import("table", JDeveloperCREATE);;
  */
 class JDeveloperCreateTableAdminFormFilter extends JDeveloperCreateTable
 {		
-	/*
+	/**
 	 * Look for language keys in the template and add them
 	 *
 	 * @var	boolean

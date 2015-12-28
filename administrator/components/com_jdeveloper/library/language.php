@@ -2,111 +2,72 @@
 /**
  * @package     JDeveloper
  * @subpackage  Library
- *
- * @copyright  	Copyright (C) 2014, Tilo-Lars Flasche. All rights reserved.
- * @license     GNU General Public License version 2 or later
+ * 
+ * @author		Tilo-Lars Flasche
+ * @copyright	Copyright (C) 2014, Tilo-Lars Flasche. All rights reserved.
+ * @license		http://www.gnu.org/licenses/gpl-2.0.html
  */
+defined("_JEXEC") or die();
 
-defined('_JEXEC') or die;
-jimport('joomla.filesystem.folder');
+jimport("jcms.language");
+
+use lib_jcms\language\Language as JCMSLanguage;
 
 /**
- * Class for working with language files
- *
- * @package     JDeveloper
- * @subpackage  Library
+ * JDeveloper Language class
  */
-class JDeveloperLanguage
+class JDeveloperLanguage extends JCMSLanguage
 {
-	/**
-	 * The language key prefix
-	 *
-	 * @var string
-	 */
-	protected $prefix = "";
-
-	/**
-	 * The language keys
-	 *
-	 * @var JRegistry
-	 */
-	protected $registry = null;
-
 	/**
 	 * Language object container
 	 *
 	 * @var array<JDeveloperLanguage>
 	 */
 	private static $instances = array();
-
-	/**
-	 * Constructor
-	 *
-	 * @param	string	$prefix		An optional prefix
-	 */
-	public function __construct($prefix = "")
-	{
-		$this->prefix = strtoupper($prefix);
-		$this->registry = new JRegistry();
-	}
 	
 	/**
 	 * Add language keys
 	 *
 	 * @param	array	$array			The language keys
-	 * @param	string	$prefix			An optional prefix
-	 * @param	boolean	$addpprefix		Should the standart prefix be added?
+	 * @param	string	$subprefix		An optional prefix
+	 * @param	boolean	$addPrefix		Should the standart prefix be added?
 	 *
 	 * @return	void
 	 */
-	public function addKeys($array, $prefix = "", $addPrefix = true)
+	public function addKeys($array, $subprefix = "", $addPrefix = true)
 	{
 		foreach ($array as $key => $value)
 		{
 			$parts = array();
 			
-			if ($addPrefix)
+			if ($addPrefix && isset($this->_config["prefix"]) && !empty($this->_config["prefix"]))
 			{
-				!empty($this->prefix) ? $parts[] = $this->prefix : null;
-				!empty($prefix) ? $parts[] = $prefix : null;
+				$parts[] = $this->_config["prefix"];
 			}
-			else
-			{
-				!empty($prefix) ? $parts[] = $prefix : null;
+				
+			if (!empty($subprefix)) {
+				$parts[] = $subprefix;
 			}
 			
-			!empty($key) ? $parts[] = $key : null;
+			if (!empty($key)) {
+				$parts[] = $key;
+			}
 			
-			$this->registry->set(strtoupper(implode("_", $parts)), $value);
+			$this->set(strtoupper(implode("_", $parts)), $value);
 		}
 	}
 	
 	/**
 	 * Get lannguage keys as INI string
 	 *
-	 * @return	string
-	 */
-	public function getINI()
-	{
-		$array = $this->registry->toArray();
-		ksort($array);
-		$registry = new JRegistry($array);
-		
-		return $registry->toString("INI");
-	}
-
-	/**
-	 * Get lannguage keys as INI string
-	 *
 	 * @return	JDeveloperLanguage
 	 */
-	public static function &getStaticInstance($name, $prefix = "")
-	{
+	public static function &getInstance($name, $config = array()) {
 		if (!isset(self::$instances[$name]))
 		{
-			self::$instances[$name] = new JDeveloperLanguage($prefix);
+			self::$instances[$name] = new JDeveloperLanguage($config);
 		}
-		
+	
 		return self::$instances[$name];
 	}
 }

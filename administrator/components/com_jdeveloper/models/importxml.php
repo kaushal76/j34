@@ -22,7 +22,7 @@ class JDeveloperModelImportXml extends JModelLegacy
 	 *
 	 * @param	SimpleXMLElement	$manifest	Manifest file
 	 *
-	 * @return	mixed	Component object on success, false otherwise
+	 * @return	mixed	data array on success, false otherwise
 	 */
 	public function getComponent(SimpleXMLElement $manifest)
 	{
@@ -32,8 +32,8 @@ class JDeveloperModelImportXml extends JModelLegacy
 		// Set component properties
 		$component = array();
 		$component["id"] = 0;
-		$component["name"] = (string) $manifest->name;
-		$component["display_name"] = ucfirst((string) $manifest->name);
+		$component["name"] = str_replace("com_", "", $manifest->name);
+		$component["display_name"] = ucfirst(str_replace("com_", "", $manifest->name));
 		$component["site"] = isset($manifest->files);
 		$component["version"] = (string) $manifest->version;
 		$component["description"] = (string) $manifest->description;

@@ -68,6 +68,10 @@ class JDeveloperCreateTableSiteTmplPluralDefault extends JDeveloperCreateTable
 			// Don`t create a table column for the mainfield
 			if ( preg_match('/' . $this->fields[0]->name . '/i', $field->name) ) continue;
 			
+			// Check if field should be displayed in frontend list view
+			if ($field->params["frontend_list"] == 0)
+				continue;
+			
 			$template->addPlaceholders( $this->getDefaultPlaceholders(), true );
 			$template->addPlaceholders( array('field' => $field->name), true );
 			$buffer .= $template->getBuffer();
@@ -81,6 +85,7 @@ class JDeveloperCreateTableSiteTmplPluralDefault extends JDeveloperCreateTable
 		$template = $this->loadSubtemplate('tablebody.txt');
 		$buffer = '';
 				
+		// Create columns for relations to other tables
 		if (isset($this->table->params["relations"]))
 		{
 			foreach ($this->table->params["relations"] as $relation)
@@ -91,10 +96,16 @@ class JDeveloperCreateTableSiteTmplPluralDefault extends JDeveloperCreateTable
 			}
 		}
 
+		// Create rcolumns for fields
 		foreach ($this->fields as $field)
 		{
 			// Don`t create a table column for the mainfield
-			if ( preg_match('/' . $this->fields[0]->name . '/i', $field->name) ) continue;
+			if ( preg_match('/' . $this->fields[0]->name . '/i', $field->name) )
+				continue;
+			
+			// Check if field should be displayed in frontend list view
+			if ($field->params["frontend_list"] == 0)
+				continue;
 			
 			$template->addPlaceholders( array('field' => $field->name), true );
 			$buffer .= $template->getBuffer();

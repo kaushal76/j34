@@ -10,7 +10,8 @@
 defined('_JEXEC') or die;
 
 jimport('joomla.filesystem.folder');
-require_once JDeveloperLIB.DS.'language.php';
+JDeveloperLoader::import("language");
+JDeveloperLoader::import("controllers.list");
 
 /**
  * JDeveloper Extensions Controller
@@ -18,26 +19,8 @@ require_once JDeveloperLIB.DS.'language.php';
  * @package     JDeveloper
  * @subpackage  Controllers
  */
-class JDeveloperControllerExtensions extends JControllerAdmin
+class JDeveloperControllerExtensions extends JDeveloperControllerList
 {
-	/**
-	 * Method to get a model object, loading it if required.
-	 *
-	 * @param   string  $name    The model name. Optional.
-	 * @param   string  $prefix  The class prefix. Optional.
-	 * @param   array   $config  Configuration array for model. Optional.
-	 *
-	 * @return  object  The model.
-	 *
-	 * @since   12.2
-	 */
-	public function getModel($name = 'Extension', $prefix='JDeveloperModel', $config = array())
-	{
-		$config['ignore_request'] = true;
-		$model = parent::getModel($name, $prefix, $config);
-		return $model;
-	}
-
 	/**
 	 * Create ZIP file of existing extension
 	 */

@@ -80,12 +80,9 @@ class JDeveloperViewComponent extends JViewLegacy
 		$active = explode(".", $input->get("active", "general"));
 
 		switch (count($active)) {
-			case 0:
-				$active[0] = "general";
-				
+			case 1:
 				if (count($this->tables))
-					$active[1] = $this->tables[0];
-				
+					$active[1] = "table" . $this->tables[0]->id;			
 				break;
 			default:
 				break;

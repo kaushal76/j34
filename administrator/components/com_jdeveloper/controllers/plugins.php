@@ -8,6 +8,7 @@
  */
 
 defined('_JEXEC') or die;
+JDeveloperLoader::import("controllers.list");
 
 /**
  * JDeveloper Plugins Controller
@@ -15,26 +16,8 @@ defined('_JEXEC') or die;
  * @package     JDeveloper
  * @subpackage  Controllers
  */
-class JDeveloperControllerPlugins extends JControllerAdmin
+class JDeveloperControllerPlugins extends JDeveloperControllerList
 {
-	/**
-	 * Method to get a model object, loading it if required.
-	 *
-	 * @param   string  $name    The model name. Optional.
-	 * @param   string  $prefix  The class prefix. Optional.
-	 * @param   array   $config  Configuration array for model. Optional.
-	 *
-	 * @return  object  The model.
-	 *
-	 * @since   12.2
-	 */
-	public function getModel($name = 'Plugin', $prefix='JDeveloperModel', $config = array())
-	{
-		$config['ignore_request'] = true;
-		$model = parent::getModel($name, $prefix, $config);
-		return $model;
-	}
-
 	/**
 	 * Create ZIP file of plugins
 	 *
@@ -88,7 +71,23 @@ class JDeveloperControllerPlugins extends JControllerAdmin
 		}
 
 		$this->setMessage(JText::sprintf('COM_JDEVELOPER_PLUGIN_MESSAGE_ZIP_CREATED', count($ids)));
-	}	
+	}
+	
+	/**
+	 * Create folder
+	 */
+	public function createFolder() {
+		$data = JFactory::getApplication()->input->get("jform", array(), "array");
+		
+		if (isset($data["name"])) {
+			if (!JFolder::create(JPATH_ROOT . "/plugins/" . $data["name"])) {
+				$this->setMessage(JText::_("COM_JDEVELOPER_PLUGIN_MESSAGE_CREATE_FOLDER_SUCCESS", "error"));
+			}
+		}
+		
+		$this->setMessage(JText::_("COM_JDEVELOPER_PLUGIN_MESSAGE_CREATE_FOLDER_ERROR"));
+		$this->setRedirect(JRoute::_("index.php?option=com_jdeveloper&view=plugins", false));
+	}
 
 	/**
 	 * Delete ZIP files of plugin

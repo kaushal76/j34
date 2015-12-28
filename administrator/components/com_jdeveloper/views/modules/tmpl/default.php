@@ -13,6 +13,9 @@ JHtml::_('bootstrap.tooltip');
 JHtml::_('behavior.multiselect');
 JHtml::_('dropdown.init');
 JHtml::_('formbehavior.chosen', 'select');
+
+$listOrder = $this->state->get('list.ordering');
+$listDirn = $this->state->get('list.direction');
 ?>
 
 <script type="text/javascript">
@@ -47,53 +50,50 @@ JHtml::_('formbehavior.chosen', 'select');
 		// Search tools bar
 		echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this));
 	?>
-	<table class="table table-striped" id="tableList">
-		
-		<thead>
-			<tr>
-				<th width="1%" class="hidden-phone">
-					<input type="checkbox" name="checkall-toggle" value="" onclick="Joomla.checkAll(this)" />
-				</th>
-				<th class="nowrap left">
-					<a><?php echo JText::_('COM_JDEVELOPER_MODULE_FIELD_NAME_LABEL'); ?></a>
-				</th>
-				<th class="nowrap left">
-					<a><?php echo JText::_('COM_JDEVELOPER_MODULE_FIELD_TABLE_LABEL'); ?></a>
-				</th>
-				<th class="nowrap left">
-					<a><?php echo JText::_('COM_JDEVELOPER_MODULE_FIELD_CREATED_LABEL'); ?></a>
-				</th>
-				<th class="nowrap left">
-					<a><?php echo JText::_('COM_JDEVELOPER_MODULE_FIELD_INSTALLED_LABEL'); ?></a>
-				</th>
-				<th class="nowrap left">
-					<a><?php echo JText::_('COM_JDEVELOPER_MODULE_FIELD_ID_LABEL'); ?></a>
-				</th>
-			</tr>
-		</thead>
-				
-		<tbody>
-		<?php foreach ($this->items as $i => $item) : ?>
-			<tr class="row<?php echo $i % 2; ?>">
-				<td class="center"><?php echo JHtml::_('grid.id', $i, $item->id); ?></td>
-				<td>
-					<?php
-					$link = JRoute::_('index.php?option=com_jdeveloper&view=module&id=' . $item->id);
-					echo '<a href="' . $link . '">' . $this->escape($item->name) . '</a><br>';
-					?>
-				</td>
-				<td><?php echo $item->table; ?></td>
-				<td><?php echo JHtml::_("jdgrid.archives", "mod_", $item->name) ?></td>
-				<td><?php echo $item->installed ? "<a href=\"" . JRoute::_("index.php?option=com_modules&filter_client_id=0", false) . "\">GoTo</a>" : '<i class="icon-unpublish"></i>'; ?></td>
-				<td><?php echo $this->escape($item->id); ?></td>
-			</tr>
-		<?php endforeach ?>
-		</tbody>
-	
-	</table>
-	
+	<p>&nbsp;</p>
+	<?php foreach ($this->items as $i => $item) : ?>
+	<?php if ($i % 3 == 0) : ?>
+	<div class="row-fluid">
+	<?php endif; ?>
+	<div class="item span4">
+		<div class="item_head" style="background-color:#cc0000;">
+		<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&view=module&id=" . $item->id, false); ?>">
+			<i class="item_name"><?php echo $item->display_name; ?></i>
+		</a>
+		</div>
+		<div style="background-color:#999999; height:5px;"></div>
+		<table class="item_info">
+			<tbody>
+				<tr>
+					<td>
+						<?php echo JText::_('COM_JDEVELOPER_FIELD_INSTALLED_LABEL'); ?>: 
+						<?php echo $item->installed ? "<a class=\"badge badge-info\" href=\"" . JRoute::_("index.php?option=com_modules&filter_client_id=0", false) . "\">GoTo</a>" : '<i class="icon-unpublish"></i>'; ?>
+					</td>
+				</tr>
+				<tr>
+					<td><?php echo JText::_('COM_JDEVELOPER_FIELD_DOWNLOAD_LABEL') ?>: 
+					<?php echo JHtml::_("jdgrid.archives", "mod_", $item->name) ?></td>
+				</tr>
+				<tr>
+					<td><?php echo JText::_('COM_JDEVELOPER_FIELD_CREATED_BY') ?>: <?php echo JHtml::_("jdgrid.author", $item->created_by, $item->author_name); ?></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<?php if ($i - 2 % 3 == 0) : ?>
+	</div>
+	<?php endif; ?>
+	<?php endforeach; ?>
+	<div class="item span4">
+		<div class="item_head" style="background-color:#00aa00;">
+		<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=module.add", false); ?>">
+			</i><i class="item_name"><?php echo JText::_("COM_JDEVELOPER_NEW_MODULE"); ?></i>
+		</a>
+		</div>
+	</div>	
 	<div>
 		<input type="hidden" name="task" value=" " />
+		<input type="hidden" name="view" value="modules" />
 		<input type="hidden" name="boxchecked" value="0" />
 		<!-- Sortierkriterien -->
 		<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>" />

@@ -8,6 +8,7 @@
  */
 
 defined('_JEXEC') or die;
+JDeveloperLoader::import("controllers.list");
 
 /**
  * JDeveloper Forms Controller
@@ -15,7 +16,7 @@ defined('_JEXEC') or die;
  * @package     JDeveloper
  * @subpackage  Controllers
  */
-class JDeveloperControllerForms extends JControllerAdmin
+class JDeveloperControllerForms extends JDeveloperControllerList
 {
 	/**
 	 * The URL view list variable.
@@ -24,20 +25,6 @@ class JDeveloperControllerForms extends JControllerAdmin
 	 * @since  12.2
 	 */
 	protected $view_list = 'Forms';
-	
-	/**
-	 * Get the admin model and set it to default
-	 *
-	 * @param   string           $name    Name of the model.
-	 * @param   string           $prefix  Prefix of the model.
-	 * @param   array			 $config  The model configuration.
-	 */
-	public function getModel($name = 'Form', $prefix='JDeveloperModel', $config = array())
-	{
-		$config['ignore_request'] = true;
-		$model = parent::getModel($name, $prefix, $config);
-		return $model;
-	}
 
 	/**
 	 * Rebuild the nested set tree.

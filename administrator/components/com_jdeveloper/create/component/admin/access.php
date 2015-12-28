@@ -29,7 +29,8 @@ class JDeveloperCreateComponentAdminAccess extends JDeveloperCreateComponent
 	{
 		$this->template->addPlaceHolders(
 			array( 
-			'Sections' => $this->sections(),
+				"Sections" => $this->sections(),
+				"form" => $this->getForm($this->component->form_id_access)
 			)
 		);
 		
@@ -51,6 +52,39 @@ class JDeveloperCreateComponentAdminAccess extends JDeveloperCreateComponent
 			}
 		}
 
+		return $buffer;
+	}
+	
+	/**
+	 * Get config form
+	 */
+	private function getForm($parent_id) {
+		$model = $this->getModel("Form");
+		$table = $model->getTable();
+		$buffer = "";
+	
+		foreach ($model->getChildren($parent_id, 1) as $child) {
+			$name = $child->tag == "action" ? "form.action" : "form.child";
+			$create = JDeveloperCreate::getInstance($name, array("item_id" => $child->id));
+				
+			if (!$table->isLeaf($child->id)) {
+				$create->getTemplate()->addPlaceholders(array(
+						"children" => $this->getForm($child->id)
+				));
+			}
+			else {
+				$create->getTemplate()->addPlaceholders(array(
+					"children" => "",
+					"component" => $this->component->name,
+					"title" => str_replace(".", "_", $child->name)
+				), true);
+			}
+				
+			$result = $create->getBuffer();
+			$result = explode("\n", $result);
+			$buffer .= implode("\n\t", $result);
+		}
+	
 		return $buffer;
 	}
 }

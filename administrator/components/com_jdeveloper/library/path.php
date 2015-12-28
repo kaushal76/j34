@@ -26,9 +26,11 @@ class JDeveloperPath
 	 */
 	public static function dots2ds($path)
 	{
-		if (JFile::exists($path))
+		$path = str_replace(JPATH_ROOT, "", $path);
+		
+		if (JFile::exists(JPATH_ROOT . $path))
 		{
-			return $path;
+			return JPATH_ROOT . $path;
 		}
 		
 		$filepath = JFile::stripExt($path);
@@ -39,9 +41,9 @@ class JDeveloperPath
 		{
 			$filepath = substr_replace($filepath, DS, strpos($filepath, '.'), 1);
 
-			if (JFile::exists($filepath . '.' . $ext))
+			if (JFile::exists(JPATH_ROOT . $filepath . '.' . $ext))
 			{
-				return $filepath . '.' . $ext;
+				return JPATH_ROOT . $filepath . '.' . $ext;
 			}
 		}
 

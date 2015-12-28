@@ -8,6 +8,7 @@
  */
 
 defined('_JEXEC') or die;
+JDeveloperLoader::import("controllers.list");
 
 /**
  * JDeveloper Tables Controller
@@ -15,7 +16,7 @@ defined('_JEXEC') or die;
  * @package     JDeveloper
  * @subpackage  Controllers
  */
-class JDeveloperControllerTables extends JControllerAdmin
+class JDeveloperControllerTables extends JDeveloperControllerList
 {
 	/**
 	 * The URL view list variable.
@@ -26,16 +27,9 @@ class JDeveloperControllerTables extends JControllerAdmin
 	protected $view_list = "component";
 	
 	/**
-	 * Get the admin model and set it to default
-	 *
-	 * @param   string           $name    Name of the model.
-	 * @param   string           $prefix  Prefix of the model.
-	 * @param   array			 $config  The model configuration.
+	 * Model item name
+	 * 
+	 * @var	  string
 	 */
-	public function getModel($name = 'Table', $prefix = 'JDeveloperModel', $config = array())
-	{
-		$config['ignore_request'] = true;
-		$model = parent::getModel($name, $prefix, $config);
-		return $model;
-	}
+	protected $model_item = "table";
 }

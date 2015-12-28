@@ -18,7 +18,7 @@ JHtml::_('formbehavior.chosen', 'select');
 
 <h2><?php echo JText::_('COM_##COMPONENT##_##TABLE##_VIEW_##SINGULAR##_TITLE'); ?>: <i><?php echo $this->item->##mainfield##; ?></i></h2>
 
-<form action="<?php JRoute::_('index.php?option=com_##component##&id=' . (int)$this->item->id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
+<form action="<?php echo JRoute::_('index.php?option=com_##component##&id=' . (int)$this->item->id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
 	
 	<div>
 		<button type="button" class="btn btn-primary" onclick="Joomla.submitform('##singular##.apply')"><?php echo JText::_('JAPPLY') ?></button>

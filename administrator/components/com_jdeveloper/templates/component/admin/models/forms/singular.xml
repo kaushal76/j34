@@ -206,24 +206,10 @@
 			component="com_##component##"
 			section="##singular##"
 			validate="rules"
-		/>##{end_asset_id}##
-	</fieldset>
-	<fields name="params">
-		<fieldset name="params">
-		</fieldset>
-	</fields>
-	<fields name="images" label="COM_CONTENT_FIELD_IMAGE_OPTIONS">
-		<fieldset name="images" label="JGLOBAL_FIELDSET_IMAGE_OPTIONS">##{start_images}##
-			<field
-				name="image_first"
-				type="media"
-				label="COM_##COMPONENT##_FIELD_IMAGE_FIRST_LABEL"
-				description="COM_##COMPONENT##_FIELD_IMAGE_FIRST_DESC"
-			/>##{end_images}##
-		</fieldset>
-	</fields>
+		/>##{end_asset_id}####form_fields##
+	</fieldset>##{start_metadata}##
 	<fields name="metadata" label="JGLOBAL_FIELDSET_METADATA_OPTIONS">
-		<fieldset name="jmetadata" label="JGLOBAL_FIELDSET_METADATA_OPTIONS">##{start_metadata}##
+		<fieldset name="jmetadata" label="JGLOBAL_FIELDSET_METADATA_OPTIONS">
 			<field
 				name="robots"
 				type="list"
@@ -242,7 +228,7 @@
 				label="JFIELD_METADATA_RIGHTS_LABEL"
 				description="JFIELD_METADATA_RIGHTS_DESC"
 				size="20"
-			/>##{end_metadata}##
+			/>
 		</fieldset>
-	</fields>
+	</fields>##{end_metadata}####form##
 </form>

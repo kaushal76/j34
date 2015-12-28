@@ -378,7 +378,7 @@ class ConfmgtControllerRev1ewerForm extends ConfmgtController
 					$rawsubject = $emaildata->subject;
 					$recipient = $data['email'];
 					$config = JFactory::getConfig();
-					$sitename = $config->getValue('config.sitename');
+					$sitename = $config->get('config.sitename');
 					$rawbody = $emaildata->message;
 					$agreelink = JURI::base() . 'index.php?option=com_confmgt&view=rev1ewerform&task=rev1ewerform.agree&rnd=' . $agreedstatus;
 					$denylink = JURI::base() . 'index.php?option=com_confmgt&view=rev1ewerform&task=rev1ewerform.reject&rnd=' . $agreedstatus;

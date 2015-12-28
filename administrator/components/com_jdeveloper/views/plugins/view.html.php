@@ -53,21 +53,21 @@ class JDeveloperViewPlugins extends JViewLegacy
 		$bar = JToolBar::getInstance('toolbar');
 
 		JToolBarHelper::title(JText::_('COM_JDEVELOPER_PLUGINS'));
-		JToolBarHelper::addNew('plugin.add', 'JTOOLBAR_NEW');
+		JToolBarHelper::addNew('plugin.add', 'JTOOLBAR_NEW');/**
 		JToolBarHelper::editList('plugin.edit', 'JTOOLBAR_EDIT');
 
 		JToolBarHelper::publish('plugins.create', 'JTOOLBAR_CREATE_ZIP');
 		JToolBarHelper::publish('plugins.install', 'JTOOLBAR_INSTALL');
 		JToolBarHelper::unpublish('plugins.uninstall', 'JTOOLBAR_UNINSTALL');
 		JToolBarHelper::deleteList('', 'plugins.delete', 'JTOOLBAR_DELETE');
-		JToolBarHelper::deleteList('', 'plugins.deletezip', 'JTOOLBAR_DELETE_ZIP');
+		JToolBarHelper::deleteList('', 'plugins.deletezip', 'JTOOLBAR_DELETE_ZIP');**/
 				
 		JHtml::_('bootstrap.modal', 'collapseModal');
 
 		// Instantiate a new JLayoutFile instance and render the batch button
 		$layout = new JLayoutFile('joomla.toolbar.batch');
 		$dhtml = $layout->render(array('title' => JText::_('JTOOLBAR_BATCH')));
-		$bar->appendButton('Custom', $dhtml, 'batch');
+		//$bar->appendButton('Custom', $dhtml, 'batch');
 		
 		JToolBarHelper::preferences('com_jdeveloper');
 	}

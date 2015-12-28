@@ -18,42 +18,42 @@ JDeveloperLoader::import("create");
  */
 class JDeveloperCreateTable extends JDeveloperCreate
 {	
-	/*
+	/**
 	 * The component data
 	 *
 	 * @var	JObject
 	 */
 	protected $component;
 	
-	/*
+	/**
 	 * The fields data
 	 *
 	 * @var	array<JObject>
 	 */
 	protected $fields;
 	
-	/*
+	/**
 	 * The direction where the file should be created
 	 *
 	 * @var	string
 	 */
 	protected $filePath;
 	
-	/*
+	/**
 	 * The current table data
 	 *
 	 * @var	JObject
 	 */
 	protected $table;
 	
-	/*
+	/**
 	 * Look for language keys in the template and add them
 	 *
 	 * @var	boolean
 	 */
 	protected $getLangKeys = false;
 	
-	/*
+	/**
 	 * The template header
 	 *
 	 * @var	string
@@ -123,6 +123,10 @@ class JDeveloperCreateTable extends JDeveloperCreate
 
 		foreach ($langkeys as $langkey)
 		{
+			if ($language->exists($langkey)) {
+				continue;	
+			}
+			
 			$search = str_replace($prefix, "JDEVELOPER", $langkey);
 			$search = str_replace("_" . strtoupper($this->table->name), "_TABLE", $search);
 			$search = str_replace("_" . strtoupper($this->table->plural), "_PLURAL", $search);
@@ -157,7 +161,9 @@ class JDeveloperCreateTable extends JDeveloperCreate
 			
 			if ($this->getLangKeys)
 			{
-				$this->addLanguageKeys($this->template->getLanguageKeys(array("COM_" . strtoupper($this->component->name) . "_[A-Z0-9_]*")));
+				$this->addLanguageKeys(
+						$this->template->getLanguageKeys(array("COM_" . strtoupper($this->component->name) . "_[A-Z0-9_]*"))
+						);
 			}
 		}
 
@@ -259,16 +265,17 @@ class JDeveloperCreateTable extends JDeveloperCreate
 	 */
 	protected function getLanguage($name = "")
 	{
-		$_name = "com_" . $this->component->name;
+		$_name = "com_" . $this->component->name;		
+		$config = array("prefix" => "COM_" . strtoupper($this->component->name));
 
 		if (!empty($name))
 		{
 			$_name .= "_" . $name;
 		}
-
-		return JDeveloperLanguage::getStaticInstance($_name, strtoupper("COM_" . $this->component->name));
+		
+		return JDeveloperLanguage::getInstance($_name, $config);
 	}
-
+	
 	/**
 	 * @see	JDeveloperCreate
 	 */

@@ -8,6 +8,7 @@
  */
 
 defined('_JEXEC') or die;
+JDeveloperLoader::import("models.admin");
 
 /**
  * JDeveloper Table Model
@@ -15,7 +16,7 @@ defined('_JEXEC') or die;
  * @package     JDeveloper
  * @subpackage  Models
  */
-class JDeveloperModelTable extends JModelAdmin
+class JDeveloperModelTable extends JDeveloperModelAdmin
 {
 	/**
 	 * Method to delete one or more records.
@@ -28,6 +29,8 @@ class JDeveloperModelTable extends JModelAdmin
 	 */
 	public function delete(&$pks)
 	{
+		$db = JFactory::getDbo();
+
 		// Delete fields which belong to the table
 		if ( (int) JComponentHelper::getParams('com_jdeveloper')->get('delete_fields') );
 		{
@@ -35,17 +38,31 @@ class JDeveloperModelTable extends JModelAdmin
 			
 			foreach ($pks as $pk)
 			{
-				$db = JFactory::getDbo();
 				$query = $db->getQuery(true);
-				$db->setQuery($query->select('f.id')->from('#__jdeveloper_fields AS f')->where('f.table = ' . $db->quote((int) $pk)));
+				$db->setQuery($query->select('a.id')->from('#__jdeveloper_fields AS a')->where('a.table = ' . $db->quote((int) $pk)));
 				$ids = $db->loadRowList();
 				$keys = array();
 				foreach ($ids as $id) $keys[] = $id[0];
 				$model->delete($keys);
 				
-				if (JFile::exists(JDeveloperARCHIVE . "/tables/table_$pk.xml"))
-				 JFile::delete(JDeveloperARCHIVE . "/tables/table_$pk.xml");
+				// Delete table xml file
+				if (JFile::exists(JDeveloperARCHIVE . "/tables/table_" . $pk . ".xml"))
+				 JFile::delete(JDeveloperARCHIVE . "/tables/table_" . $pk . ".xml");
 			}
+		}
+		
+		// Delete forms which belong to the table
+		foreach ($pks as $pk)
+		{
+			$model = JModelLegacy::getInstance('Form', 'JDeveloperModel');
+			$ids = $this->getFormRootIds($pk);
+			$keys = array();
+			
+			foreach ($ids as $id) {
+				$keys[] = $id[0];
+			}
+			
+			$model->delete($keys);
 		}
 		
 		return parent::delete($pks);
@@ -67,47 +84,24 @@ class JDeveloperModelTable extends JModelAdmin
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
-		
-	/**
-	 * Method for getting the form from the model.
-	 *
-	 * @param   array    $data      Data for the form.
-	 * @param   boolean  $loadData  True if the form is to load its own data (default case), false if not.
-	 *
-	 * @return  mixed  A JForm object on success, false on failure
-	 *
-	 * @since   12.2
-	 */
-	public function getForm($data = array(), $loadData = true)
-	{
-		$options = array('control' => 'jform', 'load_data' =>$loadData);
-		$form = $this->loadForm('tables', 'table', $options);
-		
-		if(empty($form))
-		{
-			return false;
-		}
-		return $form;
-	}
 	
 	/**
-	 * Method to get the data that should be injected in the form.
-	 *
-	 * @return  array    The default data is an empty array.
-	 *
-	 * @since   12.2
+	 * Get root ids of forms which belong to a table
+	 * 
+	 * @param int	$id		The table id
+	 * 
+	 * @return array	The root ids
 	 */
-	protected function loadFormData()
-	{
-		$app = JFactory::getApplication();
-		$data = $app->getUserState('com_jdeveloper.edit.table.data', array());
-		
-		if (empty($data))
-		{
-			$data = $this->getItem();
-		}
-		
-		return $data;
+	public function getFormRootIds($id) {
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true)
+			->select("a.id")
+			->from("#__jdeveloper_forms AS a")
+			->where("a.relation LIKE 'table." . $id . "%'")
+			->where("a.level = 1");
+		$db->setQuery($query);
+			
+		return $db->loadRowList();
 	}
 	
 	/**
@@ -131,6 +125,7 @@ class JDeveloperModelTable extends JModelAdmin
 		$db = JFactory::getDbo();
 		$params = JComponentHelper::getParams('com_jdeveloper');
 		
+		// Create database table name
 		if (!empty($item->component)) {
 			$component = JModelLegacy::getInstance('Component', 'JDeveloperModel')->getItem($item->component);
 			
@@ -146,14 +141,104 @@ class JDeveloperModelTable extends JModelAdmin
 			$item->dbname = $item->name;
 		}
 				
+		// Set first table field as main field
 		$db->setQuery("SELECT f.name FROM #__jdeveloper_fields AS f WHERE f.table = " . $db->quote($item->id) . " ORDER BY f.ordering");
 		$item->mainfield = $db->loadResult();
 
+		// Get Joomla core fields
 		$registry = new JRegistry();
 		$registry->loadString($item->jfields);
 		$item->jfields = $registry->toArray();
 		
+		// Get related form item
+		$table = JTable::getInstance("Form", "JDeveloperTable");
+		
+		$item->form_id = 0;
+		if ($table->load(array("tag" => "form", "relation" => "table." . $item->id . ".form"), true)) {
+			$item->form_id = $table->id;
+		}
+		
+		// Get form params id
+		$item->form_params_id = 0;		
+		if ($table->load(array("tag" => "fields", "name" => "params", "relation" => "table." . $item->id . ".form"), true)) {
+			$item->form_params_id = $table->id;
+		}
+		
+		// Get form images id
+		$item->form_images_id = 0;		
+		if ($table->load(array("tag" => "fields", "name" => "images", "relation" => "table." . $item->id . ".form"), true)) {
+			$item->form_images_id = $table->id;
+		}
+		
 		return $item;
+	}
+	
+	/**
+	 * Get id of last item
+	 * 
+	 * @return int	The id of the last item
+	 */
+	public function getLastItemId() {
+		$db = JFactory::getDbo();
+		
+		$query = $db->getQuery(true)
+		->select("a.id")
+		->from("#__jdeveloper_" . $this->getName() . "s AS a")
+		->order("a.id DESC LIMIT 1");
+		
+		$db->setQuery($query);
+
+		return $db->loadResult();
+	}
+	
+	/**
+	 * Get table params form item
+	 * 
+	 * @param int	$table_id	Table id
+	 * 
+	 * @return object	The params form item
+	 */
+	public function getParamsFormItem($table_id) {
+		$model_form = JModelLegacy::getInstance("Form", "JDeveloperModel");
+		$table = $model_form->getTable();
+				
+		$exists = $table->load(array(
+				"relation" => "table." . $table_id . ".form",
+				"tag" => "fields",
+				"name" => "params",
+				"level" => 2
+			), true);
+		
+		if ($exists) {
+			return $model_form->getItem($table->id);
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Get table params form item
+	 * 
+	 * @param int	$table_id	Table id
+	 * 
+	 * @return object	The params form item
+	 */
+	public function getImagesFormItem($table_id) {
+		$model_form = JModelLegacy::getInstance("Form", "JDeveloperModel");
+		$table = $model_form->getTable();
+		
+		$exists = $table->load(array(
+				"relation" => "table." . $table_id . ".form",
+				"tag" => "fields",
+				"name" => "images",
+				"level" => 2
+			), true);
+		
+		if ($exists) {
+			return $model_form->getItem($table->id);
+		}
+		
+		return null;
 	}
 
 	/**
@@ -172,6 +257,59 @@ class JDeveloperModelTable extends JModelAdmin
 			return true;
 		
 		return false;
+	}
+	
+	/**
+	 * @see JModelAdmin::save()
+	 */
+	public function save($data)
+	{
+		if (!parent::save($data))
+			return false;
+
+		// New item
+		if (!isset($data["id"]) || empty($data["id"])) {
+			// Get id of last item
+			$db = JFactory::getDbo();
+			$query = $db->getQuery(true)
+				->select("a.id")
+				->from("#__jdeveloper_tables AS a")
+				->order("a.id DESC LIMIT 1");
+			$db->setQuery($query);
+			$id = $db->loadResult();
+			$item = $this->getItem($id);
+			
+			if (!$this->createForms($id)) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * Create table forms
+	 * 
+	 * @param int	$id	The table id
+	 * 
+	 * @return boolean	true on success, false on error
+	 */
+	public function createForms($id) {
+		$model_form = JModelLegacy::getInstance("Form", "JDeveloperModel");
+		
+		try {
+			$model_form->importFromXML(
+					new SimpleXMLElement(JDeveloperTEMPLATES . "/form/table.xml", null, true),
+					1,
+					"table.$id.form",
+					"table.$id.form"
+					);
+		} catch (Exception $e) {
+			$this->setError($e->getMessage());
+			return false;
+		}
+		
+		return true;
 	}
 	
 	/**
@@ -223,102 +361,37 @@ class JDeveloperModelTable extends JModelAdmin
 	}
 	
 	/**
-	 * Method to perform batch operations on an item or a set of items.
-	 *
-	 * @param   array  $commands  An array of commands to perform.
-	 * @param   array  $pks       An array of item ids.
-	 * @param   array  $contexts  An array of item contexts.
-	 *
-	 * @return  boolean  Returns true on success, false on failure.
-	 *
-	 * @since   12.2
+	 * Toggle jfield value
+	 * 
+	 * @param int		$id			Item id
+	 * @param string	$jfield		JField name
+	 * 
+	 * @return boolean	true on success, false on error
 	 */
-	public function batch($commands, $pks, $contexts)
-	{		
-		// Set some needed variables.
-		$this->user = JFactory::getUser();
-		$this->table = $this->getTable();
-		$this->tableClassName = get_class($this->table);
-		$this->contentType = new JUcmType;
-		$this->type = $this->contentType->getTypeByTable($this->tableClassName);
-		$this->batchSet = true;
-
-		foreach ($commands as $field => $value)
-		{
-			if ($value != "")
-			{
-				if (!$this->batchCustom($field, $value, $pks, $contexts))
-				{
-					return false;
-				}
-			}
-		}
+	public function toggleJfield($id, $jfield) {
+		$table = $this->getTable();
 		
-		return true;
-	}
-	
-	/**
-	 * Batch changes for a group of rows.
-	 *
-	 * @param   string  $field     The field.
-	 * @param   string  $value     The new value for field site.
-	 * @param   array   $pks       An array of row IDs.
-	 * @param   array   $contexts  An array of item contexts.
-	 *
-	 * @return  boolean  True if successful, false otherwise and internal error is set.
-	 *
-	 * @since   11.3
-	 */
-	protected function batchCustom($field, $value, $pks, $contexts)
-	{
-		if (!$this->batchSet)
-		{
-			// Set some needed variables.
-			$this->user = JFactory::getUser();
-			$this->table = $this->getTable();
-			$this->tableClassName = get_class($this->table);
-			$this->contentType = new JUcmType;
-			$this->type = $this->contentType->getTypeByTable($this->tableClassName);
-			$this->batchSet = true;
-		}
-
-		foreach ($pks as $pk)
-		{
-			if ($this->user->authorise('core.edit', 'com_jdeveloper'))
-			{				
-				$this->table->reset();
-				$this->table->load($pk);
-
-				if (property_exists($this->table, $field))
-				{
-					$this->table->set($field, $value);
-				}
-				else
-				{
-					$registry = new JRegistry();
-					$registry->loadString($this->table->params);
-					$registry->set($field, $value);
-					$this->table->set('params', $registry->toString());
-				}
-
-				static::createTagsHelper($this->tagsObserver, $this->type, $pk, $this->typeAlias, $this->table);
-
-				if (!$this->table->store())
-				{
-					$this->setError($this->table->getError());
-					return false;
-				}
-			}
-			else
-			{
-				$this->setError(JText::_('JLIB_APPLICATION_ERROR_BATCH_CANNOT_EDIT'));
+		if ($table->load(array("id" => $id), true)) {
+			$jfields = json_decode($table->jfields);
+			
+			if (!isset($jfields->$jfield)) {
 				return false;
 			}
+			
+			if ($jfields->$jfield == "0") {
+				$jfields->$jfield = "1";
+			} else {
+				$jfields->$jfield = "0";
+			}
+			
+			$table->jfields = json_encode($jfields);
+			$table->store();
+			$table->reset();
+			
+			return true;
 		}
-
-		// Clean the cache
-		$this->cleanCache();
-
-		return true;
+		
+		$this->setError("Couldn't load table item");
+		return false;
 	}
 }

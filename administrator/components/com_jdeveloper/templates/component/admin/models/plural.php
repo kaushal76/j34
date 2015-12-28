@@ -103,8 +103,8 @@ class ##Component##Model##Plural## extends JModelList
 
 		// Set filter state for tags
 		$tag = $this->getUserStateFromRequest($this->context . '.filter.tag', 'filter_tag', '');
-		$this->setState('filter.tag', $tag);##{end_tags}##
-##setstates####{start_language}##
+		$this->setState('filter.tag', $tag);##{end_tags}####setstates####{start_language}##
+		
 		// force a language
 		$forcedLanguage = $app->input->get('forcedLanguage');
 
@@ -162,8 +162,9 @@ class ##Component##Model##Plural## extends JModelList
 		// Get database object
 		$db = $this->getDbo();
 		$query = $db->getQuery(true);
-		$query->select('a.*')->from('#__##table_db## AS a');				
-##relations##		##{start_language}##// Join over the language
+		$query->select('a.*')->from('#__##table_db## AS a');##relations####{start_language}##
+		
+		// Join over the language
 		$query->select('l.title AS language_title')
 			->join('LEFT', $db->quoteName('#__languages') . ' AS l ON l.lang_code = a.language');##{end_language}####{start_checked_out}##
 		
@@ -298,8 +299,8 @@ class ##Component##Model##Plural## extends JModelList
 					. ' ON ' . $db->quoteName('tagmap.content_item_id') . ' = ' . $db->quoteName('a.##pk##')
 					. ' AND ' . $db->quoteName('tagmap.type_alias') . ' = ' . $db->quote('com_##component##.##singular##')
 				);
-		}##{end_tags}##
-##filterby##
+		}##{end_tags}####filterby##
+		
 		// Add list oredring and list direction to SQL query##{start_table_nested}##
 		$sort = $this->getState('list.ordering', 'a.lft');##{end_table_nested}####{!start_table_nested}##
 		$sort = $this->getState('list.ordering', '##mainfield##');##{!end_table_nested}##

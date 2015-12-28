@@ -112,17 +112,24 @@
 			type="text"
 			label="COM_JDEVELOPER_FIELD_FIELD_MAXLENGTH_LABEL"
 			description="COM_JDEVELOPER_FIELD_FIELD_MAXLENGTH_DESC"
-			filter="integer"
+			validate="maxlength"
 			class="inputbox"
 			required="true"
 		/>
 		<field 
 			name="options"
-			type="formfieldoptions"
+			type="listextendable"
 			multiple="true"
 			label="COM_JDEVELOPER_FIELD_FIELD_OPTIONS_LABEL"
 			description="COM_JDEVELOPER_FIELD_FIELD_OPTIONS_DESC"
-			model="Field"
+			class="inputbox"
+		/>
+		<field 
+			name="attributes"
+			type="listextendable"
+			multiple="true"
+			label="COM_JDEVELOPER_FIELD_FIELD_ATTRIBUTES_LABEL"
+			description="COM_JDEVELOPER_FIELD_FIELD_ATTRIBUTES_DESC"
 			class="inputbox"
 		/>
 	</fieldset>

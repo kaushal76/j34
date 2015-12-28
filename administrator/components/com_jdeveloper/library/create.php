@@ -8,6 +8,7 @@
  */
 
 defined('_JEXEC') or die;
+
 JDeveloperLoader::import("language");
 JDeveloperLoader::import("template");
 
@@ -19,42 +20,42 @@ JDeveloperLoader::import("template");
  */
 abstract class JDeveloperCreate
 {	
-	/*
+	/**
 	 * The configuration
 	 *
 	 * @var	array
 	 */
 	protected $config = array();
 		
-	/*
+	/**
 	 * The template object
 	 *
 	 * @var	JDeveloperTemplate
 	 */
 	protected $template = null;
 		
-	/*
+	/**
 	 * The template base paths
 	 *
 	 * @var	array
 	 */
 	protected $templateDirs = array();
 		
-	/*
+	/**
 	 * The template file path
 	 *
 	 * @var	string
 	 */
 	protected $templateFile = "";
 		
-	/*
+	/**
 	 * The extensions type (important for overrides)
 	 *
 	 * @var	string
 	 */
 	protected $type = "";
 		
-	/*
+	/**
 	 * The errors
 	 *
 	 * @var	array<string>
@@ -68,7 +69,7 @@ abstract class JDeveloperCreate
 	 */
 	protected $_models = array();
 
-	/*
+	/**
 	 * The class name
 	 *
 	 * @var	string
@@ -104,7 +105,6 @@ abstract class JDeveloperCreate
 		return null;
 	}
 
-	/**
 	/**
 	 * Check whether file should be created or not
 	 *
@@ -200,7 +200,7 @@ abstract class JDeveloperCreate
 		}
 		else
 		{
-			throw new JDeveloperException("Could not find class <i>$class</i>");
+			throw new Exception("Could not find class <i>$class</i>");
 		}
 	}
 
@@ -365,7 +365,7 @@ abstract class JDeveloperCreate
 	{
 		if (!$template instanceof JDeveloperTemplate)
 		{
-			throw new JDeveloperException($this->name . ": Template must be instance of JDeveloperTemplate");
+			throw new Exception($this->name . ": Template must be instance of JDeveloperTemplate");
 		}
 
 		$this->template = $template;

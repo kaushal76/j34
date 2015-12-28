@@ -16,9 +16,7 @@ defined('_JEXEC') or die;
  * @subpackage  Tables
  */
 class JDeveloperTableModule extends JTable
-{
-	public $jfields;
-	
+{	
 	public function __construct($db)
 	{
 		parent::__construct('#__jdeveloper_modules', 'id', $db);
@@ -33,6 +31,7 @@ class JDeveloperTableModule extends JTable
 		
 		if (isset($array['params']) && is_array($array['params']))
 		{
+			ksort($array["params"]);
 			$registry = new JRegistry();
 			$registry->loadArray($array['params']);
 			$array['params'] = (string) $registry;

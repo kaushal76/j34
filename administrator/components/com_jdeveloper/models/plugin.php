@@ -8,7 +8,7 @@
  */
 
 defined('_JEXEC') or die;
-JDeveloperLoader::import("install");
+JDeveloperLoader::import("models.extension");
 
 /**
  * JDeveloper Plugin Model
@@ -16,36 +16,8 @@ JDeveloperLoader::import("install");
  * @package     JDeveloper
  * @subpackage  Models
  */
-class JDeveloperModelPlugin extends JModelAdmin
+class JDeveloperModelPlugin extends JDeveloperModelExtension
 {
-	/**
-	 * Method to delete one or more records.
-	 *
-	 * @param   array  &$pks  An array of record primary keys.
-	 *
-	 * @return  boolean  True if successful, false if an error occurs.
-	 */
-	public function delete(&$pks)
-	{
-		$model_pl = JModelLegacy::getInstance("Overrides", "JDeveloperModel");
-		$model_sg = JModelLegacy::getInstance("Override", "JDeveloperModel");
-
-		// Delete overrides
-		foreach ($pks as $pk)
-		{
-			$overrides = $model_pl->getOverrides("plugin", $pk);
-			if (count($overrides))
-			{
-				foreach ($overrides as $override)
-				{
-					$model_sg->delete($override->id);
-				}
-			}
-		}
-		
-		return parent::delete($pks);
-	}
-
 	/**
 	 * Method to get a table object, load it if necessary.
 	 *
@@ -61,29 +33,6 @@ class JDeveloperModelPlugin extends JModelAdmin
 	public function getTable($type = 'Plugin', $prefix = 'JDeveloperTable', $config = array())
 	{
 		return JTable::getInstance($type, $prefix, $config);
-	}
-	
-	/**
-	 * Method for getting the form from the model.
-	 *
-	 * @param   array    $data      Data for the form.
-	 * @param   boolean  $loadData  True if the form is to load its own data (default case), false if not.
-	 *
-	 * @return  mixed  A JForm object on success, false on failure
-	 *
-	 * @since   12.2
-	 */
-	public function getForm($data = array(), $loadData = true)
-	{
-		$options = array('control' => 'jform', 'load_data' =>$loadData);
-		$form = $this->loadForm('plugins', 'plugin', $options);
-		
-		if(empty($form))
-		{
-			return false;
-		}
-		
-		return $form;
 	}
 	
 	/**
@@ -110,6 +59,16 @@ class JDeveloperModelPlugin extends JModelAdmin
 		{
 			return false;
 		}
+
+		// Get related config form id
+		$table = JTable::getInstance("Form", "JDeveloperTable");
+		
+		if ($table->load(array("tag" => "config", "relation" => "plugin." . $item->id . ".config"), true)) {
+			$item->form_id = $table->id;
+		}
+		else {
+			$item->form_id = 0;
+		}
 		
 		$item->installed = JDeveloperInstall::isInstalled("plugin", $item->name, $item->folder);
 		$item->createDir = JDeveloperArchive::getArchiveDir() . "/" . JDeveloperArchive::getArchiveName("plg_", $item->name, $item->version);
@@ -123,25 +82,6 @@ class JDeveloperModelPlugin extends JModelAdmin
 		if (empty($item->params['license']))		$item->params['license'] = $params->get("license", "");
 
 		return $item;
-	}
-
-	/**
-	 * Method to get the data that should be injected in the form.
-	 *
-	 * @return  array    The default data is an empty array.
-	 *
-	 * @since   12.2
-	 */
-	protected function loadFormData()
-	{
-		$app = JFactory::getApplication();
-		$data = $app->getUserState('com_jdeveloper.edit.plugin.data', array());
-		
-		if(empty($data)) {
-			$data = $this->getItem();
-		}
-		
-		return $data;
 	}
 	
 	/**
@@ -171,94 +111,5 @@ class JDeveloperModelPlugin extends JModelAdmin
 		}
 		
 		parent::populateState();
-	}
-	
-	/**
-	 * Method to perform batch operations on an item or a set of items.
-	 *
-	 * @param   array  $commands  An array of commands to perform.
-	 * @param   array  $pks       An array of item ids.
-	 * @param   array  $contexts  An array of item contexts.
-	 *
-	 * @return  boolean  Returns true on success, false on failure.
-	 *
-	 * @since   12.2
-	 */
-	public function batch($commands, $pks, $contexts)
-	{		
-		// Set some needed variables.
-		$this->user = JFactory::getUser();
-		$this->table = $this->getTable();
-		$this->tableClassName = get_class($this->table);
-		$this->contentType = new JUcmType;
-		$this->type = $this->contentType->getTypeByTable($this->tableClassName);
-		$this->batchSet = true;
-
-		foreach ($commands as $field => $value)
-		{
-			if ($value != "")
-			{
-				if (!$this->batchCustom($field, $value, $pks, $contexts))
-				{
-					return false;
-				}
-			}
-		}
-		
-		return true;
-	}
-	
-	/**
-	 * Batch site changes for a group of rows.
-	 *
-	 * @param   string  $field     The field.
-	 * @param   string  $value     The new value for field site.
-	 * @param   array   $pks       An array of row IDs.
-	 * @param   array   $contexts  An array of item contexts.
-	 *
-	 * @return  boolean  True if successful, false otherwise and internal error is set.
-	 *
-	 * @since   11.3
-	 */
-	protected function batchCustom($field, $value, $pks, $contexts)
-	{
-		if (!$this->batchSet)
-		{
-			// Set some needed variables.
-			$this->user = JFactory::getUser();
-			$this->table = $this->getTable();
-			$this->tableClassName = get_class($this->table);
-			$this->contentType = new JUcmType;
-			$this->type = $this->contentType->getTypeByTable($this->tableClassName);
-			$this->batchSet = true;
-		}
-
-		foreach ($pks as $pk)
-		{
-			if ($this->user->authorise('core.edit', 'com_jdeveloper'))
-			{				
-				$this->table->reset();
-				$this->table->load($pk);
-				$this->table->set($field, $value);
-
-				static::createTagsHelper($this->tagsObserver, $this->type, $pk, $this->typeAlias, $this->table);
-
-				if (!$this->table->store())
-				{
-					$this->setError($this->table->getError());
-					return false;
-				}
-			}
-			else
-			{
-				$this->setError(JText::_('JLIB_APPLICATION_ERROR_BATCH_CANNOT_EDIT'));
-				return false;
-			}
-		}
-
-		// Clean the cache
-		$this->cleanCache();
-
-		return true;
 	}
 }

@@ -151,9 +151,17 @@ class JDeveloperCreatePlugin extends JDeveloperCreate
 	 */
 	protected function getLanguage($name = "")
 	{
-		return JDeveloperLanguage::getStaticInstance("plg_" . $this->item->name);
+		$_name = "plg_" . $this->item->name;		
+		$config = array("prefix" => "PLG_" . strtoupper($this->item->name));
+
+		if (!empty($name))
+		{
+			$_name .= "_" . $name;
+		}
+		
+		return JDeveloperLanguage::getInstance($_name, $config);
 	}
-	
+		
 	/**
 	 * @see	JDeveloperCreate
 	 */

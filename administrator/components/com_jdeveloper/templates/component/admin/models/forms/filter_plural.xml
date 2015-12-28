@@ -23,7 +23,7 @@
 		<field
 			name="published"
 			type="status"
-			label="COM_##COMPONENT##_FILTER_PUBLISHED"
+			label="COM_##COMPONENT##_FILTER_PUBLISHED_LABEL"
 			description="COM_##COMPONENT##_FILTER_PUBLISHED_DESC"
 			onchange="this.form.submit();"
 			>
@@ -51,12 +51,26 @@
 		<field
 			name="author_id"
 			type="author"
-			label="COM_##COMPONENT##_FILTER_AUTHOR"
+			label="COM_##COMPONENT##_FILTER_AUTHOR_LABEL"
 			description="COM_##COMPONENT##_FILTER_AUTHOR_DESC"
 			onchange="this.form.submit();"
 			>
 			<option value="">JOPTION_SELECT_AUTHOR</option>
-		</field>##{end_created_by}####{start_language}##
+		</field>##{end_created_by}####{start_created}##
+		<field
+			name="fromdate"
+			type="calendar"
+			label="JDEVELOPER_TABLE_FILTER_FROMDATE_LABEL"
+			description="JDEVELOPER_TABLE_FILTER_FROMDATE_DESC"
+			onchange="this.form.submit();"
+		/>
+		<field
+			name="todate"
+			type="calendar"
+			label="JDEVELOPER_TABLE_FILTER_TODATE_LABEL"
+			description="JDEVELOPER_TABLE_FILTER_TODATE_DESC"
+			onchange="this.form.submit();"
+		/>##{end_created}####{start_language}##
 		<field
 			name="language"
 			type="contentlanguage"

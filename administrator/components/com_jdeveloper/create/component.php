@@ -18,49 +18,56 @@ require_once JDeveloperLIB.DS. 'create.php';
  */
 class JDeveloperCreateComponent extends JDeveloperCreate
 {	
-	/*
+	/**
 	 * The component data
 	 *
 	 * @var	JObject
 	 */
 	protected $component;
 	
-	/*
+	/**
 	 * The component folder
 	 *
 	 * @var	string
 	 */
 	protected $createDir;
 	
-	/*
+	/**
 	 * The fields data
 	 *
 	 * @var	array<JObject>
 	 */
 	protected $fields;
 	
-	/*
+	/**
 	 * The direction where the file should be created
 	 *
 	 * @var	string
 	 */
 	protected $filePath;
 	
-	/*
+	/**
 	 * Look for language keys in the template and add them
 	 *
 	 * @var	boolean
 	 */
 	protected $getLangKeys = false;
 	
-	/*
+	/**
+	 * Language objects
+	 * 
+	 * @var array<JDeveloperLanguage>
+	 */
+	protected static $languages = array();
+	
+	/**
 	 * The current table data
 	 *
 	 * @var	JObject
 	 */
 	protected $table;
 	
-	/*
+	/**
 	 * The template header
 	 *
 	 * @var	string
@@ -258,14 +265,15 @@ class JDeveloperCreateComponent extends JDeveloperCreate
 	 */
 	protected function getLanguage($name = "")
 	{
-		$_name = "com_" . $this->component->name;
+		$_name = "com_" . $this->component->name;		
+		$config = array("prefix" => "COM_" . strtoupper($this->component->name));
 
 		if (!empty($name))
 		{
 			$_name .= "_" . $name;
 		}
-
-		return JDeveloperLanguage::getStaticInstance($_name, strtoupper("COM_" . $this->component->name));
+		
+		return JDeveloperLanguage::getInstance($_name, $config);
 	}
 	
 	/**

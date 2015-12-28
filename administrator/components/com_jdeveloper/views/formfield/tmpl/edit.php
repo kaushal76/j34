@@ -37,21 +37,15 @@ JHtml::_('formbehavior.chosen', 'select');
 	</div>
 	<?php if ($this->item->get('name', 0)) : ?>
 	<div class="row-fluid">
-		<div class="span6">
+		<div class="span12">
 			<div class="control-group">
 				<div class="control-label"><?php echo $this->form->getLabel('source'); ?></div>
 			</div>
 			<?php echo $this->form->getInput('source'); ?>
 		</div>
-		<div class="span6">
-			<div class="control-group">
-				<div class="control-label"><?php echo $this->form->getLabel('xml'); ?></div>
-			</div>
-			<?php echo $this->form->getInput('xml'); ?>
-		</div>
 	</div>
 	<?php endif; ?>	
-	<div class="control-group" style="<?php if ($this->item->id == 0) : ?>display:none<?php endif; ?>">
+	<div class="control-group hidden" style="<?php if ($this->item->id == 0) : ?>display:none<?php endif; ?>">
 		<div class="control-label"><?php echo $this->form->getLabel('id'); ?></div>
 		<div class="controls"><?php echo $this->form->getInput('id'); ?></div>
 	</div>

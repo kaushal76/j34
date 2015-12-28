@@ -24,7 +24,7 @@ class ##Component##Controller##Plural## extends JControllerAdmin
 	 * @var    string
 	 * @since  12.2
 	 */
-	protected $view_list = '##Plural##';
+	protected $view_list = '##plural##';
 	
 	/**
 	 * Get the admin model and set it to default

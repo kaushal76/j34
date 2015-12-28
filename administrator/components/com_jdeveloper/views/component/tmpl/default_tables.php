@@ -12,11 +12,10 @@ defined('_JEXEC') or die;
 $doc = JFactory::getDocument();
 $input = JFactory::getApplication()->input;
 
-$tables = JModelLegacy::getInstance("Tables", "JDeveloperModel")->getComponentTables($this->item->id);
+$tables = $this->tables;
 $model_table = JModelLegacy::getInstance("Table", "JDeveloperModel");
 $model_fields = JModelLegacy::getInstance("Fields", "JDeveloperModel");
 $model_field = JModelLegacy::getInstance("Field", "JDeveloperModel");
-$table_active = $input->get('table', 0, 'int') ? $input->get('table') : $tables[0]->id;
 
 $listOrder	= $this->escape($this->state->get('list.ordering'));
 $listDirn	= $this->escape($this->state->get('list.direction'));
@@ -34,6 +33,7 @@ $listDirn	= $this->escape($this->state->get('list.direction'));
 			?>
 			<div class="tab-pane <?php if (isset($this->active[1]) && $table->id == $this->active[1]) : ?>active<?php endif; ?>" id="table<?php echo $table->id; ?>">
 				<i style="color:#999999;font-size:20px;font-weight:700;">#__<?php echo $table->dbname; ?> </i>
+				<div class="btn-group">
 				  <a role="menuitem" tabindex="-1" href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=field.add&component=" . $this->item->id . "&table=" . $table->id, false); ?>" class="btn btn-success">
 					<i class="icon-new"></i> <?php echo JText::_("JTOOLBAR_ADD_FIELD"); ?>
 				  </a>
@@ -45,23 +45,155 @@ $listDirn	= $this->escape($this->state->get('list.direction'));
 				  </a>
 				  <?php if (!$model_table->isInstalled($table->id)) : ?>
 				  <a role="menuitem" tabindex="-1" href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=table.install&id=" . $table->id, false); ?>" class="btn btn-success">
-					<i class="icon-upload"></i> <?php echo JText::_("JTOOLBAR_INSTALL"); ?>
+					<i class="icon-upload"></i> <?php echo JText::_("JTOOLBAR_CREATEDBTABLE"); ?>
 				  </a>
 				  <?php else : ?>
 				  <a role="menuitem" tabindex="-1" href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=table.uninstall&id=" . $table->id, false); ?>" class="btn btn-warning">
-					<i class="icon-unpublish"></i> <?php echo JText::_("JTOOLBAR_UNINSTALL"); ?>
+					<i class="icon-unpublish"></i> <?php echo JText::_("JTOOLBAR_DELETEDBTABLE"); ?>
 				  </a>			  
 				  <?php endif; ?>
 				  <a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#deleteTable<?php echo $table->id; ?>" class="btn btn-danger">
 					<i class="icon-delete"></i> <?php echo JText::_("JTOOLBAR_DELETE"); ?>
 				  </a>
 				  <a role="menuitem" tabindex="-1" onclick="SqueezeBox.fromElement(this, {handler:'iframe', size: {x: window.getSize().x * 0.6, y: window.getSize().y * 0.8}, url:'<?php echo JRoute::_("index.php?option=com_jdeveloper&view=table&layout=form&tmpl=component&id=" . $table->id) ?>'})" class="btn btn-info">
-					Form
+					<?php echo JText::_("COM_JDEVELOPER_TABLE_DISPLAY_FORM"); ?>
 				  </a>
 				  <a role="menuitem" tabindex="-1" onclick="SqueezeBox.fromElement(this, {handler:'iframe', size: {x: window.getSize().x * 0.6, y: window.getSize().y * 0.8}, url:'<?php echo JRoute::_("index.php?option=com_jdeveloper&view=table&layout=sql&tmpl=component&id=" . $table->id) ?>'})" class="btn btn-info">
-					SQL
+					<?php echo JText::_("COM_JDEVELOPER_TABLE_DISPLAY_SQL"); ?>
 				  </a>
+				 </div>
 				<p>&nbsp;</p>
+				<div class="row-fluid">
+					<div class="span5">
+						<h2><?php echo JText::_("COM_JDEVELOPER_COMPONENT_INFO") ?></h2>
+						<table class="table">
+							<tbody>
+								<tr>
+									<td><?php echo JText::_("COM_JDEVELOPER_TABLE_FIELD_PLURAL_LABEL") ?>:</td>
+									<td><?php echo $table->plural; ?></td>
+								</tr>
+								<tr>
+									<td><?php echo JText::_("COM_JDEVELOPER_TABLE_FIELD_SINGULAR_LABEL") ?>:</td>
+									<td><?php echo $table->singular; ?></td>
+								</tr>
+								<tr>
+									<td><?php echo JText::_("COM_JDEVELOPER_TABLE_FIELD_FRONTEND_LABEL") ?>:</td>
+									<td><span class="badge badge-<?php echo $table->params["frontend"] ? "success" : "important"; ?>"><?php echo $table->params["frontend"] ? JText::_("JYES") : JText::_("JNO"); ?></span></td>
+								</tr>
+								<tr>
+									<td><?php echo JText::_("COM_JDEVELOPER_TABLE_FIELD_CATEGORIES_LABEL") ?>:</td>
+									<td><span class="badge badge-<?php echo $table->jfields["catid"] ? "success" : "important"; ?>"><?php echo $table->jfields["catid"] ? JText::_("JYES") : JText::_("JNO"); ?></span></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="span7">
+						<h2><?php echo JText::_("COM_JDEVELOPER_TABLE_FIELDSET_JOOMLA_DB_PATTERN") ?></h2>
+						<table class="table">
+							<tbody>
+							<tr>
+								<td>
+									<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=table.togglejfield&id=" . $table->id . "&jfield=catid", false); ?>">
+										<img height="72" width="72" src="<?php echo JURI::root(true);?>/media/com_jdeveloper/images/icon-category-<?php echo $table->jfields["catid"] ? "" : "in"; ?>active.png" />
+									</a>
+								</td>
+								<td>
+									<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=table.togglejfield&id=" . $table->id . "&jfield=ordering", false); ?>">
+										<img height="72" width="72" src="<?php echo JURI::root(true);?>/media/com_jdeveloper/images/icon-ordering-<?php echo $table->jfields["ordering"] ? "" : "in"; ?>active.png" />
+									</a>
+								</td>
+								<td>
+									<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=table.togglejfield&id=" . $table->id . "&jfield=published", false); ?>">
+										<img height="72" width="72" src="<?php echo JURI::root(true);?>/media/com_jdeveloper/images/icon-published-<?php echo $table->jfields["published"] ? "" : "in"; ?>active.png" />
+									</a>
+								</td>
+								<td>
+									<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=table.togglejfield&id=" . $table->id . "&jfield=created_by", false); ?>">
+										<img height="72" width="72" src="<?php echo JURI::root(true);?>/media/com_jdeveloper/images/icon-created-by-<?php echo $table->jfields["created_by"] ? "" : "in"; ?>active.png" />
+									</a>
+								</td>
+								<td>
+									<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=table.togglejfield&id=" . $table->id . "&jfield=created", false); ?>">
+										<img height="72" width="72" src="<?php echo JURI::root(true);?>/media/com_jdeveloper/images/icon-created-<?php echo $table->jfields["created"] ? "" : "in"; ?>active.png" />
+									</a>
+								</td>
+								<td>
+									<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=table.togglejfield&id=" . $table->id . "&jfield=modified_by", false); ?>">
+										<img height="72" width="72" src="<?php echo JURI::root(true);?>/media/com_jdeveloper/images/icon-modified-by-<?php echo $table->jfields["modified_by"] ? "" : "in"; ?>active.png" />
+									</a>
+								</td>
+								<td>
+									<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=table.togglejfield&id=" . $table->id . "&jfield=modified", false); ?>">
+										<img height="72" width="72" src="<?php echo JURI::root(true);?>/media/com_jdeveloper/images/icon-modified-<?php echo $table->jfields["modified"] ? "" : "in"; ?>active.png" />
+									</a>
+								</td>
+								<td>
+									<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=table.togglejfield&id=" . $table->id . "&jfield=version", false); ?>">
+										<img height="72" width="72" src="<?php echo JURI::root(true);?>/media/com_jdeveloper/images/icon-version-<?php echo $table->jfields["version"] ? "" : "in"; ?>active.png" />
+									</a>
+								</td>
+								<td>
+									<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=table.togglejfield&id=" . $table->id . "&jfield=publish_up", false); ?>">
+										<img height="72" width="72" src="<?php echo JURI::root(true);?>/media/com_jdeveloper/images/icon-publish-up-<?php echo $table->jfields["publish_up"] ? "" : "in"; ?>active.png" />
+									</a>
+								</td>
+								<td>
+									<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=table.togglejfield&id=" . $table->id . "&jfield=publish_down", false); ?>">
+										<img height="72" width="72" src="<?php echo JURI::root(true);?>/media/com_jdeveloper/images/icon-publish-down-<?php echo $table->jfields["publish_down"] ? "" : "in"; ?>active.png" />
+									</a>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=table.togglejfield&id=" . $table->id . "&jfield=alias", false); ?>">
+										<img height="72" width="72" src="<?php echo JURI::root(true);?>/media/com_jdeveloper/images/icon-alias-<?php echo $table->jfields["alias"] ? "" : "in"; ?>active.png" />
+									</a>
+								</td>
+								<td>
+									<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=table.togglejfield&id=" . $table->id . "&jfield=hits", false); ?>">
+										<img height="72" width="72" src="<?php echo JURI::root(true);?>/media/com_jdeveloper/images/icon-hits-<?php echo $table->jfields["hits"] ? "" : "in"; ?>active.png" />
+									</a>
+								</td>
+								<td>
+									<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=table.togglejfield&id=" . $table->id . "&jfield=checked_out", false); ?>">
+										<img height="72" width="72" src="<?php echo JURI::root(true);?>/media/com_jdeveloper/images/icon-checked-out-<?php echo $table->jfields["checked_out"] ? "" : "in"; ?>active.png" />
+									</a>
+								</td>
+								<td>
+									<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=table.togglejfield&id=" . $table->id . "&jfield=access", false); ?>">
+										<img height="72" width="72" src="<?php echo JURI::root(true);?>/media/com_jdeveloper/images/icon-access-<?php echo $table->jfields["access"] ? "" : "in"; ?>active.png" />
+									</a>
+								</td>
+								<td>
+									<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=table.togglejfield&id=" . $table->id . "&jfield=asset_id", false); ?>">
+										<img height="72" width="72" src="<?php echo JURI::root(true);?>/media/com_jdeveloper/images/icon-asset-id-<?php echo $table->jfields["asset_id"] ? "" : "in"; ?>active.png" />
+									</a>
+								</td>	
+								<td>
+									<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=table.togglejfield&id=" . $table->id . "&jfield=language", false); ?>">
+										<img height="72" width="72" src="<?php echo JURI::root(true);?>/media/com_jdeveloper/images/icon-language-<?php echo $table->jfields["language"] ? "" : "in"; ?>active.png" />
+									</a>
+								</td>	
+								<td>
+									<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=table.togglejfield&id=" . $table->id . "&jfield=params", false); ?>">
+										<img height="72" width="72" src="<?php echo JURI::root(true);?>/media/com_jdeveloper/images/icon-params-<?php echo $table->jfields["params"] ? "" : "in"; ?>active.png" />
+									</a>
+								</td>	
+								<td>
+									<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=table.togglejfield&id=" . $table->id . "&jfield=images", false); ?>">
+										<img height="72" width="72" src="<?php echo JURI::root(true);?>/media/com_jdeveloper/images/icon-images-<?php echo $table->jfields["images"] ? "" : "in"; ?>active.png" />
+									</a>
+								</td>
+								<td>
+									<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=table.togglejfield&id=" . $table->id . "&jfield=metadata", false); ?>">
+										<img height="72" width="72" src="<?php echo JURI::root(true);?>/media/com_jdeveloper/images/icon-metadata-<?php echo $table->jfields["metadata"] ? "" : "in"; ?>active.png" />
+									</a>
+								</td>							
+							</tr>
+							</tbody>
+						</table>					
+					</div>
+				</div>
 				<table class="table table-striped table-bordered" id="fieldList<?php echo $table->id ?>">
 					<thead>
 						<tr>
@@ -117,8 +249,8 @@ $listDirn	= $this->escape($this->state->get('list.direction'));
 							<td>catid</td>						
 							<td><i style="color:grey; font-size:12px;">INT(11)</i></td>						
 							<td></td>						
-							<td><?php echo JText::_("JCATEGORY"); ?></td>						
-							<td><?php echo JText::_("JCATEGORY"); ?></td>						
+							<td><?php echo JText::_("JCATEGORY"); ?></td>
+							<td><?php echo JText::_("JCATEGORY"); ?></td>
 							<td></td>						
 							<td></td>						
 							<td></td>						
@@ -173,8 +305,9 @@ $listDirn	= $this->escape($this->state->get('list.direction'));
 							<td>
 							<?php if ($tableIsInstalled) : ?>
 								<?php if (!$field->isInstalled) : ?>
-									<a role="menuitem" tabindex="-1" href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=field.install&id=" . $field->id, false); ?>" class="btn btn-success">
-										<i class="icon-upload"></i> <?php echo JText::_("JTOOLBAR_INSTALL"); ?>
+									<i class="icon-unpublish"></i>
+									<a role="menuitem" tabindex="-1" href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=field.install&id=" . $field->id, false); ?>" class="btn btn-warning">
+										<i class="icon-upload"></i> <?php echo JText::_("JTOOLBAR_ADD_COLUMN"); ?>
 									</a>
 								<?php else : ?>
 									<i class="icon-save"></i>						
@@ -183,7 +316,8 @@ $listDirn	= $this->escape($this->state->get('list.direction'));
 							</td>
 							<td><?php echo $this->escape($field->id); ?></td>
 							<td class="list-edit">
-								<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=field.edit&id=" . $field->id . "&component=" . $this->item->id); ?>"><i class="icon-edit"></i> <?php echo JText::_("JTOOLBAR_EDIT"); ?></a>
+								<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=field.edit&id=" . $field->id . "&component=" . $this->item->id); ?>"><i class="icon-edit"></i></a>
+								<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=field.delete&id=" . $field->id); ?>" style="color:#ff0000;"><i class="icon-delete"></i></a>
 							</td>
 						</tr>
 					<?php endforeach; ?>
@@ -198,8 +332,9 @@ $listDirn	= $this->escape($this->state->get('list.direction'));
 							<td></td>												
 							<td></td>												
 							<td>
+								<i class="icon-publish"></i>
 								<a role="menuitem" tabindex="-1" href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=table.importFieldFromDatabase&id=" . $table->id . "&column=" . $column->Field, false); ?>" class="btn btn-info">
-									<i class="icon-download"></i> <?php echo JText::_("JTOOLBAR_IMPORT"); ?>
+									<i class="icon-download"></i> <?php echo JText::_("JTOOLBAR_IMPORT_FIELD_FROM_DATABASE"); ?>
 								</a>
 							</td>												
 							<td></td>												

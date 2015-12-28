@@ -53,8 +53,10 @@ class JDeveloperCreateTableSiteTmplSingularDefault extends JDeveloperCreateTable
 		
 		foreach ($this->fields as $field)
 		{
-			if ( ! (int) $field->get('frontend_item', 0) ) continue;
-			$template->addPlaceholders( array('field' => $field->name), true );
+			if ($field->params["frontend_item"] == 0) 
+				continue;
+			
+			$template->addPlaceholders(array('field' => $field->name), true);
 			$buffer .= $template->getBuffer();
 		}
 		

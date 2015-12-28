@@ -27,23 +27,23 @@ class JDeveloperCreateTableAdminTable extends JDeveloperCreateTable
 
 	protected function initialize()
 	{
-		// Table translations
+		// Table language keys
 		$this->getLanguage()->addKeys(array(
 			'VIEW_' . $this->table->plural . '_TITLE'		=> $this->table->plural,
-			'VIEW_' . $this->table->singular . '_TITLE'	=> $this->table->singular,
+			'VIEW_' . $this->table->singular . '_TITLE'		=> $this->table->singular,
 			'FIELD_' . $this->table->pk . '_LABEL'			=> ucfirst($this->table->pk),
 			'FIELD_' . $this->table->pk . '_DESC'			=> ucfirst($this->table->pk),
 			'FIELD_' . $this->table->pk . '_ORDERING_ASC'	=> JText::sprintf('COM_JDEVELOPER_ORDER_ASC', ucfirst($this->table->pk)),
 			'FIELD_' . $this->table->pk . '_ORDERING_DESC'	=> JText::sprintf('COM_JDEVELOPER_ORDER_DESC', ucfirst($this->table->pk))
 		), $this->table->name);
 
+		// Submenu language keys
 		$this->getLanguage()->addKeys(array(
-			'SUBMENU_' . $this->table->name => $this->table->singular
-		));
+			'SUBMENU_' . $this->table->name => $this->table->plural
+		), "", true);
 
-		// Fields translations
-		foreach ($this->fields as $field)
-		{
+		// Fields language keys
+		foreach ($this->fields as $field) {
 			$pfx = $this->table->name . '_FIELD_' . $field->name;
 			
 			$this->getLanguage()->addKeys(array(
@@ -54,9 +54,15 @@ class JDeveloperCreateTableAdminTable extends JDeveloperCreateTable
 				"KEEP"			=> JText::sprintf('COM_JDEVELOPER_KEEP_VALUE', ucfirst($field->name)),
 				"FILTER"		=> '- Select ' . ucfirst($field->name) . ' -'
 			), $pfx);
+			
+			foreach ($field->options as $key => $option) {
+				$this->getLanguage()->addKeys(array(
+					"OPTION_" . strtoupper($key) => $option
+				), $pfx);
+			}
 		}
 
-		// Relations translations
+		// Relation language keys
 		if (isset($this->table->params["relations"]))
 		{
 			foreach ($this->table->params["relations"] as $relation)

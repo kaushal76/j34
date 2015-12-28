@@ -41,6 +41,7 @@ class JDeveloperTableComponent extends JTable
 		
 		if (isset($array['params']) && is_array($array['params']))
 		{
+			ksort($array["params"]);
 			$registry = new JRegistry();
 			$registry->loadArray($array['params']);
 			$array['params'] = (string) $registry;

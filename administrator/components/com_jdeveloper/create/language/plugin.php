@@ -19,21 +19,21 @@ require_once JDeveloperLIB . '/table.php';
  */
 class JDeveloperCreateLanguagePlugin extends JDeveloperCreateLanguage
 {	
-	/*
+	/**
 	 * The template item
 	 *
 	 * @var	JObject
 	 */
 	protected $item;
 
-	/*
+	/**
 	 * The language key prefix
 	 *
 	 * @var	string
 	 */
 	protected $prefix;
 	
-	/*
+	/**
 	 * Is this a system language file (file ending sys.ini) ? 
 	 *
 	 * @var	boolean

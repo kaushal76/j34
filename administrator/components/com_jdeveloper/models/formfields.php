@@ -17,7 +17,7 @@ defined('_JEXEC') or die;
  */
 class JDeveloperModelFormfields extends JModelList
 {
-	/*
+	/**
 	 * Constructor.
 	 *
 	 * @param   array  An optional associative array of configuration settings.

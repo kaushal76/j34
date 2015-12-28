@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
-	<fieldset name="##component##" label="JACTION_COMPONENT_SETTINGS" description="JACTION_COMPONENT_SETTINGS">
+	<fieldset name="##component##" label="JACTION_COMPONENT_SETTINGS" description="JACTION_COMPONENT_SETTINGS">##fields##
 	</fieldset>
 	<fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
 		<field
@@ -13,5 +13,5 @@
 			component="com_##component##"
 			section="component"
 		/>
-	</fieldset>
+	</fieldset>##form##
 </config>

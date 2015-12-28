@@ -65,6 +65,9 @@ class JDeveloperCreateTableSiteTmplSingularEdit extends JDeveloperCreateTable
 
 		foreach ($this->fields as $field)
 		{
+			if ($field->params["frontend_item"] == 0)
+				continue;
+			
 			$template->addPlaceholders( array('field' => $field->name), true );
 			$buffer .= $template->getBuffer();
 		}

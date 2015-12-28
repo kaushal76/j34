@@ -40,13 +40,18 @@ class JFormFieldPlugintype extends JFormFieldList
 		$results = $db->loadRowList();
 		$options = array();
 		
-		foreach ($results as $result)
-		{
+		foreach ($results as $result) {
 			$options[$result[0]] = JHtml::_('select.option', $result[0], ucfirst($result[0]));
-		}		
+		}
+		
+		foreach (JFolder::folders(JPATH_ROOT . "/plugins") as $folder) {
+			if (!isset($options[$folder]))
+				$options[$folder] = JHtml::_('select.option', $folder, ucfirst($folder));
+		}
 		
 		// Merge any additional options in the XML definition.
 		$options = array_merge(parent::getOptions(), $options);
+		ksort($options);
 
 		return $options;
 	}

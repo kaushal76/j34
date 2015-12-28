@@ -28,9 +28,9 @@ class ##Component##View##Singular## extends JViewLegacy
 	{
 		JFactory::getApplication()->input->set('hidemainmenu', true);
 		
-		$this->form = $this->get('Form');
-		$this->item = $this->get('Item');
-		$this->state = $this->get('State');
+		$this->form  = $this->getModel()->getForm();
+		$this->item  = $this->getModel()->getItem();
+		$this->state = $this->getModel()->getState();
 		
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))

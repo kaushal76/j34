@@ -13,33 +13,6 @@ JHtml::_('behavior.formvalidation');
 JHtml::_('formbehavior.chosen', 'select');
 
 $input = JFactory::getApplication()->input;
-
-$selector = "#jform_options";
-
-JFactory::getDocument()->addScriptDeclaration("
-(function($){
-	$(document).ready(function ()
-	{
-		// Method to add tags pressing enter
-		$('" . $selector . "_chzn input').keyup(function(event)
-		{
-			// Enter pressed
-			if (event.which === 13 || event.which === 188)
-			{				
-				var option = $('<option>');
-				option.text(this.value).val(this.value);
-				option.attr('selected','selected');
-
-				// Append the option an repopulate the chosen field
-				$('" . $selector . "').append(option);
-
-				this.value = '';
-				$('" . $selector . "').trigger('liszt:updated');
-			}
-		});
-	});
-})(jQuery);
-");
 ?>
 
 <script type="text/javascript">
@@ -70,11 +43,16 @@ JFactory::getDocument()->addScriptDeclaration("
 			<div class="controls"><?php echo $this->form->getInput('name'); ?></div>
 		</div>
 	</div>
-
+	
 	<div class="form-horizontal">
 	<?php echo JHtml::_('bootstrap.startTabSet', 'myTab', array('active' => 'details')); ?>
 		<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'details', 'Form', $this->item->id, true); ?>
 		<div class="row-fluid">
+			<?php echo $this->form->getInput('relation', '', $input->get("relation")); ?>
+			<div class="control-group">
+				<div class="control-label"><?php echo $this->form->getLabel('tag'); ?></div>
+				<div class="controls"><?php echo $this->form->getInput('tag'); ?></div>
+			</div>			
 			<?php if ($input->get("parent_id", 0) > 0 || $input->get("id", 0) > 0) : ?>
 			<div class="span4">
 				<div class="control-group">
@@ -123,10 +101,6 @@ JFactory::getDocument()->addScriptDeclaration("
 					<div class="control-label"><?php echo $this->form->getLabel('required'); ?></div>
 					<div class="controls"><?php echo $this->form->getInput('required'); ?></div>
 				</div>
-				<div class="control-group">
-					<div class="control-label"><?php echo $this->form->getLabel('options'); ?></div>
-					<div class="controls"><?php echo $this->form->getInput('options'); ?></div>
-				</div>
 			</div>
 			<?php else : ?>
 				<div class="span9">
@@ -154,6 +128,23 @@ JFactory::getDocument()->addScriptDeclaration("
 		</div>
 		<?php echo JHtml::_('bootstrap.endTab'); ?>
 
+		<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'params_and_attributes', JText::_('COM_JDEVELOPER_FIELDSET_PARAMS_AND_ATTRIBUTES', true)); ?>
+		<div class="row-fluid">
+			<div class="span6">
+				<div class="control-group">
+					<div class="control-label"><?php echo $this->form->getLabel('options'); ?></div>
+					<div class="controls"><?php echo $this->form->getInput('options'); ?></div>
+				</div>
+			</div>
+			<div class="span6">
+				<div class="control-group">
+					<div class="control-label"><?php echo $this->form->getLabel('attributes'); ?></div>
+					<div class="controls"><?php echo $this->form->getInput('attributes'); ?></div>
+				</div>
+			</div>
+		</div>
+		<?php echo JHtml::_('bootstrap.endTab'); ?>
+		
 		<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'publishing', JText::_('JGLOBAL_FIELDSET_PUBLISHING', true)); ?>
 		<div class="row-fluid form-horizontal-desktop">
 			<div class="span6">

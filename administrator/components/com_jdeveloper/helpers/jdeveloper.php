@@ -143,10 +143,11 @@ class JDeveloperHelper
 		$model = new InstallerModelUpdate();
 		$items = $model->getItems();
 
-		foreach ($items as $item)
-		{
-			if ($item->name == "JDeveloper")
-				return $item;
+		if (is_array($items)) {
+			foreach ($items as $item) {
+				if ($item->name == "JDeveloper")
+					return $item;
+			}
 		}
 		
 		return null;

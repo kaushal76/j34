@@ -22,6 +22,7 @@ $listDirn	= $this->escape($this->state->get('list.direction'));
 $components = JModelLegacy::getInstance("Components", "JDeveloperModel")->getItems();
 $user = JFactory::getUser();
 ?>
+<div class="btn-group">
 <?php if ($user->authorise("core.create")) : ?>
 	<a class="btn btn-success" href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=table.add&component=" . $this->item->id, false); ?>"><i class="icon-new"></i> <?php echo JText::_("JTOOLBAR_ADD_TABLE"); ?></a>
 <?php endif; ?>
@@ -39,9 +40,7 @@ $user = JFactory::getUser();
 <?php endif; ?>
 
 <?php if ($user->authorise("component.install")) : ?>
-	<?php if (!$this->item->installed) : ?>
-		<a class="btn" href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=components.install&cid=" . $this->item->id, false); ?>"><i class="icon-upload"></i> <?php echo JText::_("JTOOLBAR_INSTALL"); ?></a>
-	<?php endif; ?>
+	<a class="btn" href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=components.install&cid=" . $this->item->id, false); ?>"><i class="icon-upload"></i> <?php echo JText::_("JTOOLBAR_INSTALL"); ?></a>
 <?php endif; ?>
 
 <?php if ($user->authorise("component.uninstall")) : ?>
@@ -55,3 +54,4 @@ $user = JFactory::getUser();
 <?php endif; ?>
 
 <button data-toggle="modal" data-target="#switchComponent" class="btn btn-info" style="float:right"><i class="icon-list"></i> <?php echo JText::_("COM_JDEVELOPER_COMPONENT_SWITCH"); ?></button>
+</div>

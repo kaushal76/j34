@@ -26,8 +26,17 @@ $active = JFactory::getApplication()->input->get("active", "component");
 <div id="j-main-container">	
 <?php endif;?>
 	<?php echo JHtml::_('bootstrap.startTabSet', 'myTab', array('active' => $active)); ?>
-		
 		<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'component', JText::_('COM_JDEVELOPER_IMPORT_FIELDSET_COMPONENT'), true); ?>
+		<div class="well">
+			<form action="<?php echo JRoute::_('index.php?option=com_jdeveloper&task=import.componentfrominstallation', false); ?>" method="post" class="form-validate form-horizontal" name="adminForm" id="adminForm"  enctype="multipart/form-data">
+				<h4><?php echo JText::_("COM_JDEVELOPER_IMPORT_COMPONENT_FROM_INSTALLATION"); ?></h4>
+				<div class="control-group">
+					<div class="control-label"><?php echo $this->form->getLabel('extension'); ?></div>
+					<div class="controls"><?php echo $this->form->getInput('extension'); ?></div>
+				</div>
+				<input type="submit" class="btn btn-primary" value="<?php echo JText::_("JTOOLBAR_IMPORT"); ?>" onclick="this.form.submit()" />
+			</form>
+		</div>
 		<div class="well">
 			<form action="<?php echo JRoute::_('index.php?option=com_jdeveloper&task=import.componentfrommanifest', false); ?>" method="post" class="form-validate form-horizontal" name="adminForm" id="adminForm"  enctype="multipart/form-data">
 				<h4><?php echo JText::_("COM_JDEVELOPER_IMPORT_COMPONENT_FROM_MANIFEST"); ?></h4>

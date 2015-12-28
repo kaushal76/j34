@@ -13,6 +13,9 @@ JHtml::_('bootstrap.tooltip');
 JHtml::_('behavior.multiselect');
 JHtml::_('dropdown.init');
 JHtml::_('formbehavior.chosen', 'select');
+
+$listOrder = $this->state->get('list.ordering');
+$listDirn = $this->state->get('list.direction');
 ?>
 
 <script type="text/javascript">

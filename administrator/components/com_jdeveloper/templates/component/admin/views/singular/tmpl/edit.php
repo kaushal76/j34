@@ -26,7 +26,7 @@ JHtml::_('formbehavior.chosen', 'select');
 	}
 </script>
 
-<form action="<?php JRoute::_('index.php?option=com_##component##&id=' . (int)$this->item->id); ?>" method="post" name="adminForm" id="##singular##-form" class="form-validate">
+<form action="<?php echo JRoute::_('index.php?option=com_##component##&id=' . (int)$this->item->id); ?>" method="post" name="adminForm" id="##singular##-form" class="form-validate">
 	
 	<div class="form-inline form-inline-header">
 		<div class="control-group">

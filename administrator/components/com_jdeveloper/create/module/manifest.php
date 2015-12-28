@@ -28,14 +28,79 @@ class JDeveloperCreateModuleManifest extends JDeveloperCreateModule
 	public function initialize()
 	{
 		$this->template->addPlaceHolders(
-			array( 
-			'languages' => $this->lang()
+			array(
+				"configfields" => $this->getConfigFields(),
+				"configform" => $this->getForm($this->item->form_id),
+				"languages" => $this->lang()
 			)
 		);
 		
 		return parent::initialize();
 	}
+	
+	/**
+	 * Get config form fields as xml
+	 * 
+	 * @return string
+	 */
+	private function getConfigFields() {
+		$model = $this->getModel("Form");
+		$fields = $model->getChildren($this->item->form_id, 1);
+	
+		$buffer = "";
+	
+		foreach ($fields as $field) {
+			if ($field->level == "2" && $field->tag == "field") {
+				$create = JDeveloperCreate::getInstance("form.field", array("item_id" => $field->id));
+				$buffer .= $create->getBuffer();
+			}
+		}
+	
+		$buffer = explode("\n", $buffer);
+		return implode("\n\t\t", $buffer);
+	}
+	
+	/**
+	 * Get config form
+	 * 
+	 * @return string
+	 */
+	private function getForm($parent_id) {
+		$model = $this->getModel("Form");
+		$table = $model->getTable();
+		$buffer = "";
+	
+		foreach ($model->getChildren($parent_id, 1) as $child) {
+			if ($child->level == 2 && $child->tag == "field")
+				continue;
+				
+			$name = $child->tag == "field" ? "form.field" : "form.child";
+			$create = JDeveloperCreate::getInstance($name, array("item_id" => $child->id));
+				
+			if (!$table->isLeaf($child->id)) {
+				$create->getTemplate()->addPlaceholders(array(
+						"children" => $this->getForm($child->id)
+				));
+			}
+			else {
+				$create->getTemplate()->addPlaceholders(array(
+						"children" => ""
+				));
+			}
+				
+			$result = $create->getBuffer();
+			$result = explode("\n", $result);
+			$buffer .= implode("\n\t", $result);
+		}
 
+		return $buffer;
+	}
+
+	/**
+	 * Get languages
+	 * 
+	 * @return string
+	 */
 	private function lang()
 	{
 		$buffer = '';

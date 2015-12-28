@@ -15,25 +15,25 @@ require_once JDeveloperLIB . '/table.php';
  * Module Language Create Class
  *
  * @package     JDeveloper
- * @subpackage  Create.Modue
+ * @subpackage  Create.Module
  */
 class JDeveloperCreateLanguageModuleSys extends JDeveloperCreateLanguage
 {	
-	/*
+	/**
 	 * The languages
 	 *
 	 * @var	array<String>
 	 */
 	protected $languages = array();
 
-	/*
+	/**
 	 * The language key prefix
 	 *
 	 * @var	string
 	 */
 	protected $prefix;
 	
-	/*
+	/**
 	 * Is this a system language file (file ending sys.ini) ? 
 	 *
 	 * @var	boolean

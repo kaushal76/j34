@@ -8,6 +8,8 @@
  */
 
 defined('_JEXEC') or die;
+jimport("jcms.tables.csv");
+use lib_jcms\tables\TableCSV as JTableCSV;
 
 /**
  * JDeveloper master controller.
@@ -22,7 +24,7 @@ class JDeveloperController extends JControllerLegacy
 	 *
 	 * @var	string
 	 */
-	protected $default_view = "jdeveloper";
+	protected $default_view = "cpanel";
 	
 	/**
 	 * Checks whether a user can see this view.
@@ -39,12 +41,37 @@ class JDeveloperController extends JControllerLegacy
 	}
 	
 	/**
+	 * Check if JCMS library is installed
+	 * 
+	 * @return boolean	true if library is installed, false otherwise
+	 */
+	public function jcmsLibrarycheck() {
+		if (!JFolder::exists(JPATH_ROOT . "/libraries/jcms"))
+			return false;
+		
+		return true;
+	}
+	
+	/**
 	 * Test function
 	 *
 	 * @note	Only important for developer of this component
 	 */
 	public function test()
-	{
+	{		
+		$file = JPATH_COMPONENT_ADMINISTRATOR . "/db.csv";
+		$table = new JTableCSV($file, array("key", "value"));
+		$table->prepend(array (
+		    array("key", "value")
+		));
+		
+		$rows = $table->getRows();
+		foreach ($rows as $row) {
+			foreach ($row as $value) {
+				echo $value . ", ";
+			}
+			echo "<br>";
+		}
 	}
 
 	/**
@@ -70,8 +97,6 @@ class JDeveloperController extends JControllerLegacy
 	 */
 	public function display($cachable = false, $urlparams = false)
 	{		
-		JHtml::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . "/helpers/html");
-		
 		$view   = $this->input->get('view', 'components');
 		$layout = $this->input->get('layout', 'default');
 		$id     = $this->input->getInt('id');

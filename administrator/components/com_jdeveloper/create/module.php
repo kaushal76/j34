@@ -18,21 +18,21 @@ JDeveloperLoader::import("create");
  */
 class JDeveloperCreateModule extends JDeveloperCreate
 {	
-	/*
+	/**
 	 * The component folder
 	 *
 	 * @var	string
 	 */
 	protected $createDir;
 
-	/*
+	/**
 	 * The module item
 	 *
 	 * @var	JObject
 	 */
 	protected $item;
 		
-	/*
+	/**
 	 * The template header
 	 *
 	 * @var	string
@@ -152,9 +152,17 @@ class JDeveloperCreateModule extends JDeveloperCreate
 	 */
 	protected function getLanguage($name = "")
 	{
-		return JDeveloperLanguage::getStaticInstance("mod_" . $this->item->name);
+		$_name = "mod_" . $this->item->name;		
+		$config = array("prefix" => "MOD_" . strtoupper($this->item->name));
+
+		if (!empty($name))
+		{
+			$_name .= "_" . $name;
+		}
+		
+		return JDeveloperLanguage::getInstance($_name, $config);
 	}
-	
+		
 	/**
 	 * @see	JDeveloperCreate
 	 */

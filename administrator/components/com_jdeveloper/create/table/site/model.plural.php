@@ -73,6 +73,16 @@ class JDeveloperCreateTableSiteModelPlural extends JDeveloperCreateTable
 	{
 		$template = $this->loadSubtemplate('filterby.txt');
 		$buffer = '';
+		
+		if (isset($this->table->params["relations"]))
+		{
+			foreach ($this->table->params["relations"] as $relation)
+			{
+				$table = $this->getModel("Table")->getItem($relation);
+				$template->addPlaceholders(array("field" => strtolower($table->singular)));			
+				$buffer .= $template->getBuffer();
+			}
+		}
 				
 		foreach ($this->fields as $field)
 		{
@@ -129,6 +139,16 @@ class JDeveloperCreateTableSiteModelPlural extends JDeveloperCreateTable
 	{		
 		$template = $this->loadSubtemplate('setstate.txt');
 		$buffer = '';
+		
+		if (isset($this->table->params["relations"]))
+		{
+			foreach ($this->table->params["relations"] as $relation)
+			{
+				$table = $this->getModel("Table")->getItem($relation);
+				$template->addPlaceholders(array("field" => strtolower($table->singular)));			
+				$buffer .= $template->getBuffer();
+			}
+		}
 		
 		foreach ($this->fields as $field)
 		{

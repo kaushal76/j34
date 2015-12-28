@@ -18,7 +18,7 @@ JDeveloperLoader::import("create");
  */
 class JDeveloperCreateForm extends JDeveloperCreate
 {	
-	/*
+	/**
 	 * The form data
 	 *
 	 * @var	array<JObject>

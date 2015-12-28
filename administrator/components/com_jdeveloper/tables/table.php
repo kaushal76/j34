@@ -35,6 +35,7 @@ class JDeveloperTableTable extends JTable
 		
 		if (isset($array['jfields']) && is_array($array['jfields']))
 		{
+			ksort($array["jfields"]);
 			$registry = new JRegistry();
 			$registry->loadArray($array['jfields']);
 			$array['jfields'] = (string) $registry;
@@ -42,6 +43,7 @@ class JDeveloperTableTable extends JTable
 		
 		if (isset($array['params']) && is_array($array['params']))
 		{
+			ksort($array["params"]);
 			$registry = new JRegistry();
 			$registry->loadArray($array['params']);
 			$array['params'] = (string) $registry;

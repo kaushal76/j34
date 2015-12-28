@@ -22,6 +22,7 @@ $listDirn	= $this->escape($this->state->get('list.direction'));
 $modules = JModelLegacy::getInstance("Modules", "JDeveloperModel")->getItems();
 $user = JFactory::getUser();
 ?>
+<div class="btn-group">
 <?php if ($user->authorise("core.edit")) : ?>
 	<a class="btn" href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=module.edit&id=" . $this->item->id, false); ?>"><i class="icon-edit"></i> <?php echo JText::_("JTOOLBAR_EDIT"); ?></a>
 <?php endif; ?>
@@ -45,5 +46,5 @@ $user = JFactory::getUser();
 <?php if ($user->authorise("core.delete")) : ?>
 	<button data-toggle="modal" data-target="#deleteModule" class="btn btn-danger"><i class="icon-delete"></i> <?php echo JText::_("JTOOLBAR_DELETE"); ?></button>
 <?php endif; ?>
-
 <button data-toggle="modal" data-target="#switchModule" class="btn btn-info" style="float:right"><i class="icon-list"></i> <?php echo JText::_("COM_JDEVELOPER_MODULE_SWITCH"); ?></button>
+</div>

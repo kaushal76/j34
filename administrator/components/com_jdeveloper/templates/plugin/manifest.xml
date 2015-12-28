@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension version="3.5" method="upgrade" type="plugin" group="##folder##">
+<extension version="3.4" method="upgrade" type="plugin" group="##folder##">
 	<name>plg_##folder##_##name##</name>
 	<author>##author##</author>
 	<creationDate>##creationdate##</creationDate>
@@ -15,8 +15,6 @@
 	</files>
 	<languages folder="language">##languages##
 	</languages>
-	<config>
-		<fields name="params">
-		</fields>
+	<config>##configfields####configform##
 	</config>
 </extension>

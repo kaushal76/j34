@@ -49,7 +49,11 @@ $components = JModelLegacy::getInstance("Components", "JDeveloperModel")->getIte
 	<div id="j-main-container">
 <?php endif;?>
 	<?php if (!empty($this->item->id)) : ?>
-		<h2 style="font-size:26px;"><?php echo $this->item->display_name ?></h2>
+		<br>
+		<p>
+			<i style="font-family:'Times New Roma', Georgia, Serif;font-size:2.2em;"><?php echo $this->item->display_name ?></i>
+		</p>
+		<br>
 		<?php echo $this->loadTemplate("toolbar") ?>
 		<p>&nbsp;</p>
 		<div class="row-fluid">
@@ -69,6 +73,10 @@ $components = JModelLegacy::getInstance("Components", "JDeveloperModel")->getIte
 					<?php echo JText::_('COM_JDEVELOPER_COMPONENT_NO_TABLES'); ?>
 				</div>		
 				<?php endif; ?>
+			<?php echo JHtml::_('bootstrap.endTab'); ?>
+			<!-- Tab forms -->
+			<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'forms', JText::_('COM_JDEVELOPER_COMPONENT_FORMS'), false); ?>
+				<?php echo $this->loadTemplate("forms") ?>
 			<?php echo JHtml::_('bootstrap.endTab'); ?>
 			<!--  Tab overrides -->
 			<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'overrides', JText::_('COM_JDEVELOPER_COMPONENT_OVERRIDES'), false); ?>

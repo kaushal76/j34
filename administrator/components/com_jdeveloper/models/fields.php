@@ -116,12 +116,24 @@ class JDeveloperModelFields extends JModelList
 		{
 			$db = JFactory::getDbo();
 
-			$db->setQuery("SELECT c.name AS 'component' FROM `#__jdeveloper_components` AS c WHERE c.id = " . $item->table_id);
+			$db->setQuery($db->getQuery(true)
+					->select("c.name AS 'component'")
+					->from("#__jdeveloper_components AS c")
+					->where("c.id = " . $item->table_id));
+			
 			$item->component = $db->loadResult();
 			
 			$registry = new JRegistry();
 			$registry->loadString($item->params);
 			$item->params = $registry->toArray();
+			
+			$registry = new JRegistry();
+			$registry->loadString($item->options);
+			$item->options = $registry->toArray();
+			
+			$registry = new JRegistry();
+			$registry->loadString($item->attributes);
+			$item->attributes = $registry->toArray();
 		}
 		
 		// Add the items to the internal cache.

@@ -76,16 +76,16 @@ $input = JFactory::getApplication()->input;
 		<div class="span4">
 			<h4><?php echo JText::_('COM_JDEVELOPER_TABLE_FIELDSET_VIEWS'); ?></h4>
 			<div class="control-group">
-				<div class="control-label"><?php echo $this->form->getLabel('frontend_categories', 'params'); ?></div>
-				<div class="controls"><?php echo $this->form->getInput('frontend_categories', 'params'); ?></div>
+				<div class="control-label"><?php echo $this->form->getLabel('frontend_details', 'params'); ?></div>
+				<div class="controls"><?php echo $this->form->getInput('frontend_details', 'params'); ?></div>
 			</div>
 			<div class="control-group">
 				<div class="control-label"><?php echo $this->form->getLabel('frontend_edit', 'params'); ?></div>
 				<div class="controls"><?php echo $this->form->getInput('frontend_edit', 'params'); ?></div>
 			</div>
 			<div class="control-group">
-				<div class="control-label"><?php echo $this->form->getLabel('frontend_details', 'params'); ?></div>
-				<div class="controls"><?php echo $this->form->getInput('frontend_details', 'params'); ?></div>
+				<div class="control-label"><?php echo $this->form->getLabel('frontend_categories', 'params'); ?></div>
+				<div class="controls"><?php echo $this->form->getInput('frontend_categories', 'params'); ?></div>
 			</div>
 			<div class="control-group">
 				<div class="control-label"><?php echo $this->form->getLabel('frontend_feed', 'params'); ?></div>

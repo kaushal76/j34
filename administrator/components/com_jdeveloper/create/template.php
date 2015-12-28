@@ -154,9 +154,17 @@ class JDeveloperCreateTemplate extends JDeveloperCreate
 	 */
 	protected function getLanguage($name = "")
 	{
-		return JDeveloperLanguage::getStaticInstance("tpl_" . $this->item->name);
+		$_name = "tpl_" . $this->item->name;		
+		$config = array("prefix" => "TPL_" . strtoupper($this->item->name));
+
+		if (!empty($name))
+		{
+			$_name .= "_" . $name;
+		}
+		
+		return JDeveloperLanguage::getInstance($_name, $config);
 	}
-	
+		
 	/**
 	 * @see	JDeveloperCreate
 	 */

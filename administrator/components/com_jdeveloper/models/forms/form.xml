@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>
-	<fieldset addfieldpath="/administrator/components/com_categories/models/fields">
+	<fieldset addfieldpath="/administrator/components/com_categories/models/fields" name="content">
 		<field 
 			name="id"
 			type="text"
@@ -12,12 +12,27 @@
 			readonly="true"
 		/>
 		<field
+			name="relation"
+			type="hidden"
+			label="COM_JDEVELOPER_FORMS_FIELD_RELATION_LABEL"
+			description="COM_JDEVELOPER_FORMS_FIELD_RELATION_DESC"
+		/>
+		<field
 			name="name"
 			label="COM_JDEVELOPER_FORMS_FIELD_NAME_LABEL"
 			description="COM_JDEVELOPER_FORMS_FIELD_NAME_DESC"
 			type="text"
 			maxlength="50"
 			class="input-xxlarge input-large-text"
+		/>
+		<field
+			name="tag"
+			label="COM_JDEVELOPER_FORMS_FIELD_TAG_LABEL"
+			description="COM_JDEVELOPER_FORMS_FIELD_TAG_DESC"
+			type="text"
+			maxlength="255"
+			readonly="true"
+			required="true"
 		/>
 		<field 
 			name="type"
@@ -89,11 +104,18 @@
 		</field>
 		<field 
 			name="options"
-			type="formfieldoptions"
-			multiple="true"
+			type="listextendable"
 			label="COM_JDEVELOPER_FIELD_FIELD_OPTIONS_LABEL"
 			description="COM_JDEVELOPER_FIELD_FIELD_OPTIONS_DESC"
-			model="Form"
+			multiple="true"
+			class="inputbox"
+		/>
+		<field 
+			name="attributes"
+			type="listextendable"
+			label="COM_JDEVELOPER_FIELD_FIELD_ATTRIBUTES_LABEL"
+			description="COM_JDEVELOPER_FIELD_FIELD_ATTRIBUTES_DESC"
+			multiple="true"
 			class="inputbox"
 		/>
 		<field 

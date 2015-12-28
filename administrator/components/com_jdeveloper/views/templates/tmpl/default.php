@@ -34,51 +34,50 @@ $ordering = ($listOrder == 'ordering');
 		// Search tools bar
 		echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this));
 	?>
-	
-	<table class="table table-striped">
-				
-		<thead>
-			<tr>
-				<th width="1%" class="nowrap center hidden-phone">
-					<?php echo JHtml::_('searchtools.sort', '', 'c.ordering', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING', 'icon-menu-2'); ?>
-				</th>
-				<th width="1%" class="hidden-phone">
-					<?php echo JHtml::_('grid.checkall'); ?>
-				</th>
-				<th class="nowrap left">
-					<?php echo JHtml::_('searchtools.sort', JText::_('COM_JDEVELOPER_TEMPLATE_FIELD_NAME_LABEL'), 'a.name', $listDirn, $listOrder) ?>
-				</th>
-				<th class="nowrap left">
-					<a><?php echo JText::_('COM_JDEVELOPER_TEMPLATE_FIELD_ISBUILT_LABEL') ?></a>
-				</th>
-				<th class="nowrap left">
-					<a><?php echo JText::_('COM_JDEVELOPER_COMPONENT_FIELD_INSTALLED_LABEL') ?></a>
-				</th>
-				<th class="nowrap left">
-					<?php echo JHtml::_('searchtools.sort', JText::_('COM_JDEVELOPER_TEMPLATE_FIELD_VERSION_LABEL'), 'a.version', $listDirn, $listOrder) ?>
-				</th>
-				<th class="nowrap left">
-					<?php echo JHtml::_('searchtools.sort', JText::_('JAUTHOR'), 'a.created_by', $listDirn, $listOrder); ?>
-				</th>
-				<th class="nowrap left">
-					<?php echo JHtml::_('searchtools.sort', JText::_('COM_JDEVELOPER_TEMPLATE_FIELD_ID_LABEL'), 'a.id', $listDirn, $listOrder) ?>
-				</th>
-			</tr>
-		</thead>
-		
-		<tbody>
-			<?php echo $this->loadTemplate('rows'); ?>
-		</tbody>
-
-		<tfoot>
-			<tr>
-				<!-- Pagination -->
-				<td colspan="7"><?php echo $this->pagination->getListFooter(); ?></td>
-			</tr>
-		</tfoot>
-		
-	</table>
-
+	<p>&nbsp;</p>
+	<?php foreach ($this->items as $i => $item) : ?>
+	<?php if ($i % 3 == 0) : ?>
+	<div class="row-fluid">
+	<?php endif; ?>
+	<div class="item span4">
+		<div class="item_head" style="background-color:#00aaff;">
+		<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&view=template&id=" . $item->id, false); ?>">
+			<i class="item_name"><?php echo $item->display_name; ?></i>
+		</a>
+		</div>
+		<div style="background-color:#999999; height:5px;"></div>
+		<table class="item_info">
+			<tbody>
+				<tr>
+					<td>
+						<?php echo JText::_('COM_JDEVELOPER_FIELD_INSTALLED_LABEL'); ?>: 
+						<?php if (empty( $item->installed)) : ?>
+							<i class="icon-unpublish"></i>
+						<?php else : ?>
+							<a class="badge badge-info" href="<?php echo JRoute::_("index.php?option=com_templates");?>">GoTo</a>
+						<?php endif; ?>
+				</tr>
+				<tr>
+					<td><?php echo JText::_('COM_JDEVELOPER_FIELD_DOWNLOAD_LABEL') ?>: 
+					<?php echo JHtml::_("jdgrid.archives", "tpl_", $item->name); ?></td>
+				</tr>
+				<tr>
+					<td><?php echo JText::_('COM_JDEVELOPER_FIELD_CREATED_BY') ?>: <?php echo JHtml::_("jdgrid.author", $item->created_by, $item->author_name); ?></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<?php if ($i - 2 % 3 == 0) : ?>
+	</div>
+	<?php endif; ?>
+	<?php endforeach; ?>
+	<div class="item span4">
+		<div class="item_head" style="background-color:#00aa00;">
+		<a href="<?php echo JRoute::_("index.php?option=com_jdeveloper&task=template.add", false); ?>">
+			</i><i class="item_name"><?php echo JText::_("COM_JDEVELOPER_NEW_TEMPLATE"); ?></i>
+		</a>
+		</div>
+	</div>
 	<?php echo $this->loadTemplate('batch'); ?>
 
 	<div>

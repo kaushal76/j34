@@ -84,20 +84,17 @@ if ($saveOrder)
 					<th width="1%" class="nowrap center hidden-phone">
 						<?php echo JHtml::_('searchtools.sort', '', 'a.ordering', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING', 'icon-menu-2'); ?>
 					</th>
-				<?php endif; ?>
-				##{end_ordering}##
+				<?php endif; ?>##{end_ordering}##
 				<!-- item checkbox -->
-				<th width="1%" class="hidden-phone">
+				<th width="1%">
 					<?php echo JHtml::_('grid.checkall'); ?>
-				</th>
-				##{start_published}##
+				</th>##{start_published}##
 				<!-- item state -->
 				<?php if (isset($this->items[0]->published)): ?>
 					<th width="1%" class="nowrap center">
-						<?php echo JHtml::_('searchtools.sort', 'JSTATUS', 'a.state', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('searchtools.sort', 'JSTATUS', 'a.published', $listDirn, $listOrder); ?>
 					</th>
-                <?php endif; ?>
-				##{end_published}##
+                <?php endif; ?>##{end_published}##
 				<th class="nowrap left">
 					<?php echo JHtml::_('searchtools.sort', JText::_('COM_##COMPONENT##_##TABLE##_FIELD_##MAINFIELD##_LABEL', '##mainfield##'), $listDirn, $listOrder) ?>
 				</th>##table_head####{start_access}##
@@ -156,15 +153,13 @@ if ($saveOrder)
                 <?php endif; ?>
 				##{end_ordering}##
 				<!-- item checkbox -->
-				<td class="center"><?php echo JHtml::_('grid.id', $i, $item->##pk##); ?></td>
-				##{start_published}##
+				<td class="center"><?php echo JHtml::_('grid.id', $i, $item->##pk##); ?></td>##{start_published}##
 				<!-- item state -->
 				<?php if (isset($this->items[0]->published)): ?>
 					<td class="center">
 						<?php echo JHtml::_('jgrid.published', $item->published, $i, '##plural##.', $canChange, 'cb'##{start_publish_up}##, $item->publish_up##{end_publish_up}####{start_publish_down}##, $item->publish_down##{end_publish_down}##); ?>
 					</td>
-                <?php endif; ?>
-				##{end_published}##
+                <?php endif; ?>##{end_published}##
 				<!-- item main field -->
 				<td class="nowrap has-context">
 						<div class="pull-left">##{start_table_nested}##

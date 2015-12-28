@@ -16,18 +16,7 @@ $table = $this->getModel()->getTable();
 
 if ($id)
 {
-	if ($this->item->level == 1)
-	{
-		$result = JDeveloperCreate::getInstance("form.form", array("item_id" => $this->item->id))->getBuffer();
-	}
-	elseif ($table->isLeaf($this->item->id))
-	{
-		$result = JDeveloperCreate::getInstance("form.field", array("item_id" => $this->item->id))->getBuffer();
-	}
-	else
-	{
-		$result = JDeveloperCreate::getInstance("form.fieldarray", array("item_id" => $this->item->id))->getBuffer();
-	}
+	$result = JDeveloperCreate::getInstance("form.form", array("item_id" => $this->item->id))->getBuffer();
 }
 
 if ($input->get("format", "") == "xml")

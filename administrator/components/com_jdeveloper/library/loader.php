@@ -54,7 +54,7 @@ class JDeveloperLoader
 		
 		if ($path === false)
 		{
-			throw new JDeveloperException(get_class() . ": Path <i>$class</i> not found in <i>$basepath</i>");
+			throw new Exception(get_class() . ": Path <i>$class</i> not found in <i>$basepath</i>");
 		}
 		
 		require_once($path);

@@ -9,7 +9,7 @@
 // No direct access
 defined('_JEXEC') or die;
 
-class ConfmgtController extends JController
+class ConfmgtController extends JControllerLegacy
 {
 	/**
 	 * Method to display a view.

@@ -42,23 +42,11 @@
 		/>
 		<field 
 			name="folder"
-			type="list"
+			type="plugintype"
 			label="COM_JDEVELOPER_PLUGIN_FIELD_FOLDER_LABEL"
 			description="COM_JDEVELOPER_PLUGIN_FIELD_FOLDER_DESC"
 			required="1"
-		>
-			<option value="authentication">Authentication</option>
-			<option value="captcha">Captcha</option>
-			<option value="content">Content</option>
-			<option value="editors">Editors</option>
-			<option value="editors-xtd">Editors-Xtd</option>
-			<option value="extension">Extension</option>
-			<option value="finder">Finderd</option>
-			<option value="quickicon">Quickicon</option>
-			<option value="search">Search</option>
-			<option value="system">System</option>
-			<option value="user">User</option>
-		</field>
+		/>
 	</fieldset>
 	<fields name="params">
 		<fieldset name="params">
