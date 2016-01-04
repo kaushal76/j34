@@ -25,4 +25,4 @@ defined('_JEXEC') or die;
   </div>
 </div>​
 
-<a data-remote="index.php?option=com_confmgt&view=authorform&layout=modal&id=0&linkid=$linkid&tmpl=component" data-target="#myModal" data-toggle="modal">Launch demo modal</a>
+<a data-remote="index.php?option=com_confmgt&view=authorform&layout=modal_form&id=0&linkid=$linkid&tmpl=component" data-target="#myModal" data-toggle="modal">Launch demo modal</a>

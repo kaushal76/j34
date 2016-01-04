@@ -134,7 +134,7 @@ class ConfmgtControllerfullrev1ewoutcomeForm extends ConfmgtController
 			$recipient = JFactory::getUser((int)$paper->created_by)->email;
 			
 			$config = JFactory::getConfig();
-			$sitename = $config->getValue( 'config.sitename' );
+			$sitename = $config->get( 'config.sitename' );
 			$site_url=JURI::base();
 			
 			$authorname = JFactory::getUser((int)$paper->created_by)->name;

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     2.5.7
+ * @version     3.4.1
  * @package     com_confmgt
  * @copyright   Copyright (C) 2015. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -8,15 +8,6 @@
  */
 // no direct access
 defined('_JEXEC') or die;
-
-//JHtml::_('behavior.keepalive');
-//JHtml::_('behavior.tooltip');
-//JHtml::_('behavior.formvalidation');
-//JHtml::_('behavior.modal');
-//JHtml::_('bootstrap.loadCss', 'true', 'ltr');
-//JHtml::_('bootstrap.framework');
-//JHtml::_('jquery.framework');
-//JHtml::_('jquery.ui');
 
 //Load admin language file
 $lang = JFactory::getLanguage();
