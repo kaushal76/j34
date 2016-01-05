@@ -71,62 +71,99 @@ class ConfmgtModelRev1ews extends JModelList {
 	}
 
     /**
-     * Build an SQL query to load the list data.
+     * Build an SQL query to load the Abstract Pending Review List for a Given reviewer.
      *
      * @return	JDatabaseQuery
      * @since	1.6
      */
-    protected function getListQuery() {
+    protected function getAbsrtactRvPendingListQuery() {
 		$db		= $this->getDbo();
 		$query	= $db->getQuery(true);
+		$sub_query = $db->getQuery(true);
 		$user = JFactory::getUser();
+	
+		$sub_query->select(array('abstractid'));
+		$sub_query->from('#__confmgt_reviews');
+		$sub_query->where('created_by = '.(int)$user->id);
 		
   	    // Select the required fields from the table.
-        $query->select( array('a.paperid AS paperid', 'a.reviewerid AS rev1ewerid', 'b.userid AS userid', 'b.last_updated AS revassigned', 'c.title as title', 'c.abstract_review_outcome as abreviewoutcome', 'c.full_review_outcome as fullreviewoutcome', 'c.abstract as abtract', 'c.full_paper as fullpaper', 'COUNT(d.id) AS reviewsposted'));
-        $query->from('#__confmgt_rev1ewers_papers AS a');
-		$query->join('LEFT', $db->quoteName('#__confmgt_rev1ewers', 'b') . ' ON (' . $db->quoteName('a.reviewerid') . ' = ' . $db->quoteName('b.id') . ')');
-		$query->join('LEFT', $db->quoteName('#__confmgt_papers', 'c') . ' ON (' . $db->quoteName('a.paperid') . ' = ' . $db->quoteName('c.id') . ')');
-		$query->join('LEFT', $db->quoteName('#__confmgt_reviews', 'd') . ' ON (' . $db->quoteName('d.created_by') . ' = ' . $db->quoteName('b.userid') . 'AND ' . $db->quoteName('d.linkid') . ' = ' . $db->quoteName('a.paperid') . ')');
-		
-		$query->where('b.userid ='.(int)$user->id);
-		$query->where('c.id > '.(int)0);
-		$query->group ('a.paperid');
-		$query->group ('a.reviewerid');
+        $query->select( array('a.*', 'b.paperid as paperid', 'b.reviewerid as breviewerid', 'c.id as revid', 'c.userid as userid', 'b.last_updated as due_date'));
+        $query->from('#__confmgt_papers AS a');
+		$query->join('LEFT', $db->quoteName('#__confmgt_rev1ewers_papers', 'b') . ' ON (' . $db->quoteName('a.id') . ' = ' . $db->quoteName('b.paperid') . ')');
+		$query->join('LEFT', $db->quoteName('#__confmgt_rev1ewers', 'c') . ' ON (' . $db->quoteName('b.reviewerid') . ' = ' . $db->quoteName('c.id') . ')');
+		$query->where('c.userid ='.(int)$user->id);
+		$query->where('a.abstractid NOT IN ('.$sub_query.')');
+		$query->where('a.abstract_review_outcome = 0');
 		$query->order('c.id ASC');  
 		return $query;
 		
 	}
+	
+	/**
+	 * Build an SQL query to load the list data.
+	 *
+	 * @return	JDatabaseQuery
+	 * @since	3.4
+	 */
+	protected function getListQuery() {
+		$db		= $this->getDbo();
+		$query	= $db->getQuery(true);
+		$user = JFactory::getUser();
+	
+		// Select the required fields from the table.
+		$query->select( array('a.paperid AS paperid', 'a.reviewerid AS rev1ewerid', 'b.userid AS userid', 'b.last_updated AS revassigned', 'c.title as title', 'c.abstract_review_outcome as abreviewoutcome', 'c.full_review_outcome as fullreviewoutcome', 'c.abstract as abtract', 'c.full_paper as fullpaper', 'COUNT(d.id) AS reviewsposted'));
+		$query->from('#__confmgt_rev1ewers_papers AS a');
+		$query->join('LEFT', $db->quoteName('#__confmgt_rev1ewers', 'b') . ' ON (' . $db->quoteName('a.reviewerid') . ' = ' . $db->quoteName('b.id') . ')');
+		$query->join('LEFT', $db->quoteName('#__confmgt_papers', 'c') . ' ON (' . $db->quoteName('a.paperid') . ' = ' . $db->quoteName('c.id') . ')');
+		$query->join('LEFT', $db->quoteName('#__confmgt_reviews', 'd') . ' ON (' . $db->quoteName('d.created_by') . ' = ' . $db->quoteName('b.userid') . 'AND ' . $db->quoteName('d.linkid') . ' = ' . $db->quoteName('a.paperid') . ')');
+	
+		$query->where('b.userid ='.(int)$user->id);
+		$query->where('c.id > '.(int)0);
+		$query->group ('a.paperid');
+		$query->group ('a.reviewerid');
+		$query->order('c.id ASC');
+		return $query;
+	
+	}
  
+	
 	public function getItems() {
         return parent::getItems();
     }
 	
 	public function getItemsPending() {
 		 
-		$all_items = $this->getItems();
+		$all_items  = $this->getItemsAbstractRvPending();
+
 		$return = array();
 		$i=0;
 		foreach ($all_items as $item) {
-			if (($item->reviewsposted ==0) && ($item->abreviewoutcome ==0)) { 
-				$return[$i]->paperid = $item->paperid; 
+			
+				$return[$i]->paperid = $item->id; 
 				$return[$i]->title = $item->title;
-				$return[$i]->due_date = $item->revassigned;  
+				$return[$i]->due_date = $item->due_date;  
 				$return[$i]->mode = 'Abstract';
-				$return[$i]->fullpaper = $item->fullpaper;
-			}elseif (($item->abreviewoutcome >0)&&($item->fullpaper) && ($item->fullreviewoutcome ==0)&&($item->reviewsposted <2)){
-				$return[$i]->paperid = $item->paperid;
-				$return[$i]->title = $item->title;
-				$return[$i]->due_date = $item->revassigned; 
-				$return[$i]->mode = 'Full';
-				$return[$i]->fullpaper = $item->fullpaper;		
-			}
+				$return[$i]->fullpaper = $item->full_paper;
 			$i = $i+1;
 		}
+		
 		if (!empty( $return)) {
 			return $return;
 		}else{
 			return false;
 		}						 
+	}
+
+	
+	public function getItemsAbstractRvPending()
+	{		
+		$db		= $this->getDbo();
+		$query	= $db->getQuery(true);
+		$query = $this->getAbsrtactRvPendingListQuery();
+		$db->setQuery($query);
+		$results = $db->loadObjectList();
+		return $results;
+		
 	}
 	
 	public function getItemsCompleted($paperid=0, $mode=0) {

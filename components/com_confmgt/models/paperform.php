@@ -246,6 +246,7 @@ class ConfmgtModelPaperForm extends JModelForm
 		$data_prepared = $data;
 		$data_prepared['id'] = $data['abstractid'];
 		$data_prepared['linkid'] = $id;
+		$data_prepared['created_by'] = $user->id;
 		
 	
 		if($id) {
