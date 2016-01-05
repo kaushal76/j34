@@ -30,7 +30,8 @@ class ConfmgtViewRev1ews extends JViewLegacy
         $app                	= JFactory::getApplication();
         
         $this->state				= $this->get('State');
-		$this->items_pending		= $this->get('Itemspending');
+		$this->Abs_items_pending		= $this->get('AbstractItemspending');
+		$this->Full_items_pending		= $this->get('FullpaperItemspending');
 		$this->items_completed		= $this->get('Itemscompleted');
         $this->pagination			= $this->get('Pagination');
         $this->params       		= $app->getParams('com_confmgt');

@@ -94,10 +94,41 @@ class ConfmgtModelRev1ews extends JModelList {
 		$query->where('c.userid ='.(int)$user->id);
 		$query->where('a.abstractid NOT IN ('.$sub_query.')');
 		$query->where('a.abstract_review_outcome = 0');
-		$query->order('c.id ASC');  
+		$query->order('a.id ASC');  
 		return $query;
 		
 	}
+	
+	/**
+	 * Build an SQL query to load the full paper Pending Review List for a Given reviewer.
+	 *
+	 * @return	JDatabaseQuery
+	 * @since	1.6
+	 */
+	protected function getFullpaperRvPendingListQuery() {
+		$db		= $this->getDbo();
+		$query	= $db->getQuery(true);
+		$sub_query = $db->getQuery(true);
+		$user = JFactory::getUser();
+	
+		$sub_query->select(array('fullpaperid'));
+		$sub_query->from('#__confmgt_reviews');
+		$sub_query->where('created_by = '.(int)$user->id);
+	
+		// Select the required fields from the table.
+		$query->select( array('a.*', 'b.paperid as paperid', 'b.reviewerid as breviewerid', 'c.id as revid', 'c.userid as userid', 'b.last_updated as due_date'));
+		$query->from('#__confmgt_papers AS a');
+		$query->join('LEFT', $db->quoteName('#__confmgt_rev1ewers_papers', 'b') . ' ON (' . $db->quoteName('a.id') . ' = ' . $db->quoteName('b.paperid') . ')');
+		$query->join('LEFT', $db->quoteName('#__confmgt_rev1ewers', 'c') . ' ON (' . $db->quoteName('b.reviewerid') . ' = ' . $db->quoteName('c.id') . ')');
+		$query->where('c.userid ='.(int)$user->id);
+		$query->where('a.fullpaperid NOT IN ('.$sub_query.')');
+		$query->where('a.full_review_outcome = 0');
+		$query->where('a.fullpaperid > 0');
+		$query->order('a.id ASC');
+		return $query;
+	
+	}
+	
 	
 	/**
 	 * Build an SQL query to load the list data.
@@ -131,19 +162,18 @@ class ConfmgtModelRev1ews extends JModelList {
         return parent::getItems();
     }
 	
-	public function getItemsPending() {
+	public function getAbstractItemsPending() {
 		 
-		$all_items  = $this->getItemsAbstractRvPending();
+		$abstract_items  = $this->_getItemsAbstractRvPending();
 
 		$return = array();
 		$i=0;
-		foreach ($all_items as $item) {
+		foreach ($abstract_items as $item) {
 			
 				$return[$i]->paperid = $item->id; 
 				$return[$i]->title = $item->title;
 				$return[$i]->due_date = $item->due_date;  
 				$return[$i]->mode = 'Abstract';
-				$return[$i]->fullpaper = $item->full_paper;
 			$i = $i+1;
 		}
 		
@@ -153,9 +183,32 @@ class ConfmgtModelRev1ews extends JModelList {
 			return false;
 		}						 
 	}
+	
+	public function getFullpaperItemsPending() {
+			
+		$fullpaper_items  = $this->_getItemsFullpaperRvPending();
+	
+		$return = array();
+		$i=0;
+		foreach ($fullpaper_items as $item) {
+				
+			$return[$i]->paperid = $item->id;
+			$return[$i]->title = $item->title;
+			$return[$i]->due_date = $item->due_date;
+			$return[$i]->mode = 'Abstract';
+			$return[$i]->fullpaper = $item->full_paper;
+			$i = $i+1;
+		}
+	
+		if (!empty( $return)) {
+			return $return;
+		}else{
+			return false;
+		}
+	}
 
 	
-	public function getItemsAbstractRvPending()
+	protected function _getItemsAbstractRvPending()
 	{		
 		$db		= $this->getDbo();
 		$query	= $db->getQuery(true);
@@ -165,6 +218,18 @@ class ConfmgtModelRev1ews extends JModelList {
 		return $results;
 		
 	}
+	
+	protected function _getItemsFullpaperRvPending()
+	{
+		$db		= $this->getDbo();
+		$query	= $db->getQuery(true);
+		$query = $this->getFullpaperRvPendingListQuery();
+		$db->setQuery($query);
+		$results = $db->loadObjectList();
+		return $results;
+	
+	}
+	
 	
 	public function getItemsCompleted($paperid=0, $mode=0) {
 		$db		= $this->getDbo();

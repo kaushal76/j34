@@ -28,24 +28,19 @@ defined('_JEXEC') or die;
       </tr>
     </thead>
     <tbody>
-      <?php $show = false; ?>
-      <?php if ($this->items_pending): ?>
-      <?php foreach ($this->items_pending as $item) : ?>
-      <?php if (!$item->fullpaper) {
+      <?php $show = false;?>
+      <?php if ($this->Abs_items_pending): ?>
+      <?php foreach ($this->Abs_items_pending as $item) :
 				$layout = 'abstract';
 				$btn = JText::_('Post Abstract Review');
-			}else{
-				$layout = 'full';
-				$btn = JText::_('Post Full paper Review');
-			}
-	?>
-      <?php $show = true;?>
+
+      $show = true;?>
       <tr>
         <td width="5%"><?php echo $item->paperid; ?></td>
         <td><?php echo $item->title; ?></td>
         <td><?php echo $item->mode; ?></td>
         <td><?php echo $item->due_date; ?></td>
-        <td><form id="form-review-post-<?php echo $item->id; ?>" style="display:inline" action="<?php echo JRoute::_('index.php'); ?>" method="post" class="form-validate" enctype="multipart/form-data">
+        <td><form id="form-review-post-<?php echo $item->abstractid; ?>" style="display:inline" action="<?php echo JRoute::_('index.php'); ?>" method="post" class="form-validate" enctype="multipart/form-data">
             <input type="hidden" name="jform['linkid']" value="<?php echo $item->paperid; ?>" />
             <input type="hidden" name="linkid" value="<?php echo $item->paperid; ?>" />
             <input type="hidden" name="option" value="com_confmgt" />
@@ -55,6 +50,32 @@ defined('_JEXEC') or die;
             <?php echo JHtml::_('form.token'); ?>
           </form></td>
       </tr>
+      <?php endforeach; ?>
+      <?php endif; ?>
+      <?php if ($this->Full_items_pending): ?>
+      <?php foreach ($this->Full_items_pending as $item) :
+
+				$layout = 'full';
+				$btn = JText::_('Post Full paper Review');
+
+      $show = true;?>
+      <tr>
+        <td width="5%"><?php echo $item->paperid; ?></td>
+        <td><?php echo $item->title; ?></td>
+        <td><?php echo $item->mode; ?></td>
+        <td><?php echo $item->due_date; ?></td>
+        <td><form id="form-review-post-<?php echo $item->fullpaperid; ?>" style="display:inline" action="<?php echo JRoute::_('index.php'); ?>" method="post" class="form-validate" enctype="multipart/form-data">
+            <input type="hidden" name="jform['linkid']" value="<?php echo $item->paperid; ?>" />
+            <input type="hidden" name="linkid" value="<?php echo $item->paperid; ?>" />
+            <input type="hidden" name="option" value="com_confmgt" />
+            <input type="hidden" name="view" value="rev1ewform" />
+            <input type="hidden" name="layout" value="<?php echo $layout; ?>" />
+            <button type="submit" class="btn btn-general"><?php echo $btn; ?></button>
+            <?php echo JHtml::_('form.token'); ?>
+          </form></td>
+      </tr>
+      
+      
       <?php endforeach; ?>
       <?php endif; ?>
     </tbody>
