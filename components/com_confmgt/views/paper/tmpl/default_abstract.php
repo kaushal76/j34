@@ -13,43 +13,14 @@ defined('_JEXEC') or die;
 //adding overriding styles
 $url = "http://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap-editable/css/bootstrap-editable.css";
 $document = JFactory::getDocument();
-$document->addStyleSheet($url);
+//$document->addStyleSheet($url);
 
 $url = "http://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap-editable/js/bootstrap-editable.min.js";
 $document = JFactory::getDocument();
 $document->addScript($url);
 
 ?>
-<script>
-(function ( $ ) { 
-$(document).ready(function() {
-    //toggle `popup` / `inline` mode
-    $.fn.editable.defaults.mode = 'inline';     
-    
-    //make username editable
-    $('#title').editable();
-    
-    //make status editable
-    $('#status').editable({
-        type: 'select',
-        title: 'Select status',
-        placement: 'right',
-        value: 2,
-        source: [
-            {value: 1, text: 'status 1'},
-            {value: 2, text: 'status 2'},
-            {value: 3, text: 'status 3'}
-        ]
-        /*
-        //uncomment these lines to send data on server
-        ,pk: 1
-        ,url: '/post'
-        */
-    });
-});  
 
-}( jQuery ));
-</script>
 <div class="panel panel-default">
   <div class="panel-heading">
     <h1>

@@ -24,7 +24,7 @@ $lang = JFactory::getLanguage();
 $lang->load('com_confmgt', JPATH_ADMINISTRATOR);
 
 $document = JFactory::getDocument();
-$document->addScript('components/com_confmgt/assets/js/jquery_custom.js');
+//$document->addScript('components/com_confmgt/assets/js/jquery_custom.js');
 
 //adding overriding styles
 $url = "http://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap-editable/css/bootstrap-editable.css";

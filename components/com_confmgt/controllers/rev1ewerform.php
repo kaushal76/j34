@@ -71,6 +71,7 @@ class ConfmgtControllerRev1ewerForm extends ConfmgtController
 	function save()
 	{
 
+		
 		// Check for request forgeries.
 
 		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
@@ -84,7 +85,8 @@ class ConfmgtControllerRev1ewerForm extends ConfmgtController
 		// Get the user data.
 
 		$data = JFactory::getApplication()->input->get('jform', array() , 'array');
-		$edit = $data['id'] > 0;
+		
+		$edit = (int)$data['id'] > 0;
 
 		// Validate the posted data.
 
@@ -101,7 +103,7 @@ class ConfmgtControllerRev1ewerForm extends ConfmgtController
 
 		// Check for errors.
 
-		if ($data === false)
+		if ($data == false)
 		{
 
 			// Get the validation messages.
@@ -283,7 +285,7 @@ class ConfmgtControllerRev1ewerForm extends ConfmgtController
 						$recipient = $data['email'];
 						$config = JFactory::getConfig();
 						$name = $data['title'] . ' ' . $data['firstname'] . ' ' . $data['surname'];
-						$sitename = $config->getValue('config.sitename');
+						$sitename = $config->get('config.sitename');
 						$rawbody = $emaildata->message;
 						$theme_leader = $user->name;
 
@@ -335,6 +337,7 @@ class ConfmgtControllerRev1ewerForm extends ConfmgtController
 			}
 			else
 			{ //user does not exist
+				
 				$data['userid'] = 0;
 
 				// Attempt to save the data.
@@ -367,7 +370,7 @@ class ConfmgtControllerRev1ewerForm extends ConfmgtController
 
 				// get the random number in the agreed column
 
-				$agreedstatus = $model->getRow($return)->agreed;
+				$agreedstatus = (int)$model->getRow($return)->agreed;
 				if (!($agreedstatus === 1))
 				{ // reviewer has not agreed in advance
 					$name = $data['title'] . ' ' . $data['firstname'] . ' ' . $data['surname'];
@@ -429,10 +432,13 @@ class ConfmgtControllerRev1ewerForm extends ConfmgtController
 				}
 				else
 				{ //Reviewer agreed in advance
+					
 					if ($revdata['userid'] = $this->_newRevEmail($data))
+				
 					{
 						$revdata['id'] = $return;
 						$return = $model->save($revdata);
+						
 
 						// Check for errors.
 
@@ -623,7 +629,7 @@ class ConfmgtControllerRev1ewerForm extends ConfmgtController
 					$rawsubject = $emaildata->subject;
 					$recipient = $userdata['email'];
 					$config = JFactory::getConfig();
-					$sitename = $config->getValue('config.sitename');
+					$sitename = $config->get('config.sitename');
 					$rawbody = $emaildata->message;
 
 					// setting placeholders
@@ -750,7 +756,7 @@ class ConfmgtControllerRev1ewerForm extends ConfmgtController
 			$rawsubject = $emaildata->subject;
 			$recipient = $userdata['email'];
 			$config = JFactory::getConfig();
-			$sitename = $config->getValue('config.sitename');
+			$sitename = $config->get('config.sitename');
 			$siteurl = JURI::root();
 			$rawbody = $emaildata->message;
 
@@ -781,9 +787,7 @@ class ConfmgtControllerRev1ewerForm extends ConfmgtController
 		}
 	}
 
-	public
-
-	function notify()
+	public function notify()
 	{
 
 		// Check for request forgeries.
