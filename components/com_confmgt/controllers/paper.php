@@ -58,7 +58,7 @@ class ConfmgtControllerPaper extends ConfmgtController {
      */
     public function publish() {
         // Check for request forgeries.
-        JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+        JSession::checkToken('get') or jexit(JText::_('JINVALID_TOKEN'));
 
         // Initialise variables.
         $app = JFactory::getApplication();
@@ -94,7 +94,7 @@ class ConfmgtControllerPaper extends ConfmgtController {
 
     public function remove() {
         // Check for request forgeries.
-        JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+        //JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
         // Initialise variables.
         $app = JFactory::getApplication();
@@ -102,9 +102,11 @@ class ConfmgtControllerPaper extends ConfmgtController {
 
         // Get the user data.
         $data = JFactory::getApplication()->input->get('jform', array(), 'array');
+        
 
         // Attempt to save the data.
         $return = $model->delete($data['id']);
+        
 
         // Check for errors.
         if ($return === false) {

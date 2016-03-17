@@ -15,16 +15,11 @@ $url = "components/com_confmgt/assets/js/bootbox.min.js";
 $document = JFactory::getDocument ();
 $document->addScript( $url );
 
+$delurl = "components/com_confmgt/assets/js/del.js";
+$document = JFactory::getDocument ();
+$document->addScript( $delurl );
+
 ?>
-<script type="text/javascript">
-function deleteItem(item_id){
-	bootbox.confirm("Do you really want to delete this paper? Once deleted it is irrecoverable", "Cancel", "Delete", function(result) {
-	    if (result) {
-	    	document.getElementById('form-paper-delete-' + item_id).submit();
-	    } 
-	});
-}
-</script>
 
 <div class="panel panel-default">
   <div class="panel-heading">
@@ -52,13 +47,8 @@ function deleteItem(item_id){
         <td><?php echo $item->title; ?></td>
         <td><?php echo $item->themename; ?></td>
         <td><?php echo $item->last_updated; ?></td>
-        <td><form id="form-paper-delete-<?php echo $item->id; ?>" style="display:inline" action="<?php echo JRoute::_('index.php'); ?>" method="post" class="form-validate" enctype="multipart/form-data">
-            <input type="hidden" name="jform[id]" value="<?php echo $item->id; ?>" />
-            <input type="hidden" name="option" value="com_confmgt" />
-            <input type="hidden" name="task" value="paper.remove" />
-            <button type="button" class="btn btn-danger" onclick="javascript:deleteItem(<?php echo $item->id; ?>);"><i class="icon-trash icon-white"></i></button>
-            <?php echo JHtml::_('form.token'); ?>
-          </form>
+        <td>
+        <a class="btn btn-danger" data-toggle="confirm" data-title="Do you really want to delete the record"<?php echo $item->id; ?> href="<?php echo JRoute::_('index.php?option=com_confmgt&task=paper.remove&jform[id]='.$item->id.'&'.JSession::getFormToken().'=1'); ?>"><i class="icon-trash icon-white"></i></a>
           <form id="form-paper-edit-<?php echo $item->id; ?>" style="display:inline" action="<?php echo JRoute::_('index.php'); ?>" method="post" class="form-validate" enctype="multipart/form-data">
             <input type="hidden" name="id" value="<?php echo $item->id; ?>" />
             <input type="hidden" name="linkid" value="<?php echo $item->id; ?>" />
