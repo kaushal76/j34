@@ -10,13 +10,10 @@
 defined('_JEXEC') or die;
 
 JHtml::_('bootstrap.alert', 'error');
-
-$url = "components/com_confmgt/assets/js/bootbox.min.js";
 $document = JFactory::getDocument ();
-$document->addScript( $url );
-
+$bootboxurl = "components/com_confmgt/assets/js/bootbox.min.js";
 $delurl = "components/com_confmgt/assets/js/del.js";
-$document = JFactory::getDocument ();
+$document->addScript( $bootboxurl );
 $document->addScript( $delurl );
 
 ?>
