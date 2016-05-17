@@ -1,4 +1,4 @@
-<?php##{start_header}##
+<?php ##{start_header}##
 /**
  * @package     JDeveloper
  * @subpackage  Templates.Component
@@ -9,8 +9,8 @@
 
 defined('_JEXEC') or die;##{end_header}##
 ##Header##
-
-class ##Component##Controller extends JControllerLegacy
+##Component##Controller extends JControllerLegacy
+class 
 {
 	/**
 	 * The default view for the display method.
@@ -28,6 +28,7 @@ class ##Component##Controller extends JControllerLegacy
 	 * @return  boolean
 	 * @since   1.6
 	 */
+	
 	protected function canView($view)
 	{
 		$canDo	= ##Component##Helper::getActions();
