@@ -1,4 +1,4 @@
-<?php##{start_header}##
+<?php ##{start_header}##
 /**
  * @package     JDeveloper
  * @subpackage  Templates.Template
