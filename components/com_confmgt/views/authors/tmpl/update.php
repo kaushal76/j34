@@ -104,8 +104,8 @@ $linkid = $this->linkid;
 <div class="inline">
 <form id="form-author-new" style="display:inline" action="<?php echo JRoute::_('index.php?option=com_confmgt&view=paper&id='.$linkid); ?>" method="post" class="form-validate" enctype="multipart/form-data">
 <?php echo JHtml::_('form.token'); ?>
-<button class="btn btn-default btn-lg" <?php echo $nxtBtnDisable; ?> type="submit">
-<i class="icon-check"></i>
+<button class="btn btn-default btn-lg" type="submit">
+<i class="icon-ok"></i>
 <?php echo JText::_("Done"); ?>
 </button>
 </form>
