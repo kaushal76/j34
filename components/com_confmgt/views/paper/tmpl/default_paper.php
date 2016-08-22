@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     2.5.7
+ * @version     3.6.0
  * @package     com_confmgt
  * @copyright   Copyright (C) 2015. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -45,7 +45,14 @@ defined('_JEXEC') or die;?>
 		echo JText::_('COM_CONFMGT_FORM_LBL_PAPER_FULL_PAPER'); ?>
         :</td>
       <td><?php echo $this->item->full_paper_txt; ?> </td>
-      <td><?php echo $this->item->full_paper_download; ?></td>     
+      <td>
+      <?php 
+      echo $this->item->full_paper_download;
+      if (!empty($this->item->fullPaperBtn)) {
+				echo $this->item->fullPaperBtn;
+      }
+      ?>
+      </td>     
        </tr>
           <tr>
       <td class="header"><?php

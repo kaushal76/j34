@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version     2.5.7
+ * @version     3.6.0
  * @package     com_confmgt
  * @copyright   Copyright (C) 2015. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -108,6 +108,24 @@ class ConfmgtModelPaper extends JModelItem {
 
                 // Convert the JTable to a clean JObject.
                 $properties = $table->getProperties(1);
+                
+                // Download Buttons are not properties of the table, hence dealing with those seperately
+                if (!isset ($properties['full_paper_download'])) {
+                	$properties['full_paper_download'] = null;
+                }
+                
+                if (!isset ($properties['cameraready_download'])) {
+                	$properties['cameraready_download'] = null;
+                }
+                
+                if (!isset ($properties['cameraReadyBtn'])) {
+                	$properties['cameraReadyBtn'] = null;
+                }
+                
+                if (!isset ($properties['presentation_download'])) {
+                	$properties['presentation_download'] = null;
+                }
+        
                 $this->_item = JArrayHelper::toObject($properties, 'JObject');
 				
             } elseif ($error = $table->getError()) {
@@ -409,11 +427,11 @@ class ConfmgtModelPaper extends JModelItem {
 		$html = $html."<input type=\"hidden\" name=\"jform['mode']\" value=\"".$mode."\" />";
   		$html = $html."<button class=\"btn btn-default\" type=\"submit\">";
 		if ($mode =='change') {
-			$html =	$html.JText::_("Change the full Paper");
+			$html =	$html.JText::_("Change");
 		}elseif ($mode =='resubmit') {
-			$html =	$html.JText::_("Resubmit the full paper");
+			$html =	$html.JText::_("Resubmit");
 		}elseif ($mode == 'new') {
-			$html =	$html.JText::_("Upload the full paper");
+			$html =	$html.JText::_("Upload");
 		}
 		$html = $html."</button></form></div>";
 		
