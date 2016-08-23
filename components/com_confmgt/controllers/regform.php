@@ -101,7 +101,7 @@ class ConfmgtControllerRegForm extends ConfmgtController
 
 			// Redirect back to the edit screen.
 			$id = (int)$app->getUserState('com_confmgt.edit.reg.id');
-			$this->setMessage(JText::sprintf('Author save failed. Please try again', $model->getError()), 'error');
+			$this->setMessage(JText::sprintf('Author could not be saved. Please try again', $model->getError()), 'error');
 			$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=regform&layout=edit&id='.$id, false)); 
 			return false;
 		}
