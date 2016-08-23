@@ -125,7 +125,7 @@ class ConfmgtControllerRegForm extends ConfmgtController
 		$recipient = $data['email'];
 		
 		$config = JFactory::getConfig();
-		$sitename = $config->getValue( 'config.sitename' );
+		$sitename = $config->get( 'sitename' );
 		$rawbody = $emaildata->message;
 		
 		//setting placeholders
