@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     3.4.1
+ * @version     3.6.0
  * @package     com_confmgt
  * @copyright   Copyright (C) 2015. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -107,7 +107,23 @@ class ConfmgtControllerLoginForm extends ConfmgtController
 		}
 	}
  
-    public function cancel() {
+    public function cancel() 
+    {
 		$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=entrypage', false)); 
+	}
+	
+	public function logout() 
+	{
+		$app = JFactory::getApplication();
+		if ($app->logout()) 
+		{
+			$app->enqueueMessage(JText::_('COM_CONFMGR_CONTROLLER_ENTRYPAGE_LOGOUT_SUCCESS'), 'message');
+			$app->redirect(JRoute::_('index.php?option=com_confmgt&view=entrypage', false));
+		}
+		else
+		{
+			$app->enqueueMessage(JText::_('COM_CONFMGR_CONTROLLER_ENTRYPAGE_LOGOUT_FAIELD'), 'error');
+			$app->redirect(JRoute::_('index.php?option=com_confmgt&view=entrypage', false));
+		}
 	}
 }
