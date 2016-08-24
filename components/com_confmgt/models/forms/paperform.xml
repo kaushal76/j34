@@ -48,6 +48,10 @@
 		<field name="theme" type="sql" label="COM_CONFMGT_FORM_LBL_PAPER_THEME" query="SELECT id, title FROM #__confmgt_themes" key_field="id" value_field="title" class="input-block-level" required="true">
 		<option value="">Please select your theme</option>
 		</field>
+		
+		<field name="type" type="sql" label="COM_CONFMGT_FORM_LBL_TYPE" query="SELECT id, type FROM #__confmgt_submission_types" key_field="id" value_field="type" class="input-block-level" required="true">
+		<option value="">Please select your submission type</option>
+		</field>
 
        <field name="checked_out" type="hidden" filter="unset" />
         <field name="checked_out_time" type="hidden" filter="unset" />

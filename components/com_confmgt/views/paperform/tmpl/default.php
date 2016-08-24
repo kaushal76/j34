@@ -71,6 +71,13 @@ JHtml::_('jquery.framework');
           <div class="controls"> <?php echo $this->
 				form->getInput('student_submission'); ?> </div>
         </div>
+        
+        <div class="control-group">
+          <div class="control-label"> <?php echo $this->
+				form->getLabel('type'); ?> </div>
+          <div class="controls"> <?php echo $this->
+				form->getInput('type'); ?> </div>
+        </div>
         <div class="control-group">
           <div class="control-label"> <?php echo $this->
 				form->getLabel('created_by'); ?> </div>
