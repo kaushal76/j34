@@ -5,32 +5,27 @@
 		description="COM_CONFMGT_COMPONENT_DESC"
 	>
 
-        <field name="test"
-             type="radio"
-             default="1"
-             label="COM_CONFMGT_TEST_LABEL"
-             description="COM_CONFMGT_TEST_DESC">
-                 <option value="0">JHIDE</option>
-                 <option value="1">JSHOW</option>
-         </field>
-
 	</fieldset>
 	
 	<fieldset name="full_paper"
 		label="COM_CONFMGT_FULLPAPER_LABEL"
-		description="COM_CONFMGT_FULLPAPER_DESC"
+		description="COM_CONFMGT_FULLPAPER_DESC"		
 	>
 
         <field name="file_type" 
              type="text"
              label="COM_CONFMGT_FULLPAPER_FILE_TYPES_LABEL"
-             description="COM_CONFMGT_FULLPAPER_FILE_TYPES_DESC">
+             description="COM_CONFMGT_FULLPAPER_FILE_TYPES_DESC"
+             default="doc,docx"
+             >
          </field>
 		 
 		 <field name="upload_path" 
              type="text"
              label="COM_CONFMGT_FULLPAPER_PATH_LABEL"
-             description="COM_CONFMGT_FULLPAPER_PATH_DESC">
+             description="COM_CONFMGT_FULLPAPER_PATH_DESC"
+             default="components/com_confmgt/upload/"
+             >
          </field>
 
 	</fieldset>
@@ -43,25 +38,11 @@
         <field name="file_type_presentation" 
              type="text"
              label="COM_CONFMGT_PRESENTATION_FILE_TYPES_LABEL"
-             description="COM_CONFMGT_PRESENTATION_FILE_TYPES_DESC">
+             description="COM_CONFMGT_PRESENTATION_FILE_TYPES_DESC"
+             default="ppt,pptx"
+             >
          </field>
 		 
-	</fieldset>
-
-	<fieldset name="permissions"
-		description="JCONFIG_PERMISSIONS_DESC"
-		label="JCONFIG_PERMISSIONS_LABEL"
-	>
-
-		<field 
-            name="rules" 
-            type="rules"
-			component="com_confmgt"
-            class="inputbox"
-			filter="rules"
-			validate="rules"
-			label="JCONFIG_PERMISSIONS_LABEL"
-			section="component" />
 	</fieldset>
 
 </config>

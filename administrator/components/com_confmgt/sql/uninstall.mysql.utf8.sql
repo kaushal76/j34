@@ -11,5 +11,6 @@ DROP TABLE IF EXISTS `#__confmgt_rev1ewers`;
 DROP TABLE IF EXISTS `#__confmgt_themes`;
 DROP TABLE IF EXISTS `#__confmgt_email_log`;
 DROP TABLE IF EXISTS `#__confmgt_emails`;
-DROP TABLE IF EXISTS `#__confmgt_coordinators`;
+DROP TABLE IF EXISTS `#__confmgt_coordinators`
+DROP TABLE IF EXISTS `#__confmgt_submission_types`
 
