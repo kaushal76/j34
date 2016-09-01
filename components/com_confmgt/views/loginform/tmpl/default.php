@@ -13,7 +13,7 @@ defined('_JEXEC') or die;
  * TODO 
  * Adjust the login box width and make it more aesthetically pleasing 
  */
-echo $this->loadTemplate('modal');
+echo $this->loadTemplate('general');
 
 ?>
 
