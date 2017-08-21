@@ -251,6 +251,31 @@ class ConfmgtModelfullrev1ewoutcomeForm extends JModelForm
 				}			
 			}
 			
+			// Deal with submision types
+		
+	switch ($this->_paper_item->type) {
+			case 1:
+				$this->_paper_item->type_txt = JText::_('COM_CONFMGT_MODEL_PAPER_TYPE_TXT_ACADEMIC_PAPER');
+			break;
+			
+			case 2:
+				$this->_paper_item->type_txt = JText::_('COM_CONFMGT_MODEL_PAPER_TYPE_TXT_POLICY_NOTE');
+			break;
+			
+			case 3:
+				$this->_paper_item->type_txt = JText::_('COM_CONFMGT_MODEL_PAPER_TYPE_TXT_DOCTORAL_SCHOOL');
+			break;
+			
+			case 4:
+				$this->_paper_item->type_txt = JText::_('COM_CONFMGT_MODEL_PAPER_TYPE_TXT_POSTER');
+			break;
+			
+			case '':
+			default:
+			    $this->_paper_item->type_txt = JText::_('COM_CONFMGT_MODEL_PAPER_TYPE_TXT_ACADEMIC_PAPER');
+			break;
+	}
+			
 		
 		$this->_paper_item->full_paper_download = $this->_FullPaperDownloadBtn ($this->_paper_item->full_paper);
 		return $this->_paper_item;
@@ -260,7 +285,7 @@ class ConfmgtModelfullrev1ewoutcomeForm extends JModelForm
 	public function getRev1ewersData()
 	{
 		$linkid = $this->getLinkid();
-		$rows = ConfmgtHelper::getRev1ewers((int)$linkid);
+		$rows = MainHelper::getRev1ewers((int)$linkid);
 		if ($rows) {
 			return $rows;
 		}else{
@@ -271,7 +296,7 @@ class ConfmgtModelfullrev1ewoutcomeForm extends JModelForm
 	public function getRev1ewData()
 	{
 		$linkid = $this->getLinkid();
-		$rows = ConfmgtHelper::getRev1ews((int)$linkid, 'full');
+		$rows = MainHelper::getRev1ews((int)$linkid, 'full');
 		if ($rows) {
 			return $rows;
 		}else{
@@ -283,7 +308,7 @@ class ConfmgtModelfullrev1ewoutcomeForm extends JModelForm
 	{
 		// get the paper id		
 		$linkid = $this->getLinkid();
-		$rows = ConfmgtHelper::getAuthors((int)$linkid);
+		$rows = MainHelper::getAuthors((int)$linkid);
 		if ($rows) {
 			return $rows;
 		}else{
@@ -291,6 +316,21 @@ class ConfmgtModelfullrev1ewoutcomeForm extends JModelForm
 		}
 	
 	}
+	
+	public function getFullPaperRevisionCount()
+	{
+		// get the paper id		
+		$linkid = $this->getLinkid();
+		$rows = MainHelper::getFullPaperRevisionCount((int)$linkid);
+		if ($rows) {
+			return $rows;
+		}else{
+			return false;
+		}
+	
+	}
+	
+	
     
 	public function getTable($type = 'Paper', $prefix = 'ConfmgtTable', $config = array())
 	{   
@@ -606,6 +646,64 @@ class ConfmgtModelfullrev1ewoutcomeForm extends JModelForm
 		$html = $html."</button></form></div>";
 		return $html;
 		
+	}
+	
+		public function getPreviousAbstracts($id = null)
+	{
+	    if (empty($id)||$id==0) {
+				$id = $this->getLinkid();
+			}
+	    // Get a db connection.
+		$db = JFactory::getDbo();
+		 
+		// Create a new query object.
+		$query = $db->getQuery(true);
+		$user = JFactory::getUser();
+		
+		// @todo - format the query with escape characters 
+		$query
+			->select('a.*')
+			->from('#__confmgt_abstracts as a');
+	
+			// Only the papers which are not archieved
+			$query->where('a.linkid ='.(int)$id);
+		 
+		// Reset the query using our newly populated query object.
+		$db->setQuery($query);
+		 
+		// Load the results as a list of stdClass objects (see later for more options on retrieving data).
+		$results = $db->loadObjectList();
+
+	return $results;
+	}
+	
+	public function getPreviousFullPapers($id = null)
+	{
+	    
+	    if (empty($id)||$id==0) {
+				$id = $this->getLinkid();
+			}
+	    // Get a db connection.
+		$db = JFactory::getDbo();
+		 
+		// Create a new query object.
+		$query = $db->getQuery(true);
+		$user = JFactory::getUser();
+		
+		// @todo - format the query with escape characters 
+		$query
+			->select('a.*')
+			->from('#__confmgt_fullpapers as a');
+	
+			// Only the papers which are not archieved
+			$query->where('a.linkid ='.(int)$id);
+		 
+		// Reset the query using our newly populated query object.
+		$db->setQuery($query);
+		 
+		// Load the results as a list of stdClass objects (see later for more options on retrieving data).
+		$results = $db->loadObjectList();
+	return $results;
 	}
     
     

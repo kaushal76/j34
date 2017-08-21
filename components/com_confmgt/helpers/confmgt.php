@@ -8,7 +8,7 @@
  */
 defined('_JEXEC') or die;
 
-abstract class ConfmgtHelper
+abstract class MainHelper
 {
 	    /**
      * Method to get the paper ID .
@@ -17,7 +17,7 @@ abstract class ConfmgtHelper
      *
      * @return	paper ID (Int) on success false on failure.
      */
-    public static function getLinkid( )
+    public static function getLinkid()
     {
         $linkid = JFactory::getApplication()->getUserStateFromRequest( "com_confmgt.linkid", 'linkid', 0 );
         if ( $linkid == 0 ) {
@@ -109,6 +109,33 @@ abstract class ConfmgtHelper
 		return $rows;
 		
 	}
+	
+	public static function getFullPaperRevisionCount($paperid = 0) {
+		$db		= JFactory::getDbo();
+		$query	= $db->getQuery(true);
+		$user = JFactory::getUser();
+		 
+			
+		 // Select the required fields from the table.
+        $query->select('a.*');
+        $query->from('`#__confmgt_fullpaper` AS a');
+		
+		if (!$paperid==0) { 
+			$query->where('linkid ='.$paperid);
+		}else{
+			JError::raiseError(500, 'No paper id');
+			return false;
+		}
+		$query->order('a.ordering ASC');
+		$db->setQuery($query); 
+		
+		// Load the row.
+		$rows = $db->getNumRows();
+		return $rows;
+		
+	}
+	
+	
 	
 	public static function getRev1ewers($paperid =0) {
 		$db		= JFactory::getDbo();

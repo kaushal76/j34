@@ -52,7 +52,7 @@ class  JFormFieldRevsubject extends JFormField
             return false; 
           }
 		  
-		  $rev1ewer = ConfmgtHelper::getRev1ewer($revid);
+		  $rev1ewer = MainHelper::getRev1ewer($revid);
 		  $rev1ewername = $rev1ewer->title.' '.$rev1ewer->firstname.' '.$rev1ewer->surname;
 		  $config = JFactory::getConfig();
 		  $sitename = $config->get( 'config.sitename' );

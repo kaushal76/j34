@@ -46,6 +46,13 @@ defined('_JEXEC') or die;
         <td><?php
 		echo $this->item->keywords; ?></td>
       </tr>
+      <tr>
+        <td class="header"><?php
+		echo JText::_('COM_CONFMGT_FORM_LBL_PAPER_TYPE'); ?>
+          :</td>
+        <td><?php
+		echo $this->item->type_txt; ?></td>
+      </tr>
     </table>
   </div>
 

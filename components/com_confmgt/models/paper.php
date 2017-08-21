@@ -273,7 +273,31 @@ class ConfmgtModelPaper extends JModelItem {
 				}			
 			}
 		
-		// Abstract review comments 				
+		// Deal with submision types
+		
+	switch ($this->_item->type) {
+			case 1:
+				$this->_item->type_txt = JText::_('COM_CONFMGT_MODEL_PAPER_TYPE_TXT_ACADEMIC_PAPER');
+			break;
+			
+			case 2:
+				$this->_item->type_txt = JText::_('COM_CONFMGT_MODEL_PAPER_TYPE_TXT_POLICY_NOTE');
+			break;
+			
+			case 3:
+				$this->_item->type_txt = JText::_('COM_CONFMGT_MODEL_PAPER_TYPE_TXT_DOCTORAL_SCHOOL');
+			break;
+			
+			case 4:
+				$this->_item->type_txt = JText::_('COM_CONFMGT_MODEL_PAPER_TYPE_TXT_POSTER');
+			break;
+			
+			case '':
+			default:
+			    $this->_item->type_txt = JText::_('COM_CONFMGT_MODEL_PAPER_TYPE_TXT_ACADEMIC_PAPER');
+			break;
+	}
+		
 
 	   return $this->_item;
     }
@@ -559,5 +583,59 @@ class ConfmgtModelPaper extends JModelItem {
 		$html = $html."</button></form></div>";
 		return $html;
 		
+	}
+	
+	public function getPreviousAbstracts($id = null)
+	{
+	    // Get a db connection.
+		$db = JFactory::getDbo();
+		 
+		// Create a new query object.
+		$query = $db->getQuery(true);
+		$user = JFactory::getUser();
+		
+		// @todo - format the query with escape characters 
+		$query
+			->select('a.*')
+			->from('#__confmgt_abstracts as a');
+	
+			// Only the papers which are not archieved
+			$query->where('a.state =1');
+			$query->where('a.linkid ='.(int)$id);
+		 
+		// Reset the query using our newly populated query object.
+		$db->setQuery($query);
+		 
+		// Load the results as a list of stdClass objects (see later for more options on retrieving data).
+		$results = $db->loadObjectList();
+
+	return $results;
+	}
+	
+	public function getPreviousFullPapers($id = null)
+	{
+	    	    // Get a db connection.
+		$db = JFactory::getDbo();
+		 
+		// Create a new query object.
+		$query = $db->getQuery(true);
+		$user = JFactory::getUser();
+		
+		// @todo - format the query with escape characters 
+		$query
+			->select('a.*')
+			->from('#__confmgt_fullpapers as a');
+	
+			// Only the papers which are not archieved
+			$query->where('a.state =1');
+			$query->where('a.linkid ='.(int)$id);
+		 
+		// Reset the query using our newly populated query object.
+		$db->setQuery($query);
+		 
+		// Load the results as a list of stdClass objects (see later for more options on retrieving data).
+		$results = $db->loadObjectList();
+
+	return $results;
 	}
 }

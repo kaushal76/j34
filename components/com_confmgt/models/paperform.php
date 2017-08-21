@@ -61,7 +61,7 @@ class ConfmgtModelPaperForm extends JModelForm
 	 */
 	public function getLinkid()
 	{
-		$linkid = ConfmgtHelper::getLinkId();
+		$linkid = MainHelper::getLinkId();
 		return $linkid;
 	}
         

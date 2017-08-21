@@ -46,9 +46,9 @@ class  JFormFieldAbsrev1ewcmt extends JFormField
 		  $email = emailHelper::getEmailcontent ($emailsource);
 		  $rawbody = $email->message;
 		  
-		  $linkid = ConfmgtHelper::getLinkid();
-		  $rev1ews = ConfmgtHelper::getRev1ews($linkid);
-		  $paper = ConfmgtHelper::getPaper($linkid);
+		  $linkid = MainHelper::getLinkid();
+		  $rev1ews = MainHelper::getRev1ews($linkid);
+		  $paper = MainHelper::getPaper($linkid);
 		  
 		  $config = JFactory::getConfig();
 		  $sitename = $config->get( 'config.sitename' );

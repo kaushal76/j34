@@ -128,7 +128,7 @@ class ConfmgtControllerAbrev1ewoutcomeForm extends ConfmgtController
 			$rawbody = $email->message;
 			$rawsubject = $email->subject;
 			$id = (int)$app->getUserState('com_confmgt.edit.paper.id');
-			$paper = ConfmgtHelper::getPaper($return);
+			$paper = MainHelper::getPaper($return);
 			$paperid = $return;
 			
 			$recipient = JFactory::getUser((int)$paper->created_by)->email;

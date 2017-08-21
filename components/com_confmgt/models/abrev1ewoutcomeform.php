@@ -103,7 +103,7 @@ class ConfmgtModelAbrev1ewoutcomeForm extends JModelForm
 				$canEdit = $authorised = AclHelper::isThemeleader(0,$id);
             
                 if (!$canEdit) {
-                    JError::raiseError('500', JText::_('JERROR_ALERTNOAUTHOR'));
+                    //JError::raiseError('500', JText::_('JERROR_ALERTNOAUTHOR'));
                 }
                 
 				// Check published state.
@@ -260,7 +260,7 @@ class ConfmgtModelAbrev1ewoutcomeForm extends JModelForm
 	public function getRev1ewersData()
 	{
 		$linkid = $this->getLinkid();
-		$rows = ConfmgtHelper::getRev1ewers((int)$linkid);
+		$rows = MainHelper::getRev1ewers((int)$linkid);
 		if ($rows) {
 			return $rows;
 		}else{
@@ -271,7 +271,7 @@ class ConfmgtModelAbrev1ewoutcomeForm extends JModelForm
 	public function getRev1ewData()
 	{
 		$linkid = $this->getLinkid();
-		$rows = ConfmgtHelper::getRev1ews((int)$linkid, 'abstract');
+		$rows = MainHelper::getRev1ews((int)$linkid, 'abstract');
 		if ($rows) {
 			return $rows;
 		}else{
@@ -283,7 +283,7 @@ class ConfmgtModelAbrev1ewoutcomeForm extends JModelForm
 	{
 		// get the paper id		
 		$linkid = $this->getLinkid();
-		$rows = ConfmgtHelper::getAuthors((int)$linkid);
+		$rows = MainHelper::getAuthors((int)$linkid);
 		if ($rows) {
 			return $rows;
 		}else{

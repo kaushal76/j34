@@ -43,7 +43,7 @@ class  JFormFieldUsers extends JFormField
                 $options = array();
 
                 //Iterate through all the results
-				$results = ConfmgtHelper::getUsers();
+				$results = MainHelper::getUsers();
 				$options[] = JHTML::_('select.option','',JText::_('Please choose a theme leader'));
                 foreach ($results as $result) {
                     $options[] = JHtml::_('select.option', $result->id, $result->name);  

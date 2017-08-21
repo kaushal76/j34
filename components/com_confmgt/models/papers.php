@@ -114,6 +114,11 @@ class ConfmgtModelPapers extends JModelList {
 	
 	public function getLeadersItems() {
 		
+		//Check if student papers to be managed by the main theme leaders
+		$app = JFactory::getApplication();
+		$params = $app->getParams();
+		$student_papers_managed_by = $params->get('student_papers_managed_by',1);
+		
 		//remove temporary papers
 		$this->tmpRemoveQuery();
 		
@@ -130,26 +135,36 @@ class ConfmgtModelPapers extends JModelList {
 			->from('#__confmgt_papers as a')
 			->select('b.title as theme')
 			->join('LEFT', '#__confmgt_themes as b ON a.theme = b.id')
+			->select('COUNT(g.id) AS revisions')
+			->join('LEFT', '#__confmgt_fullpapers as g ON a.id = g.linkid')
+			->select('f.type as type')
+			->join('LEFT', '#__confmgt_submission_types as f ON a.type = f.id')
 			->select('uc.name as author')
+			->select('uc.email as email')
 			->select('COUNT(d.reviewerid) AS rev1ewers')
 			->join('LEFT', '#__users as uc ON uc.id = a.created_by')
 			->join('LEFT', $db->quoteName('#__confmgt_rev1ewers_papers', 'd') . ' ON (' . $db->quoteName('a.id') . ' = ' . $db->quoteName('d.paperid') . ')');
-			if (AclHelper::isSuperCoordinator()) { // Super coordinator, hence all papers are selected
-			}elseif (!AclHelper::isStudentCoordinator()) { //Not super coordinator and not a student coordinator, hence only papers within the relevant themes
+			// Super coordinator, hence all papers are selected
+			if (AclHelper::isSuperCoordinator()) { 
+			//Not super coordinator and not a student coordinator,
+			//hence only papers within the relevant themes
+			}elseif (!AclHelper::isStudentCoordinator()) { 
 				$query->where('b.userid = '.$user->id);
-				$query->where('a.student_submission = 0');
-			}else{ // Student coordinator hence student papers and papers within the relevant themes
-				$query->where('a.student_submission = 1 OR b.userid = '.$user->id);
+			// Student coordinator hence student papers and papers within the relevant themes	
+			}else{ 
+				$query->where('b.userid = '.$user->id);
+				//$query->where('a.student_submission = 1 OR b.userid = '.$user->id);
 			}
 			// Only the papers which are not archieved
 			$query->where('a.state =1');
+			$query->where('a.active =1');
 			$query->group('a.id');
 			$query->order('a.id ASC');
 		 
 		// Reset the query using our newly populated query object.
 		$db->setQuery($query);
 		 
-		// Load the results as a list of stdClass objects (see later for more options on retrieving data).
+		// Load the results as a list of stdClass objects (
 		$results = $db->loadObjectList();
 
 	return $results;

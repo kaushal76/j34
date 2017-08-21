@@ -102,12 +102,39 @@ abstract class AclHelper
         }
     }
 	
-	// function to check if the logged in user is a Student Paper Coordinator
-	public static function isStudentCoordinator()
+	// function to check if the logged in user is a Student Paper Coordinator or if the theme leader 
+	public static function isStudentCoordinator($paperid = 0)
     {
-        //Obtain a database connection
+        //Check if student papers to be managed by the main theme leaders
+		$app = JFactory::getApplication();
+		$params = $app->getParams();
+		$student_papers_managed_by = $params->get('student_papers_managed_by',1);
+		
+		//Obtain a database connection
         $db   = JFactory::getDbo();
         $user = JFactory::getUser();
+        
+        //Build the query 
+		$query = $db->getQuery(true);
+		
+		//@TODO validate for each theme as theme leader
+		if ($student_papers_managed_by == 1) {
+			if ($paperid >0) {
+				$query = $db->getQuery(true)->select('userid')->from($db->quoteName('#__confmgt_themes'))->where('userid = ' . (int) $user->id);
+				}
+			 $query = $db->getQuery(true)->select('userid')->from($db->quoteName('#__confmgt_themes'))->where('userid = ' . (int) $user->id);
+			 $db->setQuery($query);
+                $db->execute();
+                $num_rows = $db->getNumRows();
+                if ($num_rows > 0) {
+                    return true;
+                } //$num_rows > 0
+                else {
+                    return false;
+                }
+		}
+		
+		
         if ($user->id == 0) {
             return false;
         }
@@ -115,8 +142,7 @@ abstract class AclHelper
 		if (self::isSuperCoordinator()) {
 				return true; 
 			}
-		//Build the query 
-		$query = $db->getQuery(true);
+		
 		$query->select($db->quoteName(array(
 			'a.userid',
 			'a.themeid',

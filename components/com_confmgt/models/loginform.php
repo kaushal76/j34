@@ -1,21 +1,20 @@
 <?php
 /**
- * @version     2.5.8
+ * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
  */
 // No direct access.
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.modelform');
-jimport('joomla.event.dispatcher');
 
 /**
  * Confmgt login form model.
  */
-class ConfmgtModelLoginForm extends JModelAdmin
+
+class ConfmgtModelLoginForm extends JModelForm
 {
     
     var $_item = null;
@@ -35,7 +34,7 @@ class ConfmgtModelLoginForm extends JModelAdmin
 	/**
 	 * Method to get an ojbect.
 	 *
-	 * @param	integer	The id of the object to get.
+	 * @param	integer Id of the object to get.
 	 *
 	 * @return	mixed	Object on success, false on failure.
 	 */
@@ -55,7 +54,7 @@ class ConfmgtModelLoginForm extends JModelAdmin
      * 
 	 * @param	array	$data		An optional array of data for the form to interogate.
 	 * @param	boolean	$loadData	True if the form is to load its own data (default case), false if not.
-	 * @return	JForm	A JForm object on success, false on failure
+	 * @return	JForm	A JForm object on success false on faliure
 	 * @since	1.6
 	 */
 	public function getForm($data = array(), $loadData = true)
@@ -63,7 +62,8 @@ class ConfmgtModelLoginForm extends JModelAdmin
 		// Get the form.
 		$form = $this->loadForm('com_confmgt.login', 'loginform', array('control' => 'jform', 'load_data' => $loadData));
 		if (empty($form)) {
-			return false;
+			throw new RuntimeException("Could not load the login form");
+		    return false;
 		}
 		return $form;
 	}
@@ -76,7 +76,7 @@ class ConfmgtModelLoginForm extends JModelAdmin
 	 */
 	protected function loadFormData()
 	{
-		$data = JFactory::getApplication()->getUserState('com_confmgt.edit.login.data', array());
+		$data = JFactory::getApplication()->getUserState('com_confmgt.edit.loginform.data', array());
         if (empty($data)) {
             $data = $this->getData();
         }       

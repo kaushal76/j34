@@ -53,6 +53,7 @@ if (!$this->rev1ews) { ?>
     <li><a href="#reviews" data-toggle="tab"> <?php echo JText::_('Reviews Received'); ?> </a></li>
     <li><a href="#reviewers" data-toggle="tab"> <?php echo JText::_('Reviewers Assigned'); ?> </a></li>
     <li><a href="#authors" data-toggle="tab"> <?php echo JText::_('Authors Details'); ?> </a></li>
+    <li><a href="#previous" data-toggle="tab"> <?php echo JText::_('Previous versions'); ?> </a></li>
   </ul>
   <div class="tab-content">
     <?php if ($this->item->full_review_outcome == 0) { ?>
@@ -71,6 +72,7 @@ if ($canView):
 	if ($this->item): ?>
     <div id="reviewers" class="tab-pane fade"> <?php echo $this->loadTemplate('rev1ewers'); ?> </div>
     <div id="authors" class="tab-pane fade"> <?php echo $this->loadTemplate('authors'); ?> </div>
+    <div id="previous" class="tab-pane fade"> <?php echo $this->loadTemplate('previous'); ?> </div>
     <div id="paper" class="tab-pane fade"> 
 	<?php 
 	if ($this->item->abstract_review_outcome > 0) { 

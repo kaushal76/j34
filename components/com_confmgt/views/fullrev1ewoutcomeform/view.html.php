@@ -41,6 +41,8 @@ class ConfmgtViewFullrev1ewoutcomeform extends JViewLegacy {
 		$this->rev1ewers = $this->get('rev1ewersData');
 		$this->rev1ews = $this->get('rev1ewData');
 		$this->authors = $this->get('authorsData');
+		$this->previousFullPapers = $this->get('previousFullPapers');
+		$this->fullPaperRevisionCount = $this->get('fullPaperRevisionCount');
 		$this->item->created_by_name = JFactory::getUser($this->item->created_by)->name;
 		
 		

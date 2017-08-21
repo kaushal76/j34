@@ -14,22 +14,31 @@ defined('_JEXEC') or die;
 //JHtml::_('bootstrap.modal');
 JHtml::_('bootstrap.alert', 'error'); 
 
+$document = JFactory::getDocument();
+$url = 'components/com_confmgt/assets/js/jquery_custom.js';
+$document->addScript($url);
+
+$url2 = 'components/com_confmgt/assets/js/table_filter.js';
+$document->addScript($url2);
+
 ?>
 
 <div class="panel panel-default">
   <div class="panel-heading">
     <h1><?php echo JText::_('COM_CONFMGT_LEADERS_PAPERS_FORM_PANEL_HEADING'); ?></h1>
+    <input type="text" class="form-control" id="dev-table-filter" data-action="filter" data-filters="#papers-table" placeholder="Search Papers" />
   </div>
   <div class="panel-body">
     <p><?php echo JText::_('COM_CONFMGT_LEADRRS_PAPERS_FORM_PANEL_DETAILS'); ?></p>
   </div>
-  <table class="table table-striped">
+  <table class="table table-striped" id="papers-table">
     <thead>
       <tr>
         <th width="5%"><?php echo JText::_("COM_CONFMGT_ID"); ?></th>
         <th><?php echo JText::_("COM_CONFMGT_TITLE"); ?></th>
         <th><?php echo JText::_("COM_CONFMGT_PAPERS_AUTHOR"); ?></th>
         <th><?php echo JText::_("COM_CONFMGT_PAPERS_THEME"); ?></th>
+        <th width="10%"><?php echo JText::_("COM_CONFMGT_PAPERS_TYPE"); ?></th>
         <th width="10%"><?php echo JText::_("COM_CONFMGT_PAPERS_STUDENT"); ?></th>
         <th width="10%"><?php echo JText::_("COM_CONFMGT_PAPERS_REV_ALLOCATED"); ?></th>
         <th width="10%"><?php echo JText::_("COM_CONFMGT_PAPERS_AB_REV_POSTED"); ?></th>
@@ -43,8 +52,10 @@ JHtml::_('bootstrap.alert', 'error');
       <tr>
         <td width="5%"><?php echo $item->id; ?></td>
         <td><?php echo $item->title; ?></td>
-        <td><?php echo $item->author; ?></td>
+        <td><a href="<?php echo JRoute::_('mailto:'.$item->email); ?>">
+            <?php echo $item->author; ?></a></td>
         <td><?php echo  $item->theme; ?></td>
+        <td><?php echo  $item->type; ?></td>
         <td><?php echo JText::_("COM_CONFMGT_PAPERS_STUDENT_".$item->student_submission); ?></td>
         <td>
         <a href="<?php echo JRoute::_('index.php?option=com_confmgt&view=rev1ewersforpaperform&linkid='.(int)$item->id); ?>">
@@ -62,6 +73,9 @@ JHtml::_('bootstrap.alert', 'error');
 		<?php if (empty($item->full_paper)) { 
 		echo JText::_("Full paper not submitted");
 		}elseif ((!empty($item->full_paper))&&($item->full_review_outcome == 0)) {?>
+		<?php if ($item->revisions > 1) { ?>
+		            <div><span class="label label-important">revision</span></div>
+		<?php } ?>
         <a href="<?php echo JRoute::_('index.php?option=com_confmgt&view=fullrev1ewoutcomeform&linkid='.(int)$item->id); ?>">
 		<?php echo JText::_("No"); ?></a>
 		<?php }else{ ?> <a href="<?php echo JRoute::_('index.php?option=com_confmgt&view=fullrev1ewoutcomeform&linkid='.(int)$item->id); ?>"><?php echo JText::_("Yes"); ?></a>

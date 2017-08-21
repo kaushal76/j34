@@ -95,6 +95,21 @@ $lang->load('com_confmgt', JPATH_ADMINISTRATOR);
           </form>
           <?php endif; ?>
         </div>
+        <div class="inline">
+        <?php if ($this->role['isAuthor']) : ?>
+          <form id="form-enrty-2" action="<?php echo JRoute::_('index.php'); ?>" 
+          method="post" enctype="multipart/form-data"  class="form-entry">
+            <?php echo JHtml::_('form.token'); ?>
+            <input type="hidden" name="option" value="com_jshopping" />
+            <button class="btn btn-default btn-entry" type="submit"> 
+			<?php echo '<span class="centre"><img src="'.JURI::root().
+			'components/com_confmgt/assets/img/theme_leader.png" alt="Register" 
+			height="42" width="42"></span><br />';?> 
+			<?php echo JText::_("Conference Registration"); ?> 
+            </button>
+          </form>
+        </div>
+        <?php endif; ?>
       </div>
     </div>
   </div>
