@@ -1,8 +1,8 @@
 <?php
 /**
- * @version     2.5.7
+ * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
  */
@@ -30,7 +30,7 @@ class ConfmgtControllerRegForm extends ConfmgtController
 		$previousId = (int) $app->getUserState('com_confmgt.edit.reg.id');
 		$editId	= JFactory::getApplication()->input->getInt('id', null, 'array');
 
-		// Set the user id for the user to edit in the session.
+		// Set the id for the record to edit in the session.
 		$app->setUserState('com_confmgt.edit.reg.id', $editId);
 
 		// Get the model.
@@ -59,13 +59,24 @@ class ConfmgtControllerRegForm extends ConfmgtController
 		$data = JFactory::getApplication()->input->get('jform', array(), 'array');
 
 		// Validate the posted data.
-		$form = $model->getForm();
-		if (!$form) {
-			JError::raiseError(500, $model->getError());
-			return false;
+		//TODO Remove getError when the user model throws Exceptions
+		try{
+			$form = $model->getForm();
+
+			if (!$form) {
+				$app->enqueueMessage($model->getError());
+				return false;
+			}
+		}
+		catch (RuntimeException $e)
+		{
+			$app->enqueueMessage($e->getMessage());
 		}
 
+
+
 		// Validate the posted data.
+		//TODO Remove getError when the user model throws Exceptions
 		$data = $model->validate($form, $data);
 
 		// Check for errors.
@@ -100,8 +111,9 @@ class ConfmgtControllerRegForm extends ConfmgtController
 			$app->setUserState('com_confmgt.edit.reg.data', $data);
 
 			// Redirect back to the edit screen.
+			//TODO Remove getError when the user model throws Exceptions
 			$id = (int)$app->getUserState('com_confmgt.edit.reg.id');
-			$this->setMessage(JText::sprintf('Author could not be saved. Please try again', $model->getError()), 'error');
+			$app->enqueueMessage(JText::sprintf('Author could not be saved. Please try again', $model->getError()), 'error');
 			$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=regform&layout=edit&id='.$id, false)); 
 			return false;
 		}
@@ -116,7 +128,7 @@ class ConfmgtControllerRegForm extends ConfmgtController
 		$credentials = array( 'username' => $data['username'], 'password' => $data['password'] );
 
         // Redirect to the list screen.
-        $this->setMessage(JText::_('COM_CONFMGT_REG_SUCCESSFULLY'));
+		$app->enqueueMessage(JText::_('COM_CONFMGT_REG_SUCCESSFULLY'));
 		$app->login($credentials);
 		
 		//sending the welcome email to the user

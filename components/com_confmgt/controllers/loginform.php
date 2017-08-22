@@ -29,6 +29,10 @@ class ConfmgtControllerLoginForm extends ConfmgtController
 		try
 		{
 			$form = $model->getForm();
+			if (!$form) {
+				$app->enqueueMessage($model->getError());
+				return false;
+			}
 		}
 		catch (RuntimeException $e)
 		{
