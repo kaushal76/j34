@@ -16,9 +16,7 @@ defined('_JEXEC') or die;
 class ConfmgtViewPapers extends JViewLegacy
 {
 	protected $items;
-	protected $pagination;
 	protected $state;
-	protected $params;
 	protected $leadersitems;
 
 	/**
