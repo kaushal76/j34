@@ -183,6 +183,9 @@ div.modalcontianer {
 	margin: 20px;
 }
 
+.invalid {
+  border-color: red !important;
+}
 
 
 

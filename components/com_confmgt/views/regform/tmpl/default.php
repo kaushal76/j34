@@ -8,7 +8,7 @@
  */
 //no direct access 
 defined('_JEXEC') or die;
-
+JHtml::_('behavior.formvalidator');
 ?>
 <div class="panel panel-default">
 	<div class="panel-heading">
@@ -70,7 +70,7 @@ defined('_JEXEC') or die;
 						<div class="control-group">
 							<div class="controls">
 								<button type="submit"
-								        class="btn btn-primary"><?php echo JText::_('JSUBMIT'); ?> </button>
+								        class="btn btn-primary validate"><?php echo JText::_('JSUBMIT'); ?> </button>
 								<?php echo JText::_('or'); ?> <a
 									href="<?php echo JRoute::_('index.php?option=com_confmgt&task=regform.cancel'); ?>"
 									title="<?php echo JText::_('JCANCEL'); ?>
