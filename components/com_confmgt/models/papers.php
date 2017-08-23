@@ -76,6 +76,13 @@ class ConfmgtModelPapers extends JModelList
         return $query;
     }
 
+    /**
+     * Removes temporary records for abstract submissions from the papers table
+     * @return boolean
+     *
+     * @since version 3.8.0
+     */
+
 
     protected function tmpRemoveQuery()
     {
@@ -88,11 +95,17 @@ class ConfmgtModelPapers extends JModelList
         $query->delete($db->quoteName('#__confmgt_papers'));
         $query->where("title = ''");
         $query->where('created_by = ' . $user->id);
-
         $db->setQuery($query);
-        $result = $db->query();
+        $result = $db->execute();
+        return $result;
     }
 
+    /**
+     * A function to remove the temp items in the paper table before returning a list of paper items
+     * @return mixed
+     *
+     * @since version
+     */
     public function getItems()
     {
 
@@ -105,8 +118,8 @@ class ConfmgtModelPapers extends JModelList
     /**
      * Method to get the paper list for theme leaders
      *
-     * @return    List
-     *
+     * @return ObjectList
+     * @TODO re code this function with better logic for student papers
      */
 
     public function getLeadersItems()
