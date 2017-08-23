@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     2.5.8.1
+ * @version     3.8.0
  * @package     com_confmgt
  * @copyright   Copyright (C) 2015. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -10,83 +10,98 @@
 defined('_JEXEC') or die;
 
 JHtml::_('bootstrap.alert', 'error');
-$document = JFactory::getDocument ();
+$document   = JFactory::getDocument();
 $bootboxurl = "components/com_confmgt/assets/js/bootbox.min.js";
-$delurl = "components/com_confmgt/assets/js/del.js";
-$document->addScript( $bootboxurl );
-$document->addScript( $delurl );
+$delurl     = "components/com_confmgt/assets/js/del.js";
+$document->addScript($bootboxurl);
+$document->addScript($delurl);
 
 ?>
 
 <div class="panel panel-default">
-  <div class="panel-heading">
-    <h1><?php echo JText::_('COM_CONFMGT_PAPERS_FORM_PANEL_HEADING'); ?></h1>
-  </div>
-  <div class="panel-body">
-    <p><?php echo JText::_('COM_CONFMGT_PAPERS_FORM_PANEL_DETAILS'); ?></p>
-  </div>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th><?php echo JText::_("COM_CONFMGT_ID"); ?></th>
-        <th><?php echo JText::_("COM_CONFMGT_TITLE"); ?></th>
-        <th><?php echo JText::_("COM_CONFMGT_PAPERS_THEME"); ?></th>
-        <th><?php echo JText::_("COM_CONFMGT_PAPERS_SUBMITTED_ON"); ?></th>
-        <th><?php echo JText::_("COM_CONFMGT_ACTION"); ?></th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php $show = false; ?>
-      <?php foreach ($this->items as $item) : ?>
-      <?php $show = true; ?>
-      <tr>
-        <td width="5%"><?php echo $item->id; ?></td>
-        <td><?php echo $item->title; ?></td>
-        <td><?php echo $item->themename; ?></td>
-        <td><?php echo $item->last_updated; ?></td>
-        <td>
-        <a class="btn btn-danger" data-toggle="confirm" data-title="Do you really want to delete the record"<?php echo $item->id; ?> href="<?php echo JRoute::_('index.php?option=com_confmgt&task=paper.remove&jform[id]='.$item->id.'&'.JSession::getFormToken().'=1'); ?>"><i class="icon-trash icon-white"></i></a>
-          <form id="form-paper-edit-<?php echo $item->id; ?>" style="display:inline" action="<?php echo JRoute::_('index.php'); ?>" method="post" class="form-validate" enctype="multipart/form-data">
-            <input type="hidden" name="id" value="<?php echo $item->id; ?>" />
-            <input type="hidden" name="linkid" value="<?php echo $item->id; ?>" />
-            <input type="hidden" name="jform[id]" value="<?php echo $item->id; ?>" />
-            <input type="hidden" name="option" value="com_confmgt" />
-            <input type="hidden" name="view" value="paper" />
-            <button type="submit" class="btn btn-genral"><i class="icon-file"></i></button>
-            <?php echo JHtml::_('form.token'); ?>
-          </form></td>
-      </tr>
-      <?php endforeach; ?>
-      <?php
-        if (!$show){ ?>
-      <tr>
-        <td colspan="5"><?php 
-            echo JText::_('COM_CONFMGT_NO_ITEMS');
-		?></td>
-      </tr>
-      <?php  } ?>
-    </tbody>
-  </table>
-</div>
-<div class="inline">
-  <form id="form-entrypage-<?php echo $item->id ?>" action="<?php echo JRoute::_('index.php'); ?>" method="post" class="form-validate form-entry" enctype="multipart/form-data">
-    <?php echo JHtml::_('form.token'); ?>
-    <button class="btn btn-default btn-lg" type="submit">
-    <i class="icon-home"></i>
-	<?php echo JText::_("COM_CONFMGT_ENTRY_PAGE"); ?>
-    </button>
-    <input type="hidden" name="option" value="com_confmgt" />
-    <input type="hidden" name="view" value="entrypage" />
-  </form>
- </div>
- <div class="inline">
-  <form id="form-paper-new-<?php echo $item->id ?>" action="<?php echo JRoute::_('index.php'); ?>" method="post" class="form-validate form-entry" enctype="multipart/form-data">
-    <?php echo JHtml::_('form.token'); ?>
-    <button class="btn btn-default btn-lg" type="submit">
-    <i class="icon-plus"></i>
-	<?php echo JText::_("COM_CONFMGT_ADD_PAPER"); ?>
-    </button>
-    <input type="hidden" name="option" value="com_confmgt" />
-    <input type="hidden" name="task" value="paper.newabstract" />
-  </form>
+	<div class="panel-heading">
+		<h1><?php echo JText::_('COM_CONFMGT_PAPERS_FORM_PANEL_HEADING'); ?></h1>
+	</div>
+	<div class="panel-body">
+		<p><?php echo JText::_('COM_CONFMGT_PAPERS_FORM_PANEL_DETAILS'); ?></p>
+	</div>
+	<div class="table-responsive">
+		<table class="table table-striped">
+			<thead>
+			<tr>
+				<th width="5%"><?php echo JText::_("COM_CONFMGT_ID"); ?></th>
+				<th><?php echo JText::_("COM_CONFMGT_TITLE"); ?></th>
+				<th width="20%"><?php echo JText::_("COM_CONFMGT_PAPERS_THEME"); ?></th>
+				<th width="20%"><?php echo JText::_("COM_CONFMGT_PAPERS_SUBMITTED_ON"); ?></th>
+				<th width="20%"><?php echo JText::_("COM_CONFMGT_ACTION"); ?></th>
+			</tr>
+			</thead>
+			<tbody>
+			<?php $show = false; ?>
+			<?php foreach ($this->items as $item) : ?>
+				<?php $show = true; ?>
+				<tr>
+					<td width="5%"><?php echo $item->id; ?></td>
+					<td><?php echo $item->title; ?></td>
+					<td><?php echo $item->themename; ?></td>
+					<td><?php echo $item->last_updated; ?></td>
+					<td>
+						<a class="btn btn-danger" data-toggle="confirm"
+						   data-title="Do you really want to delete the record"<?php echo $item->id; ?>
+						   href="<?php echo JRoute::_('index.php?option=com_confmgt&task=paper.remove&jform[id]=' . $item->id . '&' . JSession::getFormToken() . '=1'); ?>"><i
+								class="icon-trash icon-white"></i></a>
+						<form id="form-paper-edit-<?php echo $item->id; ?>" style="display:inline"
+						      action="<?php echo JRoute::_('index.php'); ?>" method="post" class="form-validate"
+						      enctype="multipart/form-data">
+							<input type="hidden" name="id" value="<?php echo $item->id; ?>"/>
+							<input type="hidden" name="linkid" value="<?php echo $item->id; ?>"/>
+							<input type="hidden" name="jform[id]" value="<?php echo $item->id; ?>"/>
+							<input type="hidden" name="option" value="com_confmgt"/>
+							<input type="hidden" name="view" value="paper"/>
+							<button type="submit" class="btn btn-genral"><i class="icon-file"></i></button>
+							<?php echo JHtml::_('form.token'); ?>
+						</form>
+					</td>
+				</tr>
+			<?php endforeach; ?>
+			<?php
+			if (!$show)
+			{ ?>
+				<tr>
+					<td colspan="5"><?php
+						echo JText::_('COM_CONFMGT_NO_ITEMS');
+						?></td>
+				</tr>
+			<?php } ?>
+			</tbody>
+		</table>
+	</div>
+	<div class="panel-footer">
+		<div class="inline">
+			<form id="form-entrypage-<?php echo $item->id ?>" action="<?php echo JRoute::_('index.php'); ?>"
+			      method="post"
+			      class="form-validate form-entry" enctype="multipart/form-data">
+				<?php echo JHtml::_('form.token'); ?>
+				<button class="btn btn-default btn-lg" type="submit">
+					<i class="icon-home"></i>
+					<?php echo JText::_("COM_CONFMGT_ENTRY_PAGE"); ?>
+				</button>
+				<input type="hidden" name="option" value="com_confmgt"/>
+				<input type="hidden" name="view" value="entrypage"/>
+			</form>
+		</div>
+		<div class="inline">
+			<form id="form-paper-new-<?php echo $item->id ?>" action="<?php echo JRoute::_('index.php'); ?>"
+			      method="post"
+			      class="form-validate form-entry" enctype="multipart/form-data">
+				<?php echo JHtml::_('form.token'); ?>
+				<button class="btn btn-default btn-lg" type="submit">
+					<i class="icon-plus"></i>
+					<?php echo JText::_("COM_CONFMGT_ADD_PAPER"); ?>
+				</button>
+				<input type="hidden" name="option" value="com_confmgt"/>
+				<input type="hidden" name="task" value="paper.newabstract"/>
+			</form>
+		</div>
+	</div>
 </div>
