@@ -20,7 +20,7 @@ class ConfmgtModelPapers extends JModelList
      *
      * @param    array    An optional associative array of configuration settings.
      * @see      JController
-     * @since    1.6
+     * @since    J1.6
      */
     public function __construct($config = array())
     {
@@ -54,8 +54,7 @@ class ConfmgtModelPapers extends JModelList
         $query = $db->getQuery(true);
 
         //Get the current user
-
-        $user = JFactory::getuser();
+        $user = JFactory::getUser();
 
         // Select the required fields from the table.
         $query->select('a.*');
@@ -70,7 +69,6 @@ class ConfmgtModelPapers extends JModelList
         //join the themes table
         $query->select('b.title AS themename');
         $query->join('LEFT', '#__confmgt_themes AS b ON b.id=a.theme');
-
         $query->order('a.id ASC');
 
         return $query;
@@ -79,29 +77,37 @@ class ConfmgtModelPapers extends JModelList
     /**
      * Removes temporary records for abstract submissions from the papers table
      * @return boolean
-     *
+     * @throws Exception if not authorised
      * @since version 3.8.0
      */
 
 
     protected function tmpRemoveQuery()
     {
+        $user = JFactory::getUser();
+        $authorised = $user->id > 0;
+
         // Create a new query object.
         $db = $this->getDbo();
         $query = $db->getQuery(true);
-        $user = JFactory::getUser();
 
         // Select the required fields from the table.
         $query->delete($db->quoteName('#__confmgt_papers'));
         $query->where("title = ''");
+        // For security reasons, deleting only the records created by the logged in user
         $query->where('created_by = ' . $user->id);
         $db->setQuery($query);
+
+        if (!$authorised) {
+            throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 500);
+        }
+
         $result = $db->execute();
         return $result;
     }
 
     /**
-     * A function to remove the temp items in the paper table before returning a list of paper items
+     * A function to remove the temp items in the papers table before returning a list of paper items
      * @return mixed
      *
      * @since version
@@ -111,24 +117,26 @@ class ConfmgtModelPapers extends JModelList
 
         //remove temporary papers
         $this->tmpRemoveQuery();
-
         return parent::getItems();
     }
 
     /**
+     * @since version 3.8.0
      * Method to get the paper list for theme leaders
-     *
-     * @return ObjectList
+     * @throws Exception if not authorised
+     * @return mixed
      * @TODO re code this function with better logic for student papers
      */
 
     public function getLeadersItems()
     {
 
+        $authorised = AclHelper::isThemeleader() OR AclHelper::isStudentCoordinator() OR AclHelper::isSuperCoordinator();
+
         //Check if student papers to be managed by the main theme leaders
         $app = JFactory::getApplication();
         $params = $app->getParams();
-        $student_papers_managed_by = $params->get('student_papers_managed_by', 1);
+        $student_papers_managed_by_themeleader = $params->get('student_papers_managed_by_themeleader', 1);
 
         //remove temporary papers
         $this->tmpRemoveQuery();
@@ -157,14 +165,26 @@ class ConfmgtModelPapers extends JModelList
             ->join('LEFT', $db->quoteName('#__confmgt_rev1ewers_papers', 'd') . ' ON (' . $db->quoteName('a.id') . ' = ' . $db->quoteName('d.paperid') . ')');
         // Super coordinator, hence all papers are selected
         if (AclHelper::isSuperCoordinator()) {
-            //Not super coordinator and not a student coordinator,
-            //hence only papers within the relevant themes
-        } elseif (!AclHelper::isStudentCoordinator()) {
+
+            // Student coordinator but not a themeleader - showing all student records
+        } elseif ((AclHelper::isStudentCoordinator()) AND (!AclHelper::isThemeleader())) {
+            $query->where('a.student_submission = 1');
+
+            // Only a themeleader, hence papers within the relevant themes
+        } elseif ((!AclHelper::isStudentCoordinator()) AND (AclHelper::isThemeleader())) {
             $query->where('b.userid = ' . $user->id);
-            // Student coordinator hence student papers and papers within the relevant themes
+
+            // If theme leaders don't manage student papers, remove those from the list
+            if ($student_papers_managed_by_themeleader == 0) {
+                $query->where('a.student_submission = 0');
+            }
+            //Student coordinator and a theme leader hence student papers and papers within the relevant themes
+        } elseif ((AclHelper::isStudentCoordinator()) AND (AclHelper::isThemeleader())) {
+            $query->where('b.userid = ' . $user->id OR 'a.student_submission = 1');
+
+            // Should not be authorised
         } else {
-            $query->where('b.userid = ' . $user->id);
-            //$query->where('a.student_submission = 1 OR b.userid = '.$user->id);
+            $authorised = false;
         }
         // Only the papers which are not archieved
         $query->where('a.state =1');
@@ -175,9 +195,13 @@ class ConfmgtModelPapers extends JModelList
         // Reset the query using our newly populated query object.
         $db->setQuery($query);
 
+        // If not authorsied, no results returned and throw an exception;
+        if (!$authorised) {
+            throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 500);
+        }
+
         // Load the results as a list of stdClass objects (
         $results = $db->loadObjectList();
-
         return $results;
     }
 
