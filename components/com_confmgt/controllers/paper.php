@@ -1,19 +1,18 @@
 <?php
 
 /**
- * @version     2.5.7
+ * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
  */
 // No direct access
 defined('_JEXEC') or die;
-
-require_once JPATH_COMPONENT . '/controller.php';
-
+require_once JPATH_COMPONENT.'/controller.php';
 /**
  * Paper controller class.
+ * @since version 3.8.0
  */
 class ConfmgtControllerPaper extends ConfmgtController {
 	
@@ -129,34 +128,38 @@ class ConfmgtControllerPaper extends ConfmgtController {
         // Redirect to the list screen.
 		$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=papers', false));
     }
-	
-	
-	public function newAbstract()
+
+
+	/**
+	 * Method to create and submit new abstract
+	 *
+	 * @since version 3.8.0
+	 */
+    public function newAbstract()
 	{
 		// Check for request forgeries.
 		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
-		// Initialise variables.
+		// Initialise variables and access the paper form model and the authors model
 		$app	= JFactory::getApplication();
 		$model = $this->getModel('PaperForm', 'ConfmgtModel');
 		$authors = $this->getModel ('authors', 'ConfmgtModel');
 
-		// create a new data array.
+		// create a new blank data array to initiate a new paper ID.
+		// This will create a blank paper enrty in the database and return the new ID
 		$data = array();
 
-		// Attempt to save the data and get the last saved record by the user
+		// Attempt to save the blank data and get the ID from the last saved record
 		$return	= $model->newAbstract($data);
-		
 		if ($return) {
-        	// Save the new.abstract.id to a session variable
-	       	$app->setUserState( 'com_confmgt.new.abstract.id',$return);
-			$app->setUserState( 'com_confmgt.linkid',$return);
+			//This is the first time the record is created, hence the notification email is due.
+			// Set this as a session variable
 			$app->setUserState('com_confmgt.edit.paper.email',1);
 			
 			//Check if there is an authors list; if not redierct to create one
-			if (!$authors->getItems()){
+			if (!$authors->getAuthorsForPaper($return)){
 				$this->setMessage(JText::_('You need to create a list of authors for your abstracts first', 'warning'));  
-				$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=authors', false));
+				$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=authors&linkid='.$return, false));
 			}else{			
 			// redirect to the new abstract page 
        		$this->setRedirect(JRoute::_('index.php?option=com_confmgt&task=paper.edit&id='.$return, false));
@@ -165,13 +168,6 @@ class ConfmgtControllerPaper extends ConfmgtController {
 			// Redirect to the list screen.
 			$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=papers', false));
 		}
-        
-        // Clear the profile id from the session.
-        $app->setUserState('com_confmgt.edit.paper.id', null);
-
-
-		// Flush the data from the session.
-		$app->setUserState('com_confmgt.edit.paper.data', null);
 	}
 	
 	public function downloadFullPaper()

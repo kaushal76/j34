@@ -1,18 +1,18 @@
 <?php
 
 /**
- * @version     2.5.7
+ * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
  */
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.modellist');
-
 /**
- * Methods supporting a list of Confmgt records.
+ * Authors class
+ * Contains methods to manipulate authors data related to a given paper
+ * @since version 3.8.0
  */
 class ConfmgtModelAuthors extends JModelList {
 
@@ -20,7 +20,7 @@ class ConfmgtModelAuthors extends JModelList {
      * Constructor.
      *
      * @param    array    An optional associative array of configuration settings.
-     * @see        JController
+     * @see      JController
      * @since    1.6
      */
     public function __construct($config = array()) {
@@ -36,35 +36,21 @@ class ConfmgtModelAuthors extends JModelList {
      */
     protected function populateState($ordering = null, $direction = null) {
 
-        // Initialise variables.
-		$app = JFactory::getApplication();
-
-
-        // List state information
-        $limit = $app->getUserStateFromRequest('global.list.limit', 'limit', $app->getCfg('list_limit'));
-        $this->setState('list.limit', $limit);
-
-        $limitstart = JFactory::getApplication()->input->getInt('limitstart', 0);
-        $this->setState('list.start', $limitstart);
-
-        
-
-        // List state information.
         parent::populateState($ordering, $direction);
     }
 	
 	/**
-     * BMethod to get the LinkID set in either the user session data or the fget / post data.
-     *
+     * Method to get the linkid set in get / post data.
+     * @since version 3.8.0
      * @return	linkid
      * 
      */
-	public function &getLinkid()
+	public function getLinkid()
 	{
-		$linkid = JFactory::getApplication()->getUserStateFromRequest( "com_confmgt.linkid", 'linkid', 0 );
+		$linkid = JFactory::getApplication()->input->get('linkid',0,'int');
 		if ($linkid == 0)
 		{
-			JError::raiseError('500', JText::_('JERROR_NO_PAPERID'));
+			throw new Exception(JText::_('JERROR_NO_PAPERID'),'500');
 			return false;
 		}else{		
 			return $linkid;
@@ -285,5 +271,25 @@ class ConfmgtModelAuthors extends JModelList {
 		// Return the parent getItem method 
         return parent::getItems();
     }
+
+    public function getAuthorsForPaper($paperid)
+    {
+	    $linkid = $paperid;
+	    $table = $this->getTable();
+	    $user = JFactory::getUser();
+	    // Reset the author ordering values
+	    $table->reorder('linkid='.$linkid);
+	    $db		= $this->getDbo();
+	    $query	= $db->getQuery(true);
+	    $query->select('a.*');
+	    $query->from('`#__confmgt_authors` AS a');
+	    $query->where('created_by ='.$user->id);
+	    $query->where('linkid ='.$linkid);
+
+	    $db->setQuery($query);
+	    return $db->loadObjectList();
+
+    }
+
 
 }

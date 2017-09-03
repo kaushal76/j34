@@ -381,11 +381,11 @@ class ConfmgtModelPaperForm extends JModelForm
 
 	}
 	
-		/**
+	/**
 	 * Method to create a new abstract - reserve and return the paper ID.
-	 *
-	 * @param	boolian		
-	 * @return	mixed		The newly created paper id on success, false on failure.
+	 * @since version 3.8.0
+	 * @param $data (array)
+	 * @return mixed The newly created paper id on success, false on failure.
 	 * 
 	 */
 	
@@ -404,11 +404,12 @@ class ConfmgtModelPaperForm extends JModelForm
         if ($table->save($data) === true) {
 			
 		//get the last created paper id	
-    	$id = $table->id; 
+    	$id = $table->id;
+
 		//check the author and return the last paper id
 			if ($table->created_by == $user->id) {
 				//update the linkid field with the new ID created
-				$data_new['linkid'] = $table->id;
+				$data_new['linkid'] = $id;
 				//make the abstract active
 				$data_new['active'] = 1;
 				//save the row once more
@@ -421,12 +422,12 @@ class ConfmgtModelPaperForm extends JModelForm
 				}
 				
 			}else{
-				JError::raiseError(403, JText::_('JERROR_ALERTNOAUTHOR'));
+				throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'),403);
             	return false;
 			}
 							
         } else {
-			$this->setError($table->getError());
+			throw new Exception($table->getError());
             return false;
         } 
 		
