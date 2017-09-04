@@ -43,6 +43,7 @@ class ConfmgtModelAuthors extends JModelList {
      * Method to get the linkid set in get / post data.
      * @since version 3.8.0
      * @return	linkid
+     * @return boolean
      * 
      */
 	public function getLinkid()

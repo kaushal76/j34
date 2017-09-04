@@ -40,7 +40,7 @@ class ConfmgtViewAuthors extends JViewLegacy
 		
 		if ($authorised !== true) {
             throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'));
-        	}
+        }
 
         parent::display($tpl);
 	}
