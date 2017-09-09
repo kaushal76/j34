@@ -29,6 +29,7 @@ class ConfmgtControllerAuthorForm extends ConfmgtController
 		// Get the previous edit id (if any) and the current edit id.
 		$previousId = (int) $app->getUserState('com_confmgt.edit.author.id');
 		$editId	= JFactory::getApplication()->input->getInt('id', null, 'array');
+        $linkId	= JFactory::getApplication()->input->getInt('linkid', null, 'array');
 
 		// Set the user id for the user to edit in the session.
 		$app->setUserState('com_confmgt.edit.author.id', $editId);
@@ -67,7 +68,7 @@ class ConfmgtControllerAuthorForm extends ConfmgtController
 		
 
 		// Get the user data.
-		$data = JFactory::getApplication()->input->get('jform', array(), 'array'); 
+        $data = JFactory::getApplication()->input->get('jform', array(), 'array');
 
 
 		// Get the form.
@@ -144,14 +145,17 @@ class ConfmgtControllerAuthorForm extends ConfmgtController
 	}
     
 	public function save() {
-		$url_success = 'index.php?option=com_confmgt&view=authors';
+
+        $linkId	= JFactory::getApplication()->input->getInt('linkid', null, 'array');
+		$url_success = 'index.php?option=com_confmgt&view=authors&linkid='.$linkId;
 		$url_fail = 'index.php?option=com_confmgt&view=authorform&layout=edit&id=';
 		
 		$this->save_common($url_success, $url_fail);
 	}
 	
 	public function update_save() {
-		$url_success = 'index.php?option=com_confmgt&view=authors&layout=update';
+        $linkId	= JFactory::getApplication()->input->getInt('linkid', null, 'array');
+		$url_success = 'index.php?option=com_confmgt&view=authors&layout=update&linkid='.$linkId;
 		$url_fail = 'index.php?option=com_confmgt&view=authorform&layout=update_form&id=';
 		
 		$this->save_common($url_success, $url_fail);

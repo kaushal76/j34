@@ -28,6 +28,7 @@ class ConfmgtControllerAuthor extends ConfmgtController {
         // Get the previous edit id (if any) and the current edit id.
         $previousId = (int) $app->getUserState('com_confmgt.edit.author.id');
         $editId = JFactory::getApplication()->input->getInt('id', null, 'array');
+        $linkId = JFactory::getApplication()->input->getInt('linkid', null, 'array');
 		
 
         // Set the user id for the user to edit in the session.
@@ -47,7 +48,7 @@ class ConfmgtControllerAuthor extends ConfmgtController {
         }
 
         // Redirect to the edit screen.
-        $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=authorform&layout=edit', false));
+        $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=authorform&layout=edit&linkid='.$linkId, false));
     }
 	
 	 /**
