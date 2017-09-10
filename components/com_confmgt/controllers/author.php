@@ -123,46 +123,34 @@ class ConfmgtControllerAuthor extends ConfmgtController
 
             // Redirect to the list screen.
             $this->setMessage(JText::_('COM_CONFMGT_ITEM_SAVED_SUCCESSFULLY'));
+
+            // Flush the data from the session.
+            $app->setUserState('com_confmgt.edit.author.data', null);
+
         }
-
-        // Clear the profile id from the session.
-        $app->setUserState('com_confmgt.edit.author.id', null);
-
-        // Flush the data from the session.
-        $app->setUserState('com_confmgt.edit.author.data', null);
-
-        // Redirect to the list screen.
-        $this->setMessage(JText::_('COM_CONFMGT_ITEM_SAVED_SUCCESSFULLY'));
         $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=authors&linkid=' . $linkId, false));
     }
 
+    /**
+     * Function to remove an author
+     *
+     * @return void
+     * @since version 3.8.0
+     */
     public function remove()
     {
-
-        /**
-         * Method to remove an author
-         * @return void
-         * @since 3.8.0
-         */
         $app = JFactory::getApplication();
         $model = $this->getModel('Author', 'ConfmgtModel');
-        $linkId = JFactory::getApplication()->input->getInt('linkid', null, 'array');
+        $linkId = $app->input->getInt('linkid', null, 'array');
+        $id = $app->input->getInt('id', null, 'array');
 
-        // Get the user data.
-        $data = JFactory::getApplication()->input->get('jform', array(), 'array');
-
-        // Attempt to save the data.
-        $return = $model->delete($data['id']);
+        // Attempt to delete the row.
+        $return = $model->delete($id, $linkId);
 
         // Check for errors.
         if ($return === false) {
             $this->setMessage(JText::sprintf('Delete failed', $model->getError()), 'warning');
         } else {
-            // Check in the profile.
-            if ($return) {
-                $model->checkin($return);
-            }
-
             // Clear the profile id from the session.
             $app->setUserState('com_confmgt.edit.author.id', null);
 
@@ -189,21 +177,15 @@ class ConfmgtControllerAuthor extends ConfmgtController
         $app = JFactory::getApplication();
         $model = $this->getModel('Author', 'ConfmgtModel');
         $linkId = JFactory::getApplication()->input->getInt('linkid', null, 'array');
-
-        // Get the user data.
-        $data = JFactory::getApplication()->input->get('jform', array(), 'array');
+        $id = JFactory::getApplication()->input->getInt('id', null, 'array');
 
         // Attempt to save the data.
-        $return = $model->delete($data['id']);
+        $return = $model->delete('id', $linkId);
 
         // Check for errors.
         if ($return === false) {
             $this->setMessage(JText::sprintf('Delete failed', $model->getError()), 'warning');
         } else {
-            // Check in the profile.
-            if ($return) {
-                $model->checkin($return);
-            }
 
             // Clear the profile id from the session.
             $app->setUserState('com_confmgt.edit.author.id', null);

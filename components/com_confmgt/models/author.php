@@ -1,21 +1,20 @@
 <?php
 
 /**
- * @version     2.5.7
+ * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
  */
 // No direct access.
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.modelitem');
-jimport('joomla.event.dispatcher');
 
 /**
- * Confmgt model.
+ * Confmgt author model.
  */
+
 class ConfmgtModelAuthor extends JModelItem {
 
     /**
@@ -27,8 +26,9 @@ class ConfmgtModelAuthor extends JModelItem {
      */
     protected function populateState() {
         $app = JFactory::getApplication('com_confmgt');
+        $linkid = $app->input->get('linkid',0,'int');
 
-        // Load state from the request userState on edit or from the passed variable on default
+        // Load state from the request authorState on edit or from the passed variable on default
         if (JFactory::getApplication()->input->get('layout') == 'edit' ) {
             $id = JFactory::getApplication()->getUserState('com_confmgt.edit.author.id');
         } else {
@@ -37,13 +37,6 @@ class ConfmgtModelAuthor extends JModelItem {
         }
         $this->setState('author.id', $id);
 
-        // Load the parameters.
-        $params = $app->getParams();
-        $params_array = $params->toArray();
-        if (isset($params_array['item_id'])) {
-            $this->setState('author.id', $params_array['item_id']);
-        }
-        $this->setState('params', $params);
     }
 
     /**
@@ -53,7 +46,7 @@ class ConfmgtModelAuthor extends JModelItem {
      * @return boolean
      *
      */
-	public function &getLinkid()
+	public function getLinkid()
 	{
         $linkid = JFactory::getApplication()->input->get('linkid',0,'int');
 		if ($linkid == 0)
@@ -233,7 +226,15 @@ class ConfmgtModelAuthor extends JModelItem {
         return $table->store();
     }
 
-    public function delete($id) {
+    public function delete($id, $linkId) {
+
+        $authorised = AclHelper::isAuthor($linkId);
+
+        if (!$authorised) {
+            throw New Exception('Not Authorised');
+            return false;
+        }
+
         $table = $this->getTable();
         return $table->delete($id);
     }

@@ -28,6 +28,7 @@ class ConfmgtControllerPaper extends ConfmgtController {
         // Get the previous edit id (if any) and the current edit id.
         $previousId = (int) $app->getUserState('com_confmgt.edit.paper.id');
         $editId = JFactory::getApplication()->input->getInt('id', null, 'array');
+        $linkId = JFactory::getApplication()->input->getInt('linkid', null, 'array');
 
         // Set the user id for the user to edit in the session.
         $app->setUserState('com_confmgt.edit.paper.id', $editId);
@@ -46,7 +47,7 @@ class ConfmgtControllerPaper extends ConfmgtController {
         }
 
         // Redirect to the edit screen.
-        $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=paperform&layout=edit', false));
+        $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=paperform&layout=edit&linkid='.$linkId, false));
     }
 
     /**
