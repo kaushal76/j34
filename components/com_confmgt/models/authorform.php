@@ -252,8 +252,8 @@ class ConfmgtModelAuthorForm extends JModelForm
 			$app = JFactory::getApplication();
 			
 			// check if paper id is set and then get the paper id
-			
-	        $linkid = $app->getUserStateFromRequest('com_confmgt.linkid','linkid',0);
+            $linkid = $this->getLinkid();
+
 				
 			//check if paper ID has been created
 			if ($linkid == 0) {

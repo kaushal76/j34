@@ -45,20 +45,21 @@ class ConfmgtModelAuthor extends JModelItem {
         }
         $this->setState('params', $params);
     }
-	
-		/**
-     * BMethod to get the LinkID set in either the user session data or the fget / post data.
-     *
+
+    /**
+     * Method to get the linkid set in get / post data.
+     * @since version 3.8.0
      * @return	linkid
-     * 
+     * @return boolean
+     *
      */
 	public function &getLinkid()
 	{
-		$linkid = JFactory::getApplication()->getUserStateFromRequest( "com_confmgt.linkid", 'linkid', 0 );
+        $linkid = JFactory::getApplication()->input->get('linkid',0,'int');
 		if ($linkid == 0)
 		{
-			JError::raiseError('500', JText::_('JERROR_NO_PAPERID'));
-			return false;
+            throw new Exception(JText::_('JERROR_NO_PAPERID'),'500');
+            return false;
 		}else{		
 			return $linkid;
 		}		

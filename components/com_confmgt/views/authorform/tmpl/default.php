@@ -61,6 +61,7 @@ defined('_JEXEC') or die;
             <button type="submit" class="btn btn-primary" ><?php echo JText::_('JSUBMIT'); ?></button>
             <?php echo JText::_('or'); ?> <a href="<?php echo JRoute::_('index.php?option=com_confmgt&task=authorform.cancel'); ?>" title="<?php echo JText::_('JCANCEL'); ?>"><?php echo JText::_('JCANCEL'); ?></a>
             <input type="hidden" name="option" value="com_confmgt" />
+            <input type="hidden" name="linkid" value="<?php echo $this->linkid; ?>"/>
             <input type="hidden" name="task" value="authorform.save" />
             <?php echo JHtml::_('form.token'); ?> </div>
         </div>
