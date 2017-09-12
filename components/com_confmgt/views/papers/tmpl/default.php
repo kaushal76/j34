@@ -46,24 +46,17 @@ $document->addScript($delurl);
                     <td><?php echo $item->themename; ?></td>
                     <td><?php echo $item->last_updated; ?></td>
                     <td>
-                        <a class="btn btn-danger"
+                        <a class=""
                            data-toggle="confirm"
                            data-header="Delete confirmation"
                            data-title="Do you really want to delete the record?"
-                           href="<?php echo JRoute::_('index.php?option=com_confmgt&task=paper.remove&jform[id]=' . $item->id . '&' . JSession::getFormToken() . '=1'); ?>">
-                            <i class="icon-trash icon-white"></i>
+                           href="<?php echo JRoute::_('index.php?option=com_confmgt&task=paper.remove&id=' . $item->id); ?>">
+                            <i class="icon-trash"></i>
                         </a>
-                        <form id="form-paper-edit-<?php echo $item->id; ?>" style="display:inline"
-                              action="<?php echo JRoute::_('index.php'); ?>" method="post" class="form-validate"
-                              enctype="multipart/form-data">
-                            <input type="hidden" name="id" value="<?php echo $item->id; ?>"/>
-                            <input type="hidden" name="linkid" value="<?php echo $item->id; ?>"/>
-                            <input type="hidden" name="jform[id]" value="<?php echo $item->id; ?>"/>
-                            <input type="hidden" name="option" value="com_confmgt"/>
-                            <input type="hidden" name="view" value="paper"/>
-                            <button type="submit" class="btn btn-genral"><i class="icon-file"></i></button>
-                            <?php echo JHtml::_('form.token'); ?>
-                        </form>
+                        <a class=""
+                           href="<?php echo JRoute::_('index.php?option=com_confmgt&id='.(int)$item->id.'&linkid='.(int)$item->id.'&view=paper'); ?>">
+                            <i class="icon-pencil"></i>
+                        </a>
                     </td>
                 </tr>
             <?php endforeach; ?>

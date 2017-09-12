@@ -1,17 +1,15 @@
 <?php
 
 /**
- * @version     3.6.0
+ * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
  */
 // No direct access.
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.modelitem');
-jimport('joomla.event.dispatcher');
 
 /**
  * Confmgt model.
@@ -31,35 +29,28 @@ class ConfmgtModelPaper extends JModelItem {
         // Load state from the request userState on edit or from the passed variable on default
         if (JFactory::getApplication()->input->get('layout') == 'edit') {
             $id = JFactory::getApplication()->getUserState('com_confmgt.edit.paper.id');
+			$linkid = JFactory::getApplication()->input->get('linkid');
         } else {
             $id = JFactory::getApplication()->input->get('id');
             JFactory::getApplication()->setUserState('com_confmgt.edit.paper.id', $id);
-			$linkid = JFactory::getApplication()->setUserState('com_confmgt.linkid', $id);
+			$linkid = JFactory::getApplication()->input->get('linkid');
         }
         $this->setState('paper.id', $id);
-
-        // Load the parameters.
-        $params = $app->getParams();
-        $params_array = $params->toArray();
-        if (isset($params_array['item_id'])) {
-            $this->setState('paper.id', $params_array['item_id']);
-        }
-        $this->setState('params', $params);
     }
-	
+
 	/**
-	 * Method to get the paper ID .
+	 * Method to get the paper ID
+	 * @return bool|mixed
 	 *
-	 * @param	none
-	 *
-	 * @return	paper ID (Int) on success false on failure.
+	 * @since version 3.8.0
 	 */
-	public function &getLinkid()
+
+	public function getLinkid()
 	{
-		$linkid = JFactory::getApplication()->getUserStateFromRequest( "com_confmgt.linkid", 'linkid', 0 );
+		$linkid = JFactory::getApplication()->input->get('linkid');
 		if ($linkid == 0)
 		{
-			JError::raiseError('500', JText::_('JERROR_NO_PAPERID'));
+			throw new Exception( JText::_('JERROR_NO_PAPERID'));
 			return false;
 		}else{		
 			return $linkid;
@@ -75,6 +66,7 @@ class ConfmgtModelPaper extends JModelItem {
      * @return	mixed	Object on success, false on failure.
      */
     public function &getData($id = null) {
+		$user = JFactory::getUser();
         if ($this->_item === null) {
             $this->_item = false;
 
@@ -84,7 +76,7 @@ class ConfmgtModelPaper extends JModelItem {
 			
 			if ($id > 0) {				
 				$authorised  = AclHelper::isAuthor($id);				
-			}else{			
+			}else{
 			$authorised = ($user->id > 0);			
 			}
 

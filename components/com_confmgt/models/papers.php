@@ -110,7 +110,7 @@ class ConfmgtModelPapers extends JModelList
      * A function to remove the temp items in the papers table before returning a list of paper items
      * @return mixed
      *
-     * @since version
+     * @since version 3.8.0
      */
     public function getItems()
     {
@@ -125,7 +125,7 @@ class ConfmgtModelPapers extends JModelList
      * Method to get the paper list for theme leaders
      * @throws Exception if not authorised
      * @return mixed
-     * @TODO re code this function with better logic for student papers
+     * TODO re code this function with better logic for student papers
      */
 
     public function getLeadersItems()

@@ -20,7 +20,9 @@ class ConfmgtViewPapers extends JViewLegacy
 	protected $leadersitems;
 
 	/**
-	 * Display the view
+	 * Method to display the view
+     * @since 3.8.0
+     * @return void
 	 */
 	public function display($tpl = null)
 	{
@@ -32,7 +34,6 @@ class ConfmgtViewPapers extends JViewLegacy
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
 		{
-			;
 			throw new Exception(implode("\n", $errors));
 		}
 		parent::display($tpl);

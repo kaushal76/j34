@@ -186,6 +186,7 @@ div.modalcontianer {
   border-color: red !important;
 }
 
-
-
-
+.bbsize {
+  margin: 0 auto;
+  width: 350px;
+}
