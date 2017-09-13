@@ -65,7 +65,7 @@ class ConfmgtModelPaper extends JModelItem {
      *
      * @return	mixed	Object on success, false on failure.
      */
-    public function &getData($id = null) {
+    public function getData($id = null) {
 		$user = JFactory::getUser();
         if ($this->_item === null) {
             $this->_item = false;

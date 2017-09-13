@@ -162,13 +162,14 @@ class ConfmgtControllerAuthorForm extends ConfmgtController
 	}
     
     function cancel() {
-		
-	    $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=authors', false));
+        $linkId	= JFactory::getApplication()->input->getInt('linkid', null, 'array');
+	    $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=authors&linkid='.$linkId, false));
     }
 	
 	function update_cancel() {
-		
-	    $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=authors&layout=update', false));
+
+        $linkId	= JFactory::getApplication()->input->getInt('linkid', null, 'array');
+	    $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=authors&layout=update&linkid='.$linkId, false));
     }
     
     
