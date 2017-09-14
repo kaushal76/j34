@@ -53,7 +53,7 @@ $document->addScript($url);
             data-pk="<?php echo $this->item->id; ?>" 
             data-url="<?php echo JRoute::_('index.php?option=com_confmgt&task=author.save_ajax&tmpl=component&format=raw'); ?>" 
             data-title="Enter author's Title" 
-            data-source:"/source"
+            data-source="/source"
             data-name = "title"
             data-inputclass="ajaxinput"
             data-value = <?php echo $this->item->title; ?>>

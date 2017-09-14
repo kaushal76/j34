@@ -46,26 +46,17 @@ $document->addScript($delurl);
                 <td><?php echo $item->title . ' ' . $item->firstname . ' ' . $item->surname; ?></td>
                 <td>
                     <div class="inline">
-                        <a class="btn btn-danger"
+                        <a
                            data-toggle="confirm"
                            data-header="Delete confirmation"
                            data-title="Do you really want to delete the record?"
-                           href="<?php echo JRoute::_('index.php?option=com_confmgt&task=author.remove&jform[id]=' . $item->id . '&' . JSession::getFormToken() . '=1'); ?>">
+                           href="<?php echo JRoute::_('index.php?option=com_confmgt&task=author.remove&id=' . $item->id.'&linkid=' . $linkid); ?>">
                             <i class="icon-trash icon-white"></i>
                         </a>
-                    </div>
-                    <div class="inline">
-                        <form id="form-author-edit-<?php echo $item->id; ?>" style="display:inline"
-                              action="<?php echo JRoute::_('index.php'); ?>" method="post" class="form-validate"
-                              enctype="multipart/form-data">
-                            <button class="btn btn" type="submit"><i class="icon-edit"></i>
-                            </button>
-                            <input type="hidden" name="id" value="<?php echo $item->id; ?>"/>
-                            <input type="hidden" name="option" value="com_confmgt"/>
-                            <input type="hidden" name="task" value="author.edit"/>
-                            <input type="hidden" name="linkid" value="<?php echo $linkid; ?>"/>
-                            <?php echo JHtml::_('form.token'); ?>
-                        </form>
+                        <a
+                            href="<?php echo JRoute::_('index.php?option=com_confmgt&task=author.edit&id=' . $item->id.'&linkid=' . $linkid); ?>">
+                            <i class="icon-pencil"></i>
+                        </a>
                     </div>
                 </td>
             </tr>

@@ -84,7 +84,7 @@ class ConfmgtControllerAuthor extends ConfmgtController
         }
 
         // Redirect to the edit screen.
-        $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=authorform&layout=update_form&linkid=' . $linkId, false));
+        $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=authorform&layout=edit&linkid=' . $linkId, false));
     }
 
 
@@ -111,7 +111,7 @@ class ConfmgtControllerAuthor extends ConfmgtController
 
         // Check for errors.
         if ($return === false) {
-            $this->setMessage(JText::sprintf('Save failed', $model->getError()), 'warning');
+            $app->enqueueMessage(JText::sprintf('Save failed', $model->getError()), 'warning');
         } else {
             // Check in the profile.
             if ($return) {
@@ -122,7 +122,7 @@ class ConfmgtControllerAuthor extends ConfmgtController
             $app->setUserState('com_confmgt.edit.author.id', null);
 
             // Redirect to the list screen.
-            $this->setMessage(JText::_('COM_CONFMGT_ITEM_SAVED_SUCCESSFULLY'));
+            $app->enqueueMessage(JText::_('COM_CONFMGT_ITEM_SAVED_SUCCESSFULLY'));
 
             // Flush the data from the session.
             $app->setUserState('com_confmgt.edit.author.data', null);
@@ -149,7 +149,7 @@ class ConfmgtControllerAuthor extends ConfmgtController
 
         // Check for errors.
         if ($return === false) {
-            $this->setMessage(JText::sprintf('Delete failed', $model->getError()), 'warning');
+            $app->enqueueMessage(JText::sprintf('Delete failed', $model->getError()), 'warning');
         } else {
             // Clear the profile id from the session.
             $app->setUserState('com_confmgt.edit.author.id', null);
@@ -157,7 +157,7 @@ class ConfmgtControllerAuthor extends ConfmgtController
             // Flush the data from the session.
             $app->setUserState('com_confmgt.edit.author.data', null);
 
-            $this->setMessage(JText::_('COM_CONFMGT_ITEM_DELETED_SUCCESSFULLY'));
+            $app->enqueueMessage(JText::_('COM_CONFMGT_ITEM_DELETED_SUCCESSFULLY'));
         }
 
         // Redirect to the list screen.
@@ -176,11 +176,18 @@ class ConfmgtControllerAuthor extends ConfmgtController
         // Initialise variables.
         $app = JFactory::getApplication();
         $model = $this->getModel('Author', 'ConfmgtModel');
+        $authors = $this->getModel('authors', 'ConfmgtModel');
         $linkId = JFactory::getApplication()->input->getInt('linkid', null, 'array');
         $id = JFactory::getApplication()->input->getInt('id', null, 'array');
 
+        if (count($authors->getAuthorsForPaper($linkId)) < 2) {
+            $app->enqueueMessage(JText::_('You cannot delete the only author. Please add an alternative author before you attempt to remove the current one'),'error');
+            $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=paper&linkid=' . $linkId.'&id=' . $linkId, false));
+            return false;
+        }
+
         // Attempt to save the data.
-        $return = $model->delete('id', $linkId);
+        $return = $model->delete($id, $linkId);
 
         // Check for errors.
         if ($return === false) {
@@ -193,11 +200,11 @@ class ConfmgtControllerAuthor extends ConfmgtController
             // Flush the data from the session.
             $app->setUserState('com_confmgt.edit.author.data', null);
 
-            $this->setMessage(JText::_('COM_CONFMGT_ITEM_DELETED_SUCCESSFULLY'));
+            $app->enqueueMessage(JText::_('COM_CONFMGT_ITEM_DELETED_SUCCESSFULLY'));
         }
 
         // Redirect to the list screen.
-        $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=authors&layout=update&linkid=' . $linkId, false));
+        $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=paper&linkid=' . $linkId.'&id=' . $linkId, false));
     }
 
 }
