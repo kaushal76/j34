@@ -51,7 +51,7 @@ defined('_JEXEC') or die;
         </table>
     <div class="panel-footer">
         <a class="btn btn-default"
-            href="<?php echo JRoute::_('index.php?option=com_confmgt&linkid='.$this->item->id.'&task=paper.edit&id=' . $this->item->id);  ?>">
+            href="<?php echo JRoute::_('index.php?option=com_confmgt&linkid='.$this->item->id.'&task=paper.change&id=' . $this->item->id);  ?>">
             <i class="icon-pencil"></i>
             <?php echo JText::_('Edit'); ?>
         </a>

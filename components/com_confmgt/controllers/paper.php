@@ -52,6 +52,40 @@ class ConfmgtControllerPaper extends ConfmgtController
     }
 
     /**
+     * Method to load an edit layout when editing an abstract.
+     *
+     * @since    1.6
+     */
+    public function change()
+    {
+        $app = JFactory::getApplication();
+
+        // Get the previous edit id (if any) and the current edit id.
+        $previousId = (int)$app->getUserState('com_confmgt.edit.paper.id');
+        $editId = JFactory::getApplication()->input->getInt('id', null, 'array');
+        $linkId = JFactory::getApplication()->input->getInt('linkid', null, 'array');
+
+        // Set the user id for the user to edit in the session.
+        $app->setUserState('com_confmgt.edit.paper.id', $editId);
+
+        // Get the model.
+        $model = $this->getModel('Paper', 'ConfmgtModel');
+
+        // Check out the item
+        if ($editId) {
+            $model->checkout($editId);
+        }
+
+        // Check in the previous user.
+        if ($previousId && $previousId !== $editId) {
+            $model->checkin($previousId);
+        }
+
+        // Redirect to the edit screen.
+        $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=paperform&id='.$linkId.'&layout=change&linkid=' . $linkId, false));
+    }
+
+    /**
      * Method to publish paper data.
      *
      * @return    void
@@ -75,7 +109,7 @@ class ConfmgtControllerPaper extends ConfmgtController
 
         // Check for errors.
         if ($return === false) {
-            $this->setMessage(JText::sprintf('Save failed', $model->getError()), 'warning');
+            $app->enqueueMessage(JText::sprintf('Save failed', $model->getError()), 'warning');
         } else {
             // Check in the profile.
             if ($return) {
@@ -91,7 +125,7 @@ class ConfmgtControllerPaper extends ConfmgtController
         $app->setUserState('com_confmgt.edit.paper.data', null);
 
         // Redirect to the list screen.
-        $this->setMessage(JText::_('COM_CONFMGT_ITEM_SAVED_SUCCESSFULLY'));
+        $app->enqueueMessage(JText::_('COM_CONFMGT_ITEM_SAVED_SUCCESSFULLY'));
         $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=papers', false));
     }
 
@@ -115,7 +149,7 @@ class ConfmgtControllerPaper extends ConfmgtController
 
         // Check for errors.
         if ($return === false) {
-            $this->setMessage(JText::sprintf('Delete failed', $model->getError()), 'warning');
+            $app->enqueueMessage(JText::sprintf('Delete failed', $model->getError()), 'warning');
         } else {
             // Check in the profile.
             if ($return) {
@@ -128,7 +162,7 @@ class ConfmgtControllerPaper extends ConfmgtController
             // Flush the data from the session.
             $app->setUserState('com_confmgt.edit.paper.data', null);
 
-            $this->setMessage(JText::_('COM_CONFMGT_ITEM_DELETED_SUCCESSFULLY'));
+            $app->enqueueMessage(JText::_('COM_CONFMGT_ITEM_DELETED_SUCCESSFULLY'));
         }
 
         // Redirect to the list screen.
@@ -164,7 +198,7 @@ class ConfmgtControllerPaper extends ConfmgtController
 
             //Check if there is an authors list; if not redierct to create one
             if (!$authors->getAuthorsForPaper($return)) {
-                $this->setMessage(JText::_('You need to create a list of authors for your abstracts first', 'warning'));
+                $app->enqueueMessage(JText::_('You need to create a list of authors for your abstracts first', 'warning'));
                 $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=authors&linkid=' . $return, false));
             } else {
                 // redirect to the new abstract page

@@ -73,3 +73,7 @@ $document->addScript($url);
         </button>
       </form>
     </div>
+
+<a href="#myModal" class="btn" data-toggle="modal"> Click here to see my image</a>
+
+<?php echo JHTML::_('bootstrap.renderModal', 'myModal', array(), '<img src="https://static.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg" />'); ?>

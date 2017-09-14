@@ -19,12 +19,8 @@ JHtml::_('behavior.formvalidation');
         <div class='form-horizontal'>
             <fieldset>
                 <div class="paper-edit front-end-edit">
-                    <?php if (!empty($this->item->id)): ?>
-                        <legend><?php echo JText::_('Step 2 of 2: Paper ID: ');
-                            echo $this->item->id; ?></legend>
-                    <?php else: ?>
-                        <legend><?php echo JText::_('Subimit a new abstract'); ?></legend>
-                    <?php endif; ?>
+                    <legend><?php echo JText::_('Edit details Paper ID: ');
+                        echo $this->item->id; ?></legend>
                     <form id="form-paper" role="form"
                           action="<?php echo JRoute::_('index.php?option=com_confmgt&task=paperform.save'); ?>
 		" method="post" class="form-validate form-horizontal" enctype="multipart/form-data">
