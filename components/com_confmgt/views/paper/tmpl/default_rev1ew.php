@@ -18,71 +18,64 @@ defined('_JEXEC') or die;
         <tr>
             <td class="header" style="width:30%"><?php
                 echo JText::_('Abstract review outcome: '); ?>
-                :
             </td>
             <td>
                 <?php
                 echo $this->item->abstract_review_outcome_txt;
-                if (!empty($this->item->abstractBtn)) {
-                    echo $this->item->abstractBtn;
-                }
-                ?></td>
+                echo $this->item->abstractBtn;
+                ?>
+            </td>
         </tr>
         <tr>
             <td class="header"><?php
                 echo JText::_('Abstract review comments: '); ?>
-                :
             </td>
-            <td><?php
-                echo nl2br($this->item->abstract_review_comments);
-                ?></td>
+            <td><?php echo nl2br($this->item->abstract_review_comments); ?></td>
         </tr>
         <tr>
             <td class="header"><?php
                 echo JText::_('Full paper review outcome: '); ?>
-                :
             </td>
-            <td><?php
+            <td>
+                <?php
                 echo nl2br($this->item->full_review_outcome_txt);
-                if (!empty($this->item->fullPaperBtn)) {
-                    echo $this->item->fullPaperBtn;
-                    echo $this->item->full_paper_download;
-                }
-                ?></td>
+                echo $this->item->fullPaperBtn;
+                echo $this->item->full_paper_download;
+                ?>
+            </td>
         </tr>
         <tr>
             <td class="header"><?php
                 echo JText::_('Full paper review comments: '); ?>
-                :
             </td>
             <td><?php
                 echo nl2br($this->item->full_review_comments);
-                ?></td>
+                ?>
+            </td>
         </tr>
         <tr>
             <td class="header"><?php
                 echo JText::_('Camera ready paper: '); ?>
-                :
             </td>
-            <td><?php
+            <td>
+                <?php
                 echo $this->item->camera_ready_txt;
                 echo $this->item->cameraReadyBtn;
                 echo $this->item->cameraready_download;
-                ?></td>
+                ?>
+            </td>
         </tr>
         <tr>
             <td class="header"><?php
                 echo JText::_('Presentation: '); ?>
-                :
             </td>
-            <td><?php
-
+            <td>
+                <?php
                 echo $this->item->presentation_txt;
-                if (!empty($this->item->presentationBtn)) {
-                    echo $this->item->presentationBtn;
-                }
+                echo $this->item->presentationBtn;
                 echo $this->item->presentation_download;
-                ?></td>
+                ?>
+            </td>
         </tr>
     </table>
 </div>

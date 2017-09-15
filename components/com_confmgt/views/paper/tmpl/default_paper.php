@@ -21,19 +21,16 @@ defined('_JEXEC') or die;
             </td>
             <td><?php echo $this->item->full_paper_txt; ?> </td>
             <td>
-                <?php
-                echo $this->item->full_paper_download;
-                if (!empty($this->item->fullPaperBtn)) {
-                    echo $this->item->fullPaperBtn;
-                }
-                ?>
+                <?php echo $this->item->full_paper_download; ?>
+                <?php echo $this->item->fullPaperBtn; ?>
             </td>
         </tr>
         <tr>
             <td class="header"><?php
                 echo JText::_('Camera ready paper: '); ?>
             </td>
-            <td><?php echo $this->item->camera_ready_txt; ?></td>
+            <td><?php echo $this->item->camera_ready_txt; ?>
+            </td>
             <td><?php echo $this->item->cameraready_download; ?>
                 <?php echo $this->item->cameraReadyBtn; ?>
             </td>
@@ -41,10 +38,12 @@ defined('_JEXEC') or die;
         <tr>
             <td class="header"><?php
                 echo JText::_('Presentation: '); ?>
-                :
             </td>
-            <td><?php echo $this->item->presentation_txt; ?> </td>
-            <td><?php echo $this->item->presentationBtn ?><?php echo $this->item->presentation_download ?></td>
+            <td><?php echo $this->item->presentation_txt; ?>
+            </td>
+            <td><?php echo $this->item->presentationBtn ?>
+                <?php echo $this->item->presentation_download ?>
+            </td>
         </tr>
     </table>
 </div>

@@ -5,7 +5,7 @@
  * @package     com_confmgt
  * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
- * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
+ * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - http://www.confmgt.com
  */
 // No direct access.
 defined('_JEXEC') or die;
@@ -19,52 +19,46 @@ class ConfmgtModelPaper extends JModelItem
 
     /**
      * Method to auto-populate the model state.
-     *
      * Note. Calling getState in this method will result in recursion.
-     *
      * @since    1.6
      */
+
     protected function populateState()
     {
-        $app = JFactory::getApplication('com_confmgt');
 
         // Load state from the request userState on edit or from the passed variable on default
         if (JFactory::getApplication()->input->get('layout') == 'edit') {
             $id = JFactory::getApplication()->getUserState('com_confmgt.edit.paper.id');
-            $linkid = JFactory::getApplication()->input->get('linkid');
         } else {
             $id = JFactory::getApplication()->input->get('id');
             JFactory::getApplication()->setUserState('com_confmgt.edit.paper.id', $id);
-            $linkid = JFactory::getApplication()->input->get('linkid');
         }
         $this->setState('paper.id', $id);
     }
 
     /**
-     * Method to get the paper ID
-     * @return bool|mixed
-     *
+     * Method to get the paperID
+     * @return bool/mixed
      * @since version 3.8.0
      */
 
     public function getLinkid()
     {
         $linkid = JFactory::getApplication()->input->get('linkid');
-        if ($linkid == 0) {
+        if (!$linkid) {
             throw new Exception(JText::_('JERROR_NO_PAPERID'));
         } else {
             return $linkid;
         }
     }
 
-
     /**
      * Method to get an object.
-     *
-     * @param    integer
-     *
-     * @return    mixed    Object on success, false on failure.
+     * @param integer
+     * @return mixed Object on success, false on failure.
+     * TODO remove depreciated getError / setError methods
      */
+
     public function getData($id = null)
     {
         $user = JFactory::getUser();
@@ -84,19 +78,13 @@ class ConfmgtModelPaper extends JModelItem
             if ($authorised !== true) {
                 throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'));
             }
-            $change_allowed = false;
+            $change_allowed = true;
 
             // Get a level row instance.
             $table = $this->getTable();
 
             // Attempt to load the row.
             if ($table->load($id)) {
-                // Check published state.
-                if ($published = $this->getState('filter.published')) {
-                    if ($table->state != $published) {
-                        return $this->_item;
-                    }
-                }
 
                 // Convert the JTable to a clean JObject.
                 $properties = $table->getProperties(1);
@@ -118,7 +106,7 @@ class ConfmgtModelPaper extends JModelItem
                     $properties['presentation_download'] = null;
                 }
 
-                $this->_item = JArrayHelper::toObject($properties, 'JObject');
+                $this->_item = Joomla\Utilities\ArrayHelper::toObject($properties, 'JObject');
 
             } elseif ($error = $table->getError()) {
                 $this->setError($error);
@@ -128,6 +116,14 @@ class ConfmgtModelPaper extends JModelItem
         if (isset($this->_item->created_by)) {
             $this->_item->created_by = JFactory::getUser($this->_item->created_by)->name;
         }
+
+        $this->_item->abstractBtn = null;
+        $this->_item->fullPaperBtn = null;
+        $this->_item->full_paper_download = null;
+        $this->_item->cameraReadyBtn = null;
+        $this->_item->cameraready_download = null;
+        $this->_item->presentationBtn = null;
+        $this->_item->presentation_download = null;
 
 
         //Deal with the abstract review outcome
