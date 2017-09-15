@@ -40,7 +40,7 @@ defined('_JEXEC') or die;
                 <td class="header"><?php
                     echo JText::_('Absrtact: '); ?>
                 </td>
-                <td><?php echo $this->item->abstract; ?></td>
+                <td><?php echo nl2br($this->item->abstract); ?></td>
             </tr>
             <tr>
                 <td class="header"><?php
@@ -51,7 +51,7 @@ defined('_JEXEC') or die;
         </table>
     <div class="panel-footer">
         <a class="btn btn-default"
-            href="<?php echo JRoute::_('index.php?option=com_confmgt&linkid='.$this->item->id.'&task=paper.change&id=' . $this->item->id);  ?>">
+            href="<?php echo JRoute::_('index.php?option=com_confmgt&linkid='.$this->item->id.'&task=paper.update&id=' . $this->item->id);  ?>">
             <i class="icon-pencil"></i>
             <?php echo JText::_('Edit'); ?>
         </a>

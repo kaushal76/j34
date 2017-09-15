@@ -69,6 +69,7 @@ abstract class AclHelper
         if ($user->id == 0) {
             return false;
         }
+
         if ($paperid == 0 && $themeid == 0) {
             // No paperid given or themeid, hence checking if any of the theme leaders
             $query = $db->getQuery(true)
@@ -180,12 +181,14 @@ abstract class AclHelper
         $db->setQuery($query);
         $db->execute();
         $num_rows = $db->getNumRows();
+
         if ($num_rows > 0) {
             return true;
         }
         else {
             return false;
         }
+
     }
 
     /**

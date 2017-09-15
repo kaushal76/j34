@@ -52,7 +52,6 @@ class ConfmgtModelPaper extends JModelItem
         $linkid = JFactory::getApplication()->input->get('linkid');
         if ($linkid == 0) {
             throw new Exception(JText::_('JERROR_NO_PAPERID'));
-            return false;
         } else {
             return $linkid;
         }
@@ -60,9 +59,9 @@ class ConfmgtModelPaper extends JModelItem
 
 
     /**
-     * Method to get an ojbect.
+     * Method to get an object.
      *
-     * @param    integer    The id of the object to get.
+     * @param    integer
      *
      * @return    mixed    Object on success, false on failure.
      */
@@ -84,7 +83,6 @@ class ConfmgtModelPaper extends JModelItem
 
             if ($authorised !== true) {
                 throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'));
-                return false;
             }
             $change_allowed = false;
 
@@ -377,6 +375,7 @@ class ConfmgtModelPaper extends JModelItem
 
     public function publish($id, $state)
     {
+        $user = JFactory::getUser();
         if ($id > 0) {
             $authorised = AclHelper::isAuthor($id);
         } else {
@@ -384,7 +383,6 @@ class ConfmgtModelPaper extends JModelItem
         }
         if ($authorised !== true) {
             throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'));
-            return false;
         }
         $table = $this->getTable();
         $table->load($id);
@@ -394,6 +392,7 @@ class ConfmgtModelPaper extends JModelItem
 
     public function delete($id)
     {
+        $user = JFactory::getUser();
         if ($id > 0) {
             $authorised = AclHelper::isAuthor($id);
         } else {
@@ -401,7 +400,6 @@ class ConfmgtModelPaper extends JModelItem
         }
         if ($authorised !== true) {
             throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'));
-            return false;
         }
         $table = $this->getTable();
         return $table->delete($id);

@@ -84,7 +84,7 @@ class ConfmgtControllerAuthor extends ConfmgtController
         }
 
         // Redirect to the edit screen.
-        $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=authorform&layout=edit&linkid=' . $linkId, false));
+        $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=authorform&layout=update&id='.$editId.'&linkid=' . $linkId, false));
     }
 
 

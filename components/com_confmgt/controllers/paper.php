@@ -56,7 +56,7 @@ class ConfmgtControllerPaper extends ConfmgtController
      *
      * @since    1.6
      */
-    public function change()
+    public function update()
     {
         $app = JFactory::getApplication();
 
@@ -82,7 +82,7 @@ class ConfmgtControllerPaper extends ConfmgtController
         }
 
         // Redirect to the edit screen.
-        $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=paperform&id='.$linkId.'&layout=change&linkid=' . $linkId, false));
+        $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=paperform&id='.$linkId.'&layout=update&linkid=' . $linkId, false));
     }
 
     /**

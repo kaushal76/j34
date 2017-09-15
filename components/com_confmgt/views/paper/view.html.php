@@ -10,8 +10,6 @@
 // No direct access
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.view');
-
 /**
  * View class for a paper
  */
@@ -20,7 +18,6 @@ class ConfmgtViewPaper extends JViewLegacy {
     protected $state;
     protected $item;
     protected $form;
-    protected $params;
 	protected $linkid;
 	protected $authors;
 	protected $fullpapers;
@@ -31,8 +28,7 @@ class ConfmgtViewPaper extends JViewLegacy {
      * Display the view
      */
     public function display($tpl = null) {
-        
-		$app	= JFactory::getApplication();
+
         $user	= JFactory::getUser();
 		
 		//getting the authors and full papers linked with the item
@@ -48,7 +44,6 @@ class ConfmgtViewPaper extends JViewLegacy {
         $this->state = $this->get('State');
         $this->item = $this->get('Data');
 
-        $this->params = $app->getParams('com_confmgt');
 		$this->isAuthor = AclHelper::isAuthor($this->item->id);
 
 
@@ -58,7 +53,7 @@ class ConfmgtViewPaper extends JViewLegacy {
         }      
         
         if($this->_layout == 'edit') {
-		// only registerd can create an abstract
+		// only registered can create an abstract
 		
 			if ($this->item->id > 0) {				
 				$authorised  = AclHelper::isAuthor($this->item->id);				
