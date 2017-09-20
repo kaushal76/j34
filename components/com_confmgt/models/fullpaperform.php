@@ -50,7 +50,7 @@ class ConfmgtModelFullpaperForm extends JModelForm
      *
      * @return	paper ID (Int) on success false on failure.
      */
-    public function &getLinkid( )
+    public function getLinkid( )
     {
         $linkid = JFactory::getApplication()->getUserStateFromRequest( "com_confmgt.linkid", 'linkid', 0 );
         if ( $linkid == 0 ) {

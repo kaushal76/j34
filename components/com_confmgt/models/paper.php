@@ -356,6 +356,16 @@ class ConfmgtModelPaper extends JModelItem
         return true;
     }
 
+    /**
+     * Method to update the status of a paper
+     * @param $id
+     * @param $state
+     *
+     * @return bool
+     *
+     * @since version 3.8.0
+     * @throws Exception
+     */
 
     public function publish($id, $state)
     {
@@ -374,6 +384,15 @@ class ConfmgtModelPaper extends JModelItem
         return $table->store();
     }
 
+    /**
+     * Method to delete a paper
+     * @param $id
+     *
+     * @return bool
+     *
+     * @since version 3.8.0
+     * @throws Exception
+     */
     public function delete($id)
     {
         $user = JFactory::getUser();
@@ -389,7 +408,15 @@ class ConfmgtModelPaper extends JModelItem
         return $table->delete($id);
     }
 
-    //Generate abstract button
+    /**
+     * Private method to generate an abstract change or resubmit button
+     * @param int $id
+     * @param string $mode
+     *
+     * @return string
+     *
+     * @since version 3.8.0
+     */
     private function _AbstractBtn($id = 0, $mode = 'change')
     {
         $html = "<div style=\"display:inline\">";
@@ -406,6 +433,7 @@ class ConfmgtModelPaper extends JModelItem
             $html = $html . "<input type=\"hidden\" name=\"view\" value=\"paperform\" />";
         }
         $html = $html . "<button class=\"btn btn-default\" type=\"submit\">";
+        $html = $html . "<i class=\"icon-upload\"></i>";
         if ($mode == 'change') {
             $html = $html . JText::_("Change the abstract");
         } elseif ($mode == 'resubmit') {
@@ -420,7 +448,15 @@ class ConfmgtModelPaper extends JModelItem
     }
 
 
-    //Generate full paper change button
+    /**
+     * Private method to generate a full paper submission button
+     * @param int $id
+     * @param string $mode
+     *
+     * @return string
+     *
+     * @since version 3.8.0
+     */
     private function _FullPaperBtn($id = 0, $mode = 'new')
     {
         $html = "<div style=\"display:inline\">";
@@ -432,6 +468,7 @@ class ConfmgtModelPaper extends JModelItem
         $html = $html . "<input type=\"hidden\" name=\"jform['linkid']\" value=\"" . $id . "\" />";
         $html = $html . "<input type=\"hidden\" name=\"jform['mode']\" value=\"" . $mode . "\" />";
         $html = $html . "<button class=\"btn btn-default\" type=\"submit\">";
+        $html = $html . "<i class=\"icon-upload\"></i>";
         if ($mode == 'change') {
             $html = $html . JText::_("Change");
         } elseif ($mode == 'resubmit') {
@@ -445,7 +482,15 @@ class ConfmgtModelPaper extends JModelItem
 
     }
 
-    //Generate camera ready paper change button
+    /**
+     * Private method to generate a Camera ready submit button
+     * @param int $id
+     * @param string $mode
+     *
+     * @return string
+     *
+     * @since version 3.8.0
+     */
     private function _CameraReadyPaperBtn($id = 0, $mode = 'new')
     {
         $html = "<div style=\"display:inline\">";
@@ -457,6 +502,7 @@ class ConfmgtModelPaper extends JModelItem
         $html = $html . "<input type=\"hidden\" name=\"jform['linkid']\" value=\"" . $id . "\" />";
         $html = $html . "<input type=\"hidden\" name=\"jform['mode']\" value=\"" . $mode . "\" />";
         $html = $html . "<button class=\"btn btn-default\" type=\"submit\">";
+        $html = $html . "<i class=\"icon-upload\"></i>";
         if ($mode == 'change') {
             $html = $html . JText::_("Change the Camera Ready paper");
         } elseif ($mode == 'resubmit') {
@@ -470,7 +516,15 @@ class ConfmgtModelPaper extends JModelItem
 
     }
 
-    //Generate presentation change button
+    /**
+     * Private method to submit a presentation submit button
+     * @param int $id
+     * @param string $mode
+     *
+     * @return string
+     *
+     * @since version 3.8.0
+     */
     private function _PresentationBtn($id = 0, $mode = 'new')
     {
         $html = "<div style=\"display:inline\">";
@@ -482,6 +536,7 @@ class ConfmgtModelPaper extends JModelItem
         $html = $html . "<input type=\"hidden\" name=\"jform['linkid']\" value=\"" . $id . "\" />";
         $html = $html . "<input type=\"hidden\" name=\"jform['mode']\" value=\"" . $mode . "\" />";
         $html = $html . "<button class=\"btn btn-default\" type=\"submit\">";
+        $html = $html . "<i class=\"icon-upload\"></i>";
         if ($mode == 'change') {
             $html = $html . JText::_("Change presenation");
         } elseif ($mode == 'resubmit') {
@@ -495,27 +550,15 @@ class ConfmgtModelPaper extends JModelItem
 
     }
 
-    //Generate full paper change button
-    private function _FullPaperBtnModal($id = 0, $mode = 'new')
-    {
-        ?>
 
-        <?php
-        $html = "<button data-toggle=\"modal\" class=\"btn btn-default\" style=\"display:inline\" type=\"button\" data-target=\"#FullPaperModal\" data-remote=\"" . JRoute::_('index.php?option=com_confmgt&amp;view=fullpaperform&amp;linkid=' . $id . '&amp;mode=' . $mode . '&amp;tmpl=component') . "\">";
-        if ($mode == 'change') {
-            $html = $html . JText::_("Change the full Paper");
-        } elseif ($mode == 'resubmit') {
-            $html = $html . JText::_("Resubmit the full paper");
-        } elseif ($mode == 'new') {
-            $html = $html . JText::_("Upload the full paper");
-        }
-        $html = $html . "</button>";
-
-        return $html;
-
-    }
-
-    //Generate presentation change button
+    /**
+     * Private method to generate a full paper download button
+     * @param $filename
+     *
+     * @return string
+     *
+     * @since version 3.8.0
+     */
     private function _FullPaperDownloadBtn($filename)
     {
         $html = "<div style=\"display:inline\">";
@@ -533,6 +576,14 @@ class ConfmgtModelPaper extends JModelItem
 
     }
 
+    /**
+     * Private method to generate a camera ready paper download button
+     * @param $filename
+     *
+     * @return string
+     *
+     * @since version 3.8.0
+     */
     private function _CameraReadyDownloadBtn($filename)
     {
         $html = "<div style=\"display:inline\">";
@@ -550,6 +601,14 @@ class ConfmgtModelPaper extends JModelItem
 
     }
 
+    /**
+     * Private method to generate a presentation download button
+     * @param $filename
+     *
+     * @return string
+     *
+     * @since version 3.8.0
+     */
     private function _PresentationDownloadBtn($filename)
     {
         $html = "<div style=\"display:inline\">";
@@ -567,6 +626,14 @@ class ConfmgtModelPaper extends JModelItem
 
     }
 
+    /**
+     * Method to get previously Submitted Abstracts for a given paper
+     * @param null $id
+     *
+     * @return mixed
+     *
+     * @since version 3.8.0
+     */
     public function getPreviousAbstracts($id = null)
     {
         // Get a db connection.
@@ -594,6 +661,14 @@ class ConfmgtModelPaper extends JModelItem
         return $results;
     }
 
+    /**
+     * Method to get previously submitted full papers for a given paper
+     * @param null $id
+     *
+     * @return mixed
+     *
+     * @since version 3.8.0
+     */
     public function getPreviousFullPapers($id = null)
     {
         // Get a db connection.
