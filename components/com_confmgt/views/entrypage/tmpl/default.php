@@ -19,7 +19,7 @@ defined('_JEXEC') or die;
   <div class="panel-body">
     <p><?php echo JText::_('COM_CONFMGT_VIEW_ENTRYPAGE_DEFAULT_PANEL_DETAILS'); ?></p>
     <div align="center">
-      <div class="button-container">
+      <div class="row">
         <div class="inline">
           <?php if ($this->role['isAuthor']) : ?>
           <form id="form-enrty-1" action="<?php echo JRoute::_('index.php'); ?>" 
@@ -28,7 +28,7 @@ defined('_JEXEC') or die;
             <input type="hidden" name="option" value="com_confmgt" />
             <input type="hidden" name="view" value="papers" />
             <input type="hidden" name="layout" value="default" />
-            <button class="btn btn-default btn-entry" type="submit"> 
+            <button class="btn btn-default btn-entry" type="submit">
 			<?php echo '<span class="centre"><img src="'.JURI::root().
 			'components/com_confmgt/assets/img/author.png" alt="Author" 
 			height="42" width="42"></span><br />';?> 

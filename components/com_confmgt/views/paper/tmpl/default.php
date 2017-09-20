@@ -2,7 +2,7 @@
 /**
  * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
  */
@@ -17,54 +17,48 @@ $delurl = "components/com_confmgt/assets/js/del.js";
 $document->addScript($bootboxurl);
 $document->addScript($delurl);
 $linkid = $this->linkid;
+
+$canView = $this->isAuthor;
+$canEdit = $this->isAuthor;
+
+if ($canView):
 ?>
-
-<div id="scripted">
-    <?php
-
-    $canView = $this->isAuthor;
-    $canEdit = $this->isAuthor;
-
-    if ($canView):
-    ?>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h1>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h1>
+            <?php
+            echo JText::_('Paper Status') . ' - ' . JText::_('Paper ID ') . $this->item->id; ?>
+        </h1>
+    </div>
+    <div class="panel-body">
+        <div align="table">
+            <?php
+            if ($this->item): ?>
+                <?php echo $this->loadTemplate('authors'); ?><?php echo $this->loadTemplate('information'); ?><?php echo $this->loadTemplate('paper'); ?><?php echo $this->loadTemplate('rev1ew'); ?>
                 <?php
-                echo JText::_('Paper Status') . ' - ' . JText::_('Paper ID') . $this->item->id; ?>
-            </h1>
-        </div>
-        <div class="panel-body">
-            <div align="table">
-                <?php
-                if ($this->item): ?>
-                    <?php echo $this->loadTemplate('authors'); ?><?php echo $this->loadTemplate('information'); ?><?php echo $this->loadTemplate('paper'); ?><?php echo $this->loadTemplate('rev1ew'); ?>
-                    <?php
-                else:
-                    ?>
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <?php
-                            echo JText::_('COM_CONFMGT_PAPER_FORM_PANEL_HEADING'); ?>
-                        </div>
-                        <div class="panel-body"></div>
-                    </div>
-                    <?php
-                endif;
-                else:
-                    ?>
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <?php
-                            echo JText::_('COM_CONFMGT_PAPER_FORM_PANEL_NOT_AUTHORISED'); ?>
-                        </div>
-                        <div class="panel-body"></div>
-                    </div>
-                    <?php
-                endif;
-
+            else:
                 ?>
-            </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <?php
+                        echo JText::_('COM_CONFMGT_PAPER_FORM_PANEL_HEADING'); ?>
+                    </div>
+                    <div class="panel-body"></div>
+                </div>
+                <?php
+            endif;
+            else:
+                ?>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <?php
+                        echo JText::_('COM_CONFMGT_PAPER_FORM_PANEL_NOT_AUTHORISED'); ?>
+                    </div>
+                    <div class="panel-body"></div>
+                </div>
+                <?php
+            endif;
+            ?>
         </div>
     </div>
 </div>

@@ -19,8 +19,7 @@ defined('_JEXEC') or die;
             <td class="header"><?php
                 echo JText::_('Full paper: '); ?>
             </td>
-            <td><?php echo $this->item->full_paper_txt; ?> </td>
-            <td>
+            <td><?php echo $this->item->full_paper_txt; ?>
                 <?php echo $this->item->full_paper_download; ?>
                 <?php echo $this->item->fullPaperBtn; ?>
             </td>
@@ -30,8 +29,7 @@ defined('_JEXEC') or die;
                 echo JText::_('Camera ready paper: '); ?>
             </td>
             <td><?php echo $this->item->camera_ready_txt; ?>
-            </td>
-            <td><?php echo $this->item->cameraready_download; ?>
+                <?php echo $this->item->cameraready_download; ?>
                 <?php echo $this->item->cameraReadyBtn; ?>
             </td>
         </tr>
@@ -40,8 +38,7 @@ defined('_JEXEC') or die;
                 echo JText::_('Presentation: '); ?>
             </td>
             <td><?php echo $this->item->presentation_txt; ?>
-            </td>
-            <td><?php echo $this->item->presentationBtn ?>
+                <?php echo $this->item->presentationBtn ?>
                 <?php echo $this->item->presentation_download ?>
             </td>
         </tr>

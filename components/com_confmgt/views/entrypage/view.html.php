@@ -23,6 +23,10 @@ class ConfmgtViewEntrypage extends JViewLegacy {
 
     /**
      * Display the view
+     * @param null $tpl
+     *
+     *
+     * @since version 3.8.0
      */
     public function display($tpl = null) {
 

@@ -2,7 +2,7 @@
 /**
  * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
  */
@@ -50,7 +50,7 @@ $document->addScript($delurl);
                            data-toggle="confirm"
                            data-header="Delete confirmation"
                            data-title="Do you really want to delete the record?"
-                           href="<?php echo JRoute::_('index.php?option=com_confmgt&task=paper.remove&id=' . $item->id); ?>">
+                           href="<?php echo JRoute::_('index.php?option=com_confmgt&task=paper.remove&id=' .(int)$item->id); ?>">
                             <i class="icon-trash"></i>
                         </a>
                         <a class=""

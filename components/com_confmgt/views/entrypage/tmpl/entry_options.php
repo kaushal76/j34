@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
   <div class="panel-body">
     <p><?php echo JText::_('COM_CONFMGT_VIEW_ENTRYPAGE_ENTRY_OPTIONS_PANEL_DETAILS'); ?></p>
     <div align="center">
-      <div class="button-container">
+      <div class="row">
         <div class="inline">
           <form id="form-enrty-1" action="<?php echo JRoute::_('index.php'); ?>" 
           method="post" enctype="multipart/form-data" class="form-inline form-entry">

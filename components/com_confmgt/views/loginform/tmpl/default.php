@@ -14,7 +14,7 @@ defined('_JEXEC') or die;
     <div class="offset3 span6">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Please sign in</h3>
+                <h3 class="panel-title"><?php echo JText::_('Please sign in'); ?></h3>
             </div>
             <div class="panel-body">
                 <div class='form-horizontal'>

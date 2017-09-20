@@ -19,7 +19,7 @@ JLoader::register('EmailHelper', JPATH_COMPONENT . '/helpers/email.php');
 JLoader::register('UploadHelper', JPATH_COMPONENT . '/helpers/upload.php');
 
 // adding overiding styles
-$url      = "components/com_confmgt/assets/css/confmgt.css";
+$url = "components/com_confmgt/assets/css/confmgt.css";
 $document = JFactory::getDocument();
 $document->addStyleSheet($url);
 $input = JFactory::getApplication()->input;
@@ -27,12 +27,9 @@ $input = JFactory::getApplication()->input;
 // Execute the task.
 $controller = JControllerLegacy::getInstance('Confmgt');
 $controller->registerDefaultTask('displayDefault');
-try
-{
-	$controller->execute($input->get('task'));
-}
-catch (Exception $e)
-{
-	$controller->setRedirect(JURI::base(), $e->getMessage(), 'error');
+try {
+    $controller->execute($input->get('task'));
+} catch (Exception $e) {
+    $controller->setRedirect(JURI::base(), $e->getMessage(), 'error');
 }
 $controller->redirect();

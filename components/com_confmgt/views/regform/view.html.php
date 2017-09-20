@@ -20,10 +20,15 @@ class ConfmgtViewRegform extends JViewLegacy
 	protected $state;
 	protected $item;
 	protected $form;
-	
-	/**
-	 * Display the view
-	 */
+
+    /**
+     * Display the view
+     * @param null $tpl
+     *
+     *
+     * @since version 3.8.0
+     * @throws Exception
+     */
 	public function display($tpl = null)
 	{
 		$app = JFactory::getApplication();

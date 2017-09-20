@@ -14,61 +14,49 @@ defined('_JEXEC') or die;
 class ConfmgtController extends JControllerLegacy
 {
 
-	public function displayDefault()
-	{
-		$user = JFactory::getuser();
+    public function displayDefault()
+    {
+        $user = JFactory::getUser();
 
-		//No views set, hence setting the entrypage as the default view.
-		if (JFactory::getApplication()->input->get('view') == '')
-		{
-			JFactory::getApplication()->input->set('view', 'entrypage');
-		}
+        //No views set, hence setting the entrypage as the default view.
+        if (JFactory::getApplication()->input->get('view') == '') {
+            JFactory::getApplication()->input->set('view', 'entrypage');
+        }
 
-		if ($user->guest)
-		{
-			//guest users can see  the login page
-			if (JFactory::getApplication()->input->get('view') == 'loginform')
-			{
-				$this->setMessage(JText::_('COM_CONFMGT_LOGIN_REQUIRED', 'information'));
-				//they can also see the registration form
-			}
-			elseif (JFactory::getApplication()->input->get('view') == 'regform')
-			{
-				$this->setMessage(JText::_('COM_CONFMGT_REG_REQUIRED', 'information'));
-				//they may be a reviewer confirming their agreement to review
-			}
-			elseif ((JFactory::getApplication()->input->get('view') == 'rev1ewerform')
-				&& (JFactory::getApplication()->input->get('layout') == 'agree_form')
-			)
-			{
-				//anyone else should be directed to the entry page
-			}
-			else
-			{
-				$this->setMessage(JText::_('COM_CONFMGT_GUEST_NEW', 'information'));
-				JFactory::getApplication()->input->set('view', 'entrypage');
-				JFactory::getApplication()->input->set('layout', 'entry');
-			}
-		}
+        if ($user->guest) {
+            //guest users can see  the login page
+            if (JFactory::getApplication()->input->get('view') == 'loginform') {
+                $this->setMessage(JText::_('COM_CONFMGT_LOGIN_REQUIRED', 'information'));
+                //they can also see the registration form
+            } elseif (JFactory::getApplication()->input->get('view') == 'regform') {
+                $this->setMessage(JText::_('COM_CONFMGT_REG_REQUIRED', 'information'));
+                //they may be a reviewer confirming their agreement to review
+            } elseif ((JFactory::getApplication()->input->get('view') == 'rev1ewerform')
+                && (JFactory::getApplication()->input->get('layout') == 'agree_form')
+            ) {
+                //anyone else should be directed to the entry page
+            } else {
+                $this->setMessage(JText::_('COM_CONFMGT_GUEST_NEW', 'information'));
+                JFactory::getApplication()->input->set('view', 'entrypage');
+                JFactory::getApplication()->input->set('layout', 'entry');
+            }
+        }
 
-		//set models for the paper view (data from 3 models)
-		if (JFactory::getApplication()->input->get('view') == 'paper')
-		{
-			$view = $this->getView('Paper', 'html');
-			$view->setModel($this->getModel('Paper'), true);
-			$view->setModel($this->getModel('Authors'));
-			$view->setModel($this->getModel('Fullpapers'));
-			$view->setModel($this->getModel('Camerareadypapers'));
-			$view->setModel($this->getModel('Presentations'));
-			$view->display();
+        //set models for the paper view (data from 3 models)
+        if (JFactory::getApplication()->input->get('view') == 'paper') {
+            $view = $this->getView('Paper', 'html');
+            $view->setModel($this->getModel('Paper'), true);
+            $view->setModel($this->getModel('Authors'));
+            $view->setModel($this->getModel('Fullpapers'));
+            $view->setModel($this->getModel('Camerareadypapers'));
+            $view->setModel($this->getModel('Presentations'));
+            $view->display();
 
-		}
-		else
-		{
+        } else {
 
-			//for all other views set the display
-			$this->display();
-		}
-	}
+            //for all other views set the display
+            $this->display();
+        }
+    }
 }
 
