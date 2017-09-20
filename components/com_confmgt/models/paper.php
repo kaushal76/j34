@@ -132,12 +132,10 @@ class ConfmgtModelPaper extends JModelItem
                 $this->_item->abstract_review_outcome_txt = JText::_('COM_CONFMGT_MODEL_PAPER_ABSTRACT_OUTCOME_ACCEPT');
                 if (empty($this->_item->full_paper)) {
                     $this->_item->fullPaperBtn = $this->_FullPaperBtn($this->_item->id, 'new');
-                    $this->_item->fullPaperBtnModal = $this->_FullPaperBtnModal($this->_item->id, 'new');
 
                 } else {
                     if ($change_allowed) {
                         $this->_item->fullPaperBtn = $this->_FullPaperBtn($this->_item->id, 'change');
-                        $this->_item->fullPaperBtnModal = $this->_FullPaperBtnModal($this->_item->id, 'change');
                     }
                     $this->_item->full_paper_txt = $this->_item->full_paper;
                     $this->_item->full_paper_download = $this->_FullPaperDownloadBtn($this->_item->full_paper);
@@ -150,11 +148,9 @@ class ConfmgtModelPaper extends JModelItem
                 $this->_item->abstractBtn = $this->_AbstractBtn($this->_item->id, 'change');
                 if (empty($this->_item->full_paper)) {
                     $this->_item->fullPaperBtn = $this->_FullPaperBtn($this->_item->id, 'new');
-                    $this->_item->fullPaperBtnModal = $this->_FullPaperBtnModal($this->_item->id, 'new');
                 } else {
                     if ($change_allowed) {
                         $this->_item->fullPaperBtn = $this->_FullPaperBtn($this->_item->id, 'change');
-                        $this->_item->fullPaperBtnModal = $this->_FullPaperBtnModal($this->_item->id, 'change');
                     }
                     $this->_item->full_paper_download = $this->_FullPaperDownloadBtn($this->_item->full_paper);
                     $this->_item->full_paper_txt = $this->_item->full_paper;
@@ -172,7 +168,11 @@ class ConfmgtModelPaper extends JModelItem
 
             case '':
             default:
+            case 0:
                 $this->_item->abstract_review_outcome_txt = JText::_('COM_CONFMGT_MODEL_PAPER_ABSTRACT_OUTCOME_PENDING');
+                if ($change_allowed) {
+                    $this->_item->abstractBtn = $this->_AbstractBtn($this->_item->id, 'change');
+                }
                 if (empty($this->_item->abstract_review_comments)) {
                     $this->_item->abstract_review_comments = JText::_('COM_CONFMGT_MODEL_PAPER_ABSTRACT_COMMENTS_PENDING');
                 }
@@ -187,10 +187,6 @@ class ConfmgtModelPaper extends JModelItem
 
             case 2:
                 $this->_item->full_review_outcome_txt = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_OUTCOME_MINOR_CHANGE');
-                if ($change_allowed) {
-                    $this->_item->fullPaperBtn = $this->_FullPaperBtn($this->_item->id, 'change');
-                    $this->_item->fullPaperBtnModal = $this->_FullPaperBtnModal($this->_item->id, 'change');
-                }
                 break;
 
             case 3:
@@ -204,12 +200,16 @@ class ConfmgtModelPaper extends JModelItem
 
             case '':
             default:
+            case 0:
                 if (empty($this->_item->full_paper)) {
                     $this->_item->full_review_outcome_txt = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_OUTCOME_NA');
                     $this->_item->full_review_comments = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_COMMENTS_NA');
                 } else {
                     $this->_item->full_review_outcome_txt = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_OUTCOME_PENDING');
                     $this->_item->full_review_comments = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_COMMENTS_PENDING');
+                    if ($change_allowed) {
+                        $this->_item->fullPaperBtn = $this->_FullPaperBtn($this->_item->id, 'change');
+                    }
                 }
                 break;
         }
@@ -247,7 +247,6 @@ class ConfmgtModelPaper extends JModelItem
             }
         } else {
             $this->_item->presentation_txt = JText::_('COM_CONFMGT_MODEL_PAPER_PRESENTATION_PENDING');
-            $this->_item->presentationBtn = '';
         }
 
 
@@ -357,17 +356,6 @@ class ConfmgtModelPaper extends JModelItem
         return true;
     }
 
-    public function getCategoryName($id)
-    {
-        $db = JFactory::getDbo();
-        $query = $db->getQuery(true);
-        $query
-            ->select('title')
-            ->from('#__categories')
-            ->where('id = ' . $id);
-        $db->setQuery($query);
-        return $db->loadObject();
-    }
 
     public function publish($id, $state)
     {
