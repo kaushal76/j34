@@ -22,6 +22,7 @@ class ConfmgtViewFullpaperform extends JViewLegacy {
     protected $form;
     protected $params;
 	protected $linkid;
+    protected $mode;
 
     /**
      * Display the view
@@ -38,6 +39,7 @@ class ConfmgtViewFullpaperform extends JViewLegacy {
    		$this->form		= $this->get('Form');
 		
 		$this->linkid = $this->get('Linkid');
+        $this->mode = $this->get('Mode');
    		
 
         // Check for errors.

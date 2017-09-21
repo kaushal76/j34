@@ -424,7 +424,7 @@ class ConfmgtModelPaper extends JModelItem
         $html = $html . " action=\"" . JRoute::_('index.php') . "\" method=\"post\" class=\"form-validate\" enctype=\"multipart/form-data\">";
         $html = $html . JHtml::_('form.token');
         $html = $html . "<input type=\"hidden\" name=\"option\" value=\"com_confmgt\" />";
-        $html = $html . "<input type=\"hidden\" name=\"jform['linkid']\" value=" . $id . " />";
+        $html = $html . "<input type=\"hidden\" name=\"id\" value=" . $id . " />";
         $html = $html . "<input type=\"hidden\" name=\"linkid\" value=" . $id . " />";
         $html = $html . "<input type=\"hidden\" name=\"jform['mode']\" value=\"" . $mode . "\" />";
         if ($mode == 'resubmit') {
@@ -465,8 +465,8 @@ class ConfmgtModelPaper extends JModelItem
         $html = $html . JHtml::_('form.token');
         $html = $html . "<input type=\"hidden\" name=\"option\" value=\"com_confmgt\" />";
         $html = $html . "<input type=\"hidden\" name=\"view\" value=\"fullpaperform\" />";
-        $html = $html . "<input type=\"hidden\" name=\"jform['linkid']\" value=\"" . $id . "\" />";
-        $html = $html . "<input type=\"hidden\" name=\"jform['mode']\" value=\"" . $mode . "\" />";
+        $html = $html . "<input type=\"hidden\" name=\"jform[linkid]\" value=\"" . $id . "\" />";
+        $html = $html . "<input type=\"hidden\" name=\"jform[mode]\" value=\"" . $mode . "\" />";
         $html = $html . "<button class=\"btn btn-default\" type=\"submit\">";
         $html = $html . "<i class=\"icon-upload\"></i>";
         if ($mode == 'change') {
@@ -499,8 +499,8 @@ class ConfmgtModelPaper extends JModelItem
         $html = $html . JHtml::_('form.token');
         $html = $html . "<input type=\"hidden\" name=\"option\" value=\"com_confmgt\" />";
         $html = $html . "<input type=\"hidden\" name=\"view\" value=\"camerareadypaperform\" />";
-        $html = $html . "<input type=\"hidden\" name=\"jform['linkid']\" value=\"" . $id . "\" />";
-        $html = $html . "<input type=\"hidden\" name=\"jform['mode']\" value=\"" . $mode . "\" />";
+        $html = $html . "<input type=\"hidden\" name=\"jform[linkid]\" value=\"" . $id . "\" />";
+        $html = $html . "<input type=\"hidden\" name=\"jform[mode]\" value=\"" . $mode . "\" />";
         $html = $html . "<button class=\"btn btn-default\" type=\"submit\">";
         $html = $html . "<i class=\"icon-upload\"></i>";
         if ($mode == 'change') {
@@ -533,8 +533,8 @@ class ConfmgtModelPaper extends JModelItem
         $html = $html . JHtml::_('form.token');
         $html = $html . "<input type=\"hidden\" name=\"option\" value=\"com_confmgt\" />";
         $html = $html . "<input type=\"hidden\" name=\"view\" value=\"presentationform\" />";
-        $html = $html . "<input type=\"hidden\" name=\"jform['linkid']\" value=\"" . $id . "\" />";
-        $html = $html . "<input type=\"hidden\" name=\"jform['mode']\" value=\"" . $mode . "\" />";
+        $html = $html . "<input type=\"hidden\" name=\"jform[linkid]\" value=\"" . $id . "\" />";
+        $html = $html . "<input type=\"hidden\" name=\"jform[mode]\" value=\"" . $mode . "\" />";
         $html = $html . "<button class=\"btn btn-default\" type=\"submit\">";
         $html = $html . "<i class=\"icon-upload\"></i>";
         if ($mode == 'change') {

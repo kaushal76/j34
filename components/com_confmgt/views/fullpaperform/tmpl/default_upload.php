@@ -25,14 +25,23 @@ defined('_JEXEC') or die;
                         <div class="controls"> <?php echo $this->form->getInput('full_paper'); ?> </div>
                     </div>
                     <div class="control-group">
+                        <div class="control-label"> <?php echo $this->form->getLabel('linkid'); ?> </div>
+                        <div class="controls"> <?php echo $this->form->getInput('linkid'); ?> </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="control-label"> <?php echo $this->form->getLabel('mode'); ?> </div>
+                        <div class="controls"> <?php echo $this->form->getInput('mode'); ?> </div>
+                    </div>
+                    <div class="control-group">
                         <div class="controls">
                             <input type="submit" class="btn btn-primary" name="submit"
                                    value="<?php echo JText::_('Upload'); ?>"/>
                             <?php echo JText::_('or'); ?> <a
-                                href="<?php echo JRoute::_('index.php?option=com_confmgt&task=fullpaperform.cancel'); ?>"
+                                href="<?php echo JRoute::_('index.php?option=com_confmgt&task=fullpaperform.cancel&linkid='.$this->linkid); ?>"
                                 title="<?php echo JText::_('JCANCEL'); ?>"><?php echo JText::_('JCANCEL'); ?></a>
                             <input type="hidden" name="option" value="com_confmgt"/>
-                            <input type="hidden" name="linkid" value="<?php echo $this->linkid; ?>"/>
+                            <input type="hidden" name="jform[linkid]" value="<?php echo $this->linkid; ?>"/>
+                            <input type="hidden" name="jform[mode]" value="<?php echo $this->mode; ?>"/>
                             <input type="hidden" name="task" value="fullpaperform.save"/>
                             <?php echo JHtml::_('form.token'); ?></div>
                     </div>
