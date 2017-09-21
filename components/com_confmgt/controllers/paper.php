@@ -223,7 +223,7 @@ class ConfmgtControllerPaper extends ConfmgtController
         $filename = $app->input->get('filename');
         $path = $params->get('upload_path') . $filename;
         $mime = UploadHelper::getMimetype($path, $filename);
-        $dn = UploadHelper::downloadFile($filename, $path, $mime);
+        UploadHelper::downloadFile($filename, $path, $mime);
     }
 
     /**
@@ -232,7 +232,7 @@ class ConfmgtControllerPaper extends ConfmgtController
      *
      * @since version 3.8.0
      */
-    public function downloadCameraready()
+    public function downloadCameraReady()
     {
         $app = JFactory::getApplication();
         $params = JFactory::getApplication()->getParams();

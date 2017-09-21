@@ -244,7 +244,7 @@ class ConfmgtModelPaperForm extends JModelForm
 		
 		//preparing abstract data intially
 		$data_prepared = $data;
-		$data_prepared['id'] = $data['abstractid'];
+		$data_prepared['id'] = $data['abstract_id'];
 		$data_prepared['linkid'] = $id;
 		$data_prepared['created_by'] = $user->id;
 		
@@ -271,7 +271,7 @@ class ConfmgtModelPaperForm extends JModelForm
 		if ($abstract_data) {
 			
 			//set the abstractid data for the papers table 
-			$data['abstractid'] = $abstract_table->id;
+			$data['abstract_id'] = $abstract_table->id;
 			$data['state'] = (int)1;
 			
 			if (!$table->save($data) === true) {
@@ -323,7 +323,7 @@ class ConfmgtModelPaperForm extends JModelForm
 		if ($abstract_data) {
 			
 			//set the abstractid data for the papers table 
-			$data['abstractid'] = $abstract_table->id;
+			$data['abstract_id'] = $abstract_table->id;
 			$data['id'] = $linkid;
 			
 			if (!$table->save($data) === true) {

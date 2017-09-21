@@ -38,7 +38,7 @@ defined('_JEXEC') or die;
         </tr>
         <tr>
             <td class="header"><?php
-                echo JText::_('Absrtact: '); ?>
+                echo JText::_('Abstract: '); ?>
             </td>
             <td><?php echo nl2br($this->item->abstract); ?></td>
         </tr>

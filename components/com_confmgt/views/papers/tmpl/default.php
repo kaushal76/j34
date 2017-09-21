@@ -73,7 +73,7 @@ $document->addScript($delurl);
     </div>
     <div class="panel-footer">
         <div class="inline">
-            <form id="form-entrypage-<?php echo $item->id ?>" action="<?php echo JRoute::_('index.php'); ?>"
+            <form id="form-entrypage" action="<?php echo JRoute::_('index.php'); ?>"
                   method="post"
                   class="form-validate form-entry" enctype="multipart/form-data">
                 <?php echo JHtml::_('form.token'); ?>
@@ -86,7 +86,7 @@ $document->addScript($delurl);
             </form>
         </div>
         <div class="inline">
-            <form id="form-paper-new-<?php echo $item->id ?>" action="<?php echo JRoute::_('index.php'); ?>"
+            <form id="form-paper-new" action="<?php echo JRoute::_('index.php'); ?>"
                   method="post"
                   class="form-validate form-entry" enctype="multipart/form-data">
                 <?php echo JHtml::_('form.token'); ?>

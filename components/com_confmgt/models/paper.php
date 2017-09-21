@@ -53,6 +53,28 @@ class ConfmgtModelPaper extends JModelItem
     }
 
     /**
+     * Method to build a query to return a paper for a given paper id.
+     * @return mixed
+     *
+     * @since version 3.8.0
+     */
+
+    private function _getQuery()
+    {
+        $db = JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select($db->quoteName('a.id', 'id'))
+            ->select($db->quoteName('a.name', 'name'))
+            ->from($db->quoteName('#__confmgt_papers', 'a'))
+            ->join('INNER', $db->quoteName('#__users', 'b') . ' ON (' . $db->quoteName('a.created_by') . ' = ' . $db->quoteName('b.id') . ')')
+            ->where($db->quoteName('b.username') . ' LIKE \'a%\'')
+            ->order($db->quoteName('a.created') . ' DESC');
+        return $query;
+    }
+
+
+    /**
      * Method to get an object.
      * @param integer
      * @return mixed Object on success, false on failure.

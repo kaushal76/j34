@@ -10,7 +10,7 @@ defined('_JEXEC') or die;
 //ACL helper class for the confmgt. Using a specific ACL for the component as the Joomla ACL does not serve the purpose
 abstract class UploadHelper {
 	
-    function getMimetype($tmpfilepath, $filename) {
+    static function getMimetype($tmpfilepath, $filename) {
         $arrayZips = array("application/zip", "application/x-zip", "application/x-zip-compressed", "application/vnd.ms-office");
         if (function_exists('finfo_file')) {
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
@@ -26,7 +26,7 @@ abstract class UploadHelper {
             return $mime;
     }
 	
-	function ext2mime($ext)
+	static function ext2mime($ext)
 	{
 		switch ($ext) {
                     
@@ -94,7 +94,7 @@ abstract class UploadHelper {
 	 *
 	*/ 
 	
-	function checkFile($file, $size)
+	static function checkFile($file, $size)
 	{
 
 	  //Check if the server found any error.
@@ -139,7 +139,7 @@ abstract class UploadHelper {
 	 *
 	*/ 
 	
-	function changeFileName($file, $prefix, $linkid)
+	static function changeFileName($file, $prefix, $linkid)
 	{
 
 	  //Replace any special characters in the filename
@@ -158,7 +158,7 @@ abstract class UploadHelper {
 	 *
 	*/ 
 	
-	function uploadFile($file, $uploadpath, $override = true)
+	static function uploadFile($file, $uploadpath, $override = true)
 	{
 
 	  $fileTemp = $file['tmp_name'];
@@ -193,7 +193,7 @@ abstract class UploadHelper {
 		return true;
 	}
 	
-	function downloadFile($file, $path, $mime) 
+	static function downloadFile($file, $path, $mime)
 	{
 	set_time_limit(0);
 	$fext = strtolower(substr(strrchr($file,"."),1)); 
@@ -213,7 +213,7 @@ abstract class UploadHelper {
   	exit();
 	}
 
-	function getmtype($fext) 
+	static function getmtype($fext)
 	{
 		$mime_types = array (
 		'zip'		=> 'application/zip',
@@ -252,7 +252,7 @@ abstract class UploadHelper {
 		return $mtype;
 	}
 	
-	function file_upload_max_size() {
+	static function file_upload_max_size() {
 	  static $max_size = -1;
 	
 	  if ($max_size < 0) {
@@ -269,7 +269,7 @@ abstract class UploadHelper {
 	  return $max_size;
 	}
 
-	function parse_size($size) {
+	static function parse_size($size) {
 	  $unit = preg_replace('/[^bkmgtpezy]/i', '', $size); // Remove the non-unit characters from the size.
 	  $size = preg_replace('/[^0-9\.]/', '', $size); // Remove the non-numeric characters from the size.
 	  if ($unit) {

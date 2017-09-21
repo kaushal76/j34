@@ -82,8 +82,7 @@ class ConfmgtModelFullpaperForm extends JModelForm
         if (empty($mode)) {
             $mode = $data['mode'];
         }
-
-            return $mode;
+        return $mode;
     }
 
 
@@ -241,7 +240,7 @@ class ConfmgtModelFullpaperForm extends JModelForm
         $data['created_by'] = $user->id;
 
         $app = JFactory::getApplication();
-        $authorised = aclHelper::isAuthor($linkid);
+        $authorised = AclHelper::isAuthor($linkid);
         if ($authorised !== true) {
             throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 403);
         }
@@ -271,53 +270,6 @@ class ConfmgtModelFullpaperForm extends JModelForm
     }
 
 
-    /**
-     * Method to save the full paper resubmit form data.
-     *
-     * @param    array        The form data.
-     * @return    mixed        The user id on success, false on failure.
-     * @since    1.6
-     */
-    public function save_resubmit($data)
-    {
-        $id = (!empty($data['id'])) ? $data['id'] : (int)$this->getState('fullresubmit.id');
-        $linkid = (!empty($data['linkid'])) ? $data['linkid'] : (int)$this->getLinkid();
-        $user = JFactory::getUser();
-        //set the creator
-        $data['created_by'] = $user->id;
-        //the resubmission must be a new entry in the full papers table
-        $data['id'] = 0;
-
-        //check the authorisation
-        $app = JFactory::getApplication();
-        $authorised = aclHelper::isAuthor($linkid);
-        if ($authorised !== true) {
-            JError::raiseError(403, JText::_('JERROR_ALERTNOAUTHOR'));
-            return false;
-        } //$authorised !== true
-
-        $table = $this->getTable();
-        if (!$table->save($data) === true) {
-
-            //something wrong saving the full papers table
-            return false;
-        }
-
-        //if the full papers table is updated, then update the papers table with the file name and the full paper ID.
-        //$table now returns the last saved details
-        $papertable = $this->getTable('Paper', 'ConfmgtTable');
-        $paperdata = array();
-        $paperdata['id'] = $linkid;
-        $paperdata['full_paper'] = $table->full_paper;
-        $paperdata['fullpaperid'] = $table->id;
-
-        // paper table save successful?
-        if (!$papertable->save($paperdata) === true) {
-            return false;
-        } //!$papertable->save( $paperdata ) === true
-        return $table->id;
-    }
-
     function delete($data)
     {
         $id = (!empty($data['id'])) ? $data['id'] : (int)$this->getState('fullpaper.id');
@@ -329,6 +281,5 @@ class ConfmgtModelFullpaperForm extends JModelForm
         else {
             return false;
         }
-        return true;
     }
 }
