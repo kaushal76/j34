@@ -59,7 +59,7 @@ class ConfmgtModelPaper extends JModelItem
      * @since version 3.8.0
      */
 
-    private function _getQuery()
+    private function _getQuery($id=null)
     {
         $db = JFactory::getDbo();
         $query = $db->getQuery(true);
@@ -97,7 +97,7 @@ class ConfmgtModelPaper extends JModelItem
             ->select($db->quoteName('c.abstract_review_comments', 'abstract_abstract_review_comments'))
             ->select($db->quoteName('c.state', 'abstract_state'))
             ->select($db->quoteName('c.checked_out', 'abstract_checked_out'))
-            ->select($db->quoteName('c.checked_out_by', 'abstract_checked_out_by'))
+            ->select($db->quoteName('c.checked_out_time', 'abstract_checked_out_time'))
             ->select($db->quoteName('c.last_updated', 'abstract_last_updated'))
             ->select($db->quoteName('c.mode', 'abstract_mode'))
             ->select($db->quoteName('d.id', 'presentation_id'))
@@ -119,9 +119,222 @@ class ConfmgtModelPaper extends JModelItem
             ->join('LEFT', $db->quoteName('#__confmgt_camerareadypapers', 'e') . ' ON (' . $db->quoteName('a.cameraready_id') . ' = ' . $db->quoteName('e.id') . ')')
             ->join('LEFT', $db->quoteName('#__confmgt_abstracts', 'c') . ' ON (' . $db->quoteName('a.abstract_id') . ' = ' . $db->quoteName('c.id') . ')')
             ->join('LEFT', $db->quoteName('#__confmgt_presentations', 'd') . ' ON (' . $db->quoteName('a.presentation_id') . ' = ' . $db->quoteName('d.id') . ')')
-            ->where($db->quoteName('a.id') . ' = \'a%\'');
+            ->where($db->quoteName('a.id') . ' = '.$id);
 
         return $query;
+    }
+
+    /**
+     * Method t return a Paper item.
+     * @param null $id
+     *
+     * @return mixed
+     *
+     * @since version 3.8.0
+     */
+
+    public function getPaper ($id=null)
+    {
+
+        $db = JFactory::getDbo();
+        $user = JFactory::getUser();
+
+        if (empty($id)) {
+            $id = $this->getState('paper.id');
+        }
+
+        if ($id > 0) {
+            $authorised = AclHelper::isAuthor($id);
+        } else {
+            $authorised = ($user->id > 0);
+        }
+
+        if ($authorised !== true) {
+            throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'));
+        }
+
+        $query = $this->_getQuery($id);
+        $db->setQuery($query);
+
+        // If not authorsied, no results returned and throw an exception;
+        if (!$authorised) {
+            throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 500);
+        }
+
+        // Load the results as a list of stdClass objects (
+        $paper = $db->loadObject();
+
+        // Loading the Btns
+        $paper->abstractBtn = null;
+        $paper->fullPaperBtn = null;
+        $paper->full_paper_download = null;
+        $paper->cameraReadyBtn = null;
+        $paper->cameraready_download = null;
+        $paper->presentationBtn = null;
+        $paper->presentation_download = null;
+
+        $change_allowed = true;
+
+        //Case of abstract review outcomes
+        switch ($paper->abstract_abstract_review_outcome) {
+            case 1:
+                $paper->abstract_review_outcome_txt = JText::_('COM_CONFMGT_MODEL_PAPER_ABSTRACT_OUTCOME_ACCEPT');
+                if (empty($paper->fullpaper_full_paper)) {
+                    $paper->fullPaperBtn = $this->_FullPaperBtn($paper->paper_id, 'new');
+
+                } else {
+                    if ($change_allowed) {
+                        $paper->fullPaperBtn = $this->_FullPaperBtn($paper->paper_id, 'change');
+                    }
+                    $paper->full_paper_txt = $paper->fullpaper_full_paper;
+                    $paper->full_paper_download = $this->_FullPaperDownloadBtn($paper->fullpaper_full_paper);
+                }
+                break;
+
+            case 2:
+                $paper->abstract_review_outcome_txt = JText::_('COM_CONFMGT_MODEL_PAPER_ABSTRACT_OUTCOME_MINOR_CHANGE');
+                $paper->abstractBtn = $this->_AbstractBtn($paper->paper_id, 'change');
+                if (empty($paper->fullpaper_full_paper)) {
+                    $paper->fullPaperBtn = $this->_FullPaperBtn($paper->paper_id, 'new');
+                } else {
+                    if ($change_allowed) {
+                        $paper->fullPaperBtn = $this->_FullPaperBtn($paper->paper_id, 'change');
+                    }
+                    $paper->full_paper_download = $this->_FullPaperDownloadBtn($paper->fullpaper_full_paper);
+                    $paper->full_paper_txt = $paper->fullpaper_full_paper;
+                }
+                break;
+
+            case 3:
+                $paper->abstract_review_outcome_txt = JText::_('COM_CONFMGT_MODEL_PAPER_ABSTRACT_OUTCOME_RESUBMIT');
+                $paper->abstractBtn = $this->_AbstractBtn($paper->paper_id, 'resubmit');
+                break;
+
+            case 4:
+                $paper->abstract_review_outcome_txt = JText::_('COM_CONFMGT_MODEL_PAPER_ABSTRACT_OUTCOME_REJECT');
+                break;
+
+            case '':
+            default:
+            case 0:
+                $paper->abstract_review_outcome_txt = JText::_('COM_CONFMGT_MODEL_PAPER_ABSTRACT_OUTCOME_PENDING');
+                if ($change_allowed) {
+                    $paper->abstractBtn = $this->_AbstractBtn($paper->paper_id, 'change');
+                }
+                if (empty($paper->abstract_abstract_review_comments)) {
+                    $paper->abstract_review_comments = JText::_('COM_CONFMGT_MODEL_PAPER_ABSTRACT_COMMENTS_PENDING');
+                }
+                break;
+        }
+
+        //Deal with the full paper review outcome
+        switch ($this->_item->full_review_outcome) {
+            case 1:
+                $this->_item->full_review_outcome_txt = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_OUTCOME_ACCEPT');
+                break;
+
+            case 2:
+                $this->_item->full_review_outcome_txt = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_OUTCOME_MINOR_CHANGE');
+                break;
+
+            case 3:
+                $this->_item->full_review_outcome_txt = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_OUTCOME_RESUBMIT');
+                $this->_item->fullPaperBtn = $this->_FullPaperBtn($this->_item->id, 'resubmit');
+                break;
+
+            case 4:
+                $this->_item->full_review_outcome_txt = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_OUTCOME_REJECT');
+                break;
+
+            case '':
+            default:
+            case 0:
+                if (empty($this->_item->full_paper)) {
+                    $this->_item->full_review_outcome_txt = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_OUTCOME_NA');
+                    $this->_item->full_review_comments = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_COMMENTS_NA');
+                } else {
+                    $this->_item->full_review_outcome_txt = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_OUTCOME_PENDING');
+                    $this->_item->full_review_comments = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_COMMENTS_PENDING');
+                    if ($change_allowed) {
+                        $this->_item->fullPaperBtn = $this->_FullPaperBtn($this->_item->id, 'change');
+                    }
+                }
+                break;
+        }
+
+        //Deal with the camera ready papers
+        if (empty($this->_item->camera_ready)) {
+            if (($this->_item->full_review_outcome == 1) || ($this->_item->full_review_outcome == 2)) {
+                $this->_item->camera_ready_txt = JText::_('COM_CONFMGT_MODEL_PAPER_CAMERA_READY_PENDING');
+                $this->_item->cameraReadyBtn = $this->_CameraReadyPaperBtn($this->_item->id, 'new');
+                $this->_item->presentation_txt = JText::_('COM_CONFMGT_MODEL_PAPER_PRESENTATION_NA');
+            } else {
+                $this->_item->camera_ready_txt = JText::_('COM_CONFMGT_MODEL_PAPER_CAMERA_READY_NA');
+                $this->_item->presentation_txt = JText::_('COM_CONFMGT_MODEL_PAPER_PRESENTATION_NA');
+            }
+        } else {
+            $this->_item->camera_ready_txt = $this->_item->camera_ready;
+            if ($change_allowed) {
+                $this->_item->cameraReadyBtn = $this->_CameraReadyPaperBtn($this->_item->id, 'change');
+            }
+            $this->_item->cameraready_download = $this->_CamerareadyDownloadBtn($this->_item->camera_ready);
+        }
+
+
+        //Deal with the presentations
+        if (!empty($this->_item->camera_ready)) {
+            if (empty($this->_item->presentation)) {
+                $this->_item->presentation_txt = JText::_('COM_CONFMGT_MODEL_PAPER_PRESENTATION_PENDING');
+                $this->_item->presentationBtn = $this->_PresentationBtn($this->_item->id, 'new');
+            } else {
+                if ($change_allowed) {
+                    $this->_item->PresentationBtn = $this->_PresentationPaperBtn($this->_item->id, 'change');
+                }
+                $this->_item->presentation_txt = $this->_item->presentation;
+                $this->_item->presentation_download = $this->_PresentationDownloadBtn($this->_item->presentation);
+            }
+        } else {
+            $this->_item->presentation_txt = JText::_('COM_CONFMGT_MODEL_PAPER_PRESENTATION_PENDING');
+        }
+
+
+        //If still the $this->item->full_paper is blank, it must be not due
+
+        if (empty($this->_item->full_paper)) {
+            if (($this->_item->abstract_review_outcome == 1) || ($this->_item->abstract_review_outcome == 2)) {
+                $this->_item->full_paper_txt = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_PENDING');
+            } else {
+                $this->_item->full_paper_txt = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_NA');
+            }
+        }
+
+        // Deal with submision types
+
+        switch ($this->_item->type) {
+            case 1:
+                $this->_item->type_txt = JText::_('COM_CONFMGT_MODEL_PAPER_TYPE_TXT_ACADEMIC_PAPER');
+                break;
+
+            case 2:
+                $this->_item->type_txt = JText::_('COM_CONFMGT_MODEL_PAPER_TYPE_TXT_POLICY_NOTE');
+                break;
+
+            case 3:
+                $this->_item->type_txt = JText::_('COM_CONFMGT_MODEL_PAPER_TYPE_TXT_DOCTORAL_SCHOOL');
+                break;
+
+            case 4:
+                $this->_item->type_txt = JText::_('COM_CONFMGT_MODEL_PAPER_TYPE_TXT_POSTER');
+                break;
+
+            case '':
+            default:
+                $this->_item->type_txt = JText::_('COM_CONFMGT_MODEL_PAPER_TYPE_TXT_ACADEMIC_PAPER');
+                break;
+        }
+
+
+        return $result;
     }
 
 

@@ -27,6 +27,7 @@ class ConfmgtViewPaper extends JViewLegacy
     protected $fullpapers;
     protected $camerareadypapers;
     protected $presentations;
+    protected $paper;
 
     /**
      * Display the view
@@ -53,6 +54,7 @@ class ConfmgtViewPaper extends JViewLegacy
         $this->item = $this->get('Data');
 
         $this->isAuthor = AclHelper::isAuthor($this->item->id);
+        $this->paper = $this->get('Paper');
 
 
         // Check for errors.
