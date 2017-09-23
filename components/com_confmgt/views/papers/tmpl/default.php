@@ -43,7 +43,7 @@ $document->addScript($delurl);
                 <tr>
                     <td width="5%"><?php echo $item->id; ?></td>
                     <td><?php echo $item->title; ?></td>
-                    <td><?php echo $item->themename; ?></td>
+                    <td><?php echo $item->theme_name; ?></td>
                     <td><?php echo $item->last_updated; ?></td>
                     <td>
                         <a class=""

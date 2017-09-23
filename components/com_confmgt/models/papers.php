@@ -67,7 +67,7 @@ class ConfmgtModelPapers extends JModelList
         $query->where('a.state =1');
 
         //join the themes table
-        $query->select('b.title AS themename');
+        $query->select('b.title AS theme_name');
         $query->join('LEFT', '#__confmgt_themes AS b ON b.id=a.theme');
         $query->order('a.id ASC');
 
@@ -162,7 +162,11 @@ class ConfmgtModelPapers extends JModelList
             ->select('uc.email as email')
             ->select('COUNT(d.reviewerid) AS rev1ewers')
             ->join('LEFT', '#__users as uc ON uc.id = a.created_by')
-            ->join('LEFT', $db->quoteName('#__confmgt_rev1ewers_papers', 'd') . ' ON (' . $db->quoteName('a.id') . ' = ' . $db->quoteName('d.paperid') . ')');
+            ->join('LEFT', $db->quoteName('#__confmgt_rev1ewers_papers', 'd') . ' ON (' . $db->quoteName('a.id') . ' = ' . $db->quoteName('d.paperid') . ')')
+            ->select('e.abstract_review_outcome as abstract_review_outcome')
+            ->join('LEFT', $db->quoteName('#__confmgt_abstracts', 'e') . ' ON (' . $db->quoteName('a.abstract_id') . ' = ' . $db->quoteName('e.id') . ')')
+            ->select('h.full_review_outcome as full_review_outcome')
+            ->join('LEFT', $db->quoteName('#__confmgt_fullpapers', 'h') . ' ON (' . $db->quoteName('a.fullpaper_id') . ' = ' . $db->quoteName('h.id') . ')');
         // Super coordinator, hence all papers are selected
         if (AclHelper::isSuperCoordinator()) {
 
@@ -186,7 +190,7 @@ class ConfmgtModelPapers extends JModelList
         } else {
             $authorised = false;
         }
-        // Only the papers which are not archieved
+        // Only the papers which are not archived
         $query->where('a.state =1');
         $query->where('a.active =1');
         $query->group('a.id');
