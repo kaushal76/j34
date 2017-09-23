@@ -46,7 +46,7 @@ class ConfmgtModelPaper extends JModelItem
     {
         $linkid = JFactory::getApplication()->input->get('linkid');
         if (!$linkid) {
-            throw new Exception(JText::_('JERROR_NO_PAPERID'));
+            throw new Exception(JText::_('JERROR_NO_PAPERID'),404);
         } else {
             return $linkid;
         }
@@ -222,24 +222,24 @@ class ConfmgtModelPaper extends JModelItem
                     $paper->abstractBtn = $this->_AbstractBtn($paper->paper_id, 'change');
                 }
                 if (empty($paper->abstract_abstract_review_comments)) {
-                    $paper->abstract_review_comments = JText::_('COM_CONFMGT_MODEL_PAPER_ABSTRACT_COMMENTS_PENDING');
+                    $paper->abstract_abstract_review_comments = JText::_('COM_CONFMGT_MODEL_PAPER_ABSTRACT_COMMENTS_PENDING');
                 }
                 break;
         }
 
         //Deal with the full paper review outcome
-        switch ($this->_item->full_review_outcome) {
+        switch ($paper->fullpaper_full_review_outcome) {
             case 1:
-                $this->_item->full_review_outcome_txt = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_OUTCOME_ACCEPT');
+                $paper->full_review_outcome_txt = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_OUTCOME_ACCEPT');
                 break;
 
             case 2:
-                $this->_item->full_review_outcome_txt = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_OUTCOME_MINOR_CHANGE');
+                $paper->full_review_outcome_txt = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_OUTCOME_MINOR_CHANGE');
                 break;
 
             case 3:
-                $this->_item->full_review_outcome_txt = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_OUTCOME_RESUBMIT');
-                $this->_item->fullPaperBtn = $this->_FullPaperBtn($this->_item->id, 'resubmit');
+                $paper->full_review_outcome_txt = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_OUTCOME_RESUBMIT');
+                $paper->fullPaperBtn = $this->_FullPaperBtn($paper->paper_id, 'resubmit');
                 break;
 
             case 4:
@@ -249,92 +249,92 @@ class ConfmgtModelPaper extends JModelItem
             case '':
             default:
             case 0:
-                if (empty($this->_item->full_paper)) {
-                    $this->_item->full_review_outcome_txt = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_OUTCOME_NA');
-                    $this->_item->full_review_comments = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_COMMENTS_NA');
+                if (empty($paper->fullpaper_full_paper)) {
+                    $paper->full_review_outcome_txt = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_OUTCOME_NA');
+                    $paper->fullpaper_full_review_comments = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_COMMENTS_NA');
                 } else {
-                    $this->_item->full_review_outcome_txt = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_OUTCOME_PENDING');
-                    $this->_item->full_review_comments = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_COMMENTS_PENDING');
+                    $paper->full_review_outcome_txt = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_OUTCOME_PENDING');
+                    $paper->fullpaper_full_review_comments = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_COMMENTS_PENDING');
                     if ($change_allowed) {
-                        $this->_item->fullPaperBtn = $this->_FullPaperBtn($this->_item->id, 'change');
+                        $paper->fullPaperBtn = $this->_FullPaperBtn($paper->paper_id, 'change');
                     }
                 }
                 break;
         }
 
         //Deal with the camera ready papers
-        if (empty($this->_item->camera_ready)) {
-            if (($this->_item->full_review_outcome == 1) || ($this->_item->full_review_outcome == 2)) {
-                $this->_item->camera_ready_txt = JText::_('COM_CONFMGT_MODEL_PAPER_CAMERA_READY_PENDING');
-                $this->_item->cameraReadyBtn = $this->_CameraReadyPaperBtn($this->_item->id, 'new');
-                $this->_item->presentation_txt = JText::_('COM_CONFMGT_MODEL_PAPER_PRESENTATION_NA');
+        if (empty($paper->camera_camera_ready)) {
+            if (($paper->fullpaper_full_review_outcome == 1) || ($paper->fullpaper_full_review_outcome == 2)) {
+                $paper->camera_ready_txt = JText::_('COM_CONFMGT_MODEL_PAPER_CAMERA_READY_PENDING');
+                $paper->cameraReadyBtn = $this->_CameraReadyPaperBtn($paper->paper_id, 'new');
+                $paper->presentation_txt = JText::_('COM_CONFMGT_MODEL_PAPER_PRESENTATION_NA');
             } else {
-                $this->_item->camera_ready_txt = JText::_('COM_CONFMGT_MODEL_PAPER_CAMERA_READY_NA');
-                $this->_item->presentation_txt = JText::_('COM_CONFMGT_MODEL_PAPER_PRESENTATION_NA');
+                $paper->camera_ready_txt = JText::_('COM_CONFMGT_MODEL_PAPER_CAMERA_READY_NA');
+                $paper->presentation_txt = JText::_('COM_CONFMGT_MODEL_PAPER_PRESENTATION_NA');
             }
         } else {
-            $this->_item->camera_ready_txt = $this->_item->camera_ready;
+            $paper->camera_ready_txt = $paper->camera_camera_ready;
             if ($change_allowed) {
-                $this->_item->cameraReadyBtn = $this->_CameraReadyPaperBtn($this->_item->id, 'change');
+                $paper->cameraReadyBtn = $this->_CameraReadyPaperBtn($paper->paper_id, 'change');
             }
-            $this->_item->cameraready_download = $this->_CamerareadyDownloadBtn($this->_item->camera_ready);
+            $paper->cameraready_download = $this->_CameraReadyDownloadBtn($paper->camera_camera_ready);
         }
 
 
         //Deal with the presentations
-        if (!empty($this->_item->camera_ready)) {
-            if (empty($this->_item->presentation)) {
-                $this->_item->presentation_txt = JText::_('COM_CONFMGT_MODEL_PAPER_PRESENTATION_PENDING');
-                $this->_item->presentationBtn = $this->_PresentationBtn($this->_item->id, 'new');
+        if (!empty($paper->camera_camera_ready)) {
+            if (empty($paper->presentation_presentation)) {
+                $paper->presentation_txt = JText::_('COM_CONFMGT_MODEL_PAPER_PRESENTATION_PENDING');
+                $paper->presentationBtn = $this->_PresentationBtn($paper->paper_id, 'new');
             } else {
                 if ($change_allowed) {
-                    $this->_item->PresentationBtn = $this->_PresentationPaperBtn($this->_item->id, 'change');
+                    $paper->PresentationBtn = $this->_PresentationPaperBtn($paper->paper_id, 'change');
                 }
-                $this->_item->presentation_txt = $this->_item->presentation;
-                $this->_item->presentation_download = $this->_PresentationDownloadBtn($this->_item->presentation);
+                $paper->presentation_txt = $paper->presentation_presentation;
+                $paper->presentation_download = $this->_PresentationDownloadBtn($paper->presentation_presentation);
             }
         } else {
-            $this->_item->presentation_txt = JText::_('COM_CONFMGT_MODEL_PAPER_PRESENTATION_PENDING');
+            $paper->presentation_txt = JText::_('COM_CONFMGT_MODEL_PAPER_PRESENTATION_PENDING');
         }
 
 
         //If still the $this->item->full_paper is blank, it must be not due
 
-        if (empty($this->_item->full_paper)) {
-            if (($this->_item->abstract_review_outcome == 1) || ($this->_item->abstract_review_outcome == 2)) {
-                $this->_item->full_paper_txt = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_PENDING');
+        if (empty($paper->fullpaper_full_paper)) {
+            if (($paper->abstract_abstract_review_outcome == 1) || ($paper->abstract_abstract_review_outcome == 2)) {
+                $paper->full_paper_txt = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_PENDING');
             } else {
-                $this->_item->full_paper_txt = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_NA');
+                $paper->full_paper_txt = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_NA');
             }
         }
 
         // Deal with submision types
 
-        switch ($this->_item->type) {
+        switch ($paper->paper_type) {
             case 1:
-                $this->_item->type_txt = JText::_('COM_CONFMGT_MODEL_PAPER_TYPE_TXT_ACADEMIC_PAPER');
+                $paper->type_txt = JText::_('COM_CONFMGT_MODEL_PAPER_TYPE_TXT_ACADEMIC_PAPER');
                 break;
 
             case 2:
-                $this->_item->type_txt = JText::_('COM_CONFMGT_MODEL_PAPER_TYPE_TXT_POLICY_NOTE');
+                $paper->type_txt = JText::_('COM_CONFMGT_MODEL_PAPER_TYPE_TXT_POLICY_NOTE');
                 break;
 
             case 3:
-                $this->_item->type_txt = JText::_('COM_CONFMGT_MODEL_PAPER_TYPE_TXT_DOCTORAL_SCHOOL');
+                $paper->type_txt = JText::_('COM_CONFMGT_MODEL_PAPER_TYPE_TXT_DOCTORAL_SCHOOL');
                 break;
 
             case 4:
-                $this->_item->type_txt = JText::_('COM_CONFMGT_MODEL_PAPER_TYPE_TXT_POSTER');
+                $paper->type_txt = JText::_('COM_CONFMGT_MODEL_PAPER_TYPE_TXT_POSTER');
                 break;
 
+            case 0:
             case '':
             default:
-                $this->_item->type_txt = JText::_('COM_CONFMGT_MODEL_PAPER_TYPE_TXT_ACADEMIC_PAPER');
+                $paper->type_txt = JText::_('COM_CONFMGT_MODEL_PAPER_TYPE_TXT_ACADEMIC_PAPER');
                 break;
         }
 
-
-        return $result;
+        return $paper;
     }
 
 

@@ -30,7 +30,7 @@ defined('_JEXEC') or die;
             <td class="header"><?php
                 echo JText::_('Abstract review comments: '); ?>
             </td>
-            <td><?php echo nl2br($this->item->abstract_review_comments); ?></td>
+            <td><?php echo nl2br($this->item->abstract_abstract_review_comments); ?></td>
         </tr>
         <tr>
             <td class="header"><?php
@@ -49,7 +49,7 @@ defined('_JEXEC') or die;
                 echo JText::_('Full paper review comments: '); ?>
             </td>
             <td><?php
-                echo nl2br($this->item->full_review_comments);
+                echo nl2br($this->item->fullpaper_full_review_comments);
                 ?>
             </td>
         </tr>

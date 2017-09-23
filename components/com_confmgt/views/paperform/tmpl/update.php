@@ -32,9 +32,9 @@ JHtml::_('behavior.formvalidation');
                         </div>
                         <div class="control-group">
                             <div class="control-label"> <?php echo $this->
-                                form->getLabel('abstractid'); ?> </div>
+                                form->getLabel('abstract_id'); ?> </div>
                             <div class="controls"> <?php echo $this->
-                                form->getInput('abstractid'); ?> </div>
+                                form->getInput('abstract_id'); ?> </div>
                         </div>
                         <div class="control-group">
                             <div class="control-label"> <?php echo $this->

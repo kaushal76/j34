@@ -51,10 +51,9 @@ class ConfmgtViewPaper extends JViewLegacy
         $this->linkid = $this->get('Linkid');
 
         $this->state = $this->get('State');
-        $this->item = $this->get('Data');
+        $this->item = $this->get('Paper');
 
-        $this->isAuthor = AclHelper::isAuthor($this->item->id);
-        $this->paper = $this->get('Paper');
+        $this->isAuthor = AclHelper::isAuthor($this->item->paper_id);
 
 
         // Check for errors.

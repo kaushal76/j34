@@ -27,7 +27,7 @@ if ($canView):
     <div class="panel-heading">
         <h1>
             <?php
-            echo JText::_('Paper Status') . ' - ' . JText::_('Paper ID ') . $this->item->id; ?>
+            echo JText::_('Paper Status') . ' - ' . JText::_('Paper ID ') . $this->item->paper_id; ?>
         </h1>
     </div>
     <div class="panel-body">
