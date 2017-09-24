@@ -40,7 +40,6 @@ class ConfmgtViewAbrev1ewoutcomeform extends JViewLegacy
     {
         $this->paper = $this->get('Paper', 'Paper');
         $this->state = $this->get('State');
-        $this->item = $this->get('Data');
         $this->form = $this->get('Form');
         $this->linkid = $this->get('Linkid');
         $this->item = $this->get('Data');

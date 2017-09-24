@@ -239,7 +239,7 @@ class ConfmgtModelAbrev1ewoutcomeForm extends JModelForm
 	}    
     
 	/**
-	 * Method to get the profile form.
+	 * Method to get the  form.
 	 *
 	 * The base form is loaded from XML 
      * 
