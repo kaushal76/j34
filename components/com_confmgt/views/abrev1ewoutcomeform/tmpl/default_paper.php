@@ -14,77 +14,82 @@ defined('_JEXEC') or die;
     <div class="panel-heading">
         <h1>
             <?php
-            echo JText::_('COM_CONFMGT_PAPER_PANEL_HEADING') . ' - ' . JText::_('Paper ID') . $this->item->id; ?>
+            echo JText::_('COM_CONFMGT_PAPER_PANEL_HEADING') . ' - ' . JText::_('Paper ID') . $this->paper->paper_id; ?>
         </h1>
     </div>
     <div class="panel-body"></div>
     <table class="table table-striped">
         <tr>
             <td width="25%" class="header"><?php
-                echo JText::_('COM_CONFMGT_FORM_LBL_PAPER_ABSTRACT_REVIEW_OUTCOME'); ?>
+                echo JText::_('Abstract review outcome'); ?>
                 :
             </td>
             <td><?php
-                echo $this->item->abstract_review_outcome_text;
+                echo $this->paper->abstract_review_outcome_txt;
                 ?></td>
         </tr>
         <tr>
             <td class="header"><?php
-                echo JText::_('COM_CONFMGT_FORM_LBL_PAPER_ABSTRACT_REVIEW_COMMENTS'); ?>
+                echo JText::_('Absrtact review comments'); ?>
                 :
             </td>
             <td><?php
-                echo nl2br($this->item->abstract_review_comments);
+                echo nl2br($this->paper->abstract_abstract_review_comments);
                 ?></td>
         </tr>
         <tr>
             <td class="header"><?php
-                echo JText::_('COM_CONFMGT_FORM_LBL_PAPER_FULL_PAPER'); ?>
+                echo JText::_('Full paper'); ?>
                 :
             </td>
             <td><?php
-                echo $this->item->full_paper;
-                echo $this->item->full_paper_download;
+                echo $this->paper->full_paper_txt;
+                echo $this->paper->fullpaper_full_paper;
+                echo $this->paper->full_paper_download;
                 ?></td>
         </tr>
         <tr>
             <td class="header"><?php
-                echo JText::_('COM_CONFMGT_FORM_LBL_PAPER_FULL_REVIEW_OUTCOME'); ?>
+                echo JText::_('Full paper review outcome'); ?>
                 :
             </td>
             <td><?php
 
-                echo $this->item->full_review_outcome_text;
+                echo $this->paper->full_review_outcome_txt;
                 ?></td>
         </tr>
         <tr>
             <td class="header"><?php
-                echo JText::_('COM_CONFMGT_FORM_LBL_PAPER_FULL_REVIEW_COMMENTS'); ?>
+                echo JText::_('Full paper review comments'); ?>
                 :
             </td>
             <td><?php
 
-                echo nl2br($this->item->full_review_comments);
+                echo nl2br($this->paper->fullpaper_full_review_comments);
                 ?></td>
         </tr>
         <tr>
             <td class="header"><?php
-                echo JText::_('COM_CONFMGT_FORM_LBL_PAPER_CAMERA_READY'); ?>
+                echo JText::_('Camera ready paper'); ?>
                 :
             </td>
             <td><?php
 
-                echo $this->item->camera_ready;
+                echo $this->paper->camera_ready_txt;
+                echo $this->paper->camera_camera_ready;
+                echo $this->paper->cameraready_download;
                 ?></td>
         </tr>
         <tr>
             <td class="header"><?php
-                echo JText::_('COM_CONFMGT_FORM_LBL_PAPER_PRESENTATION'); ?>
+                echo JText::_('Presentation'); ?>
                 :
             </td>
             <td><?php
 
-                echo $this->item->presentation;
+                echo $this->paper->presentation_txt;
+                echo $this->paper->presentation_presentation;
+                echo $this->paper->presentation_download;
                 ?></td>
         </tr>
         <tr>
@@ -93,7 +98,7 @@ defined('_JEXEC') or die;
                 :
             </td>
             <td><?php
-                echo $this->item->created_by_name; ?></td>
+                echo $this->paper->paper_created_by; ?></td>
         </tr>
     </table>
 </div>

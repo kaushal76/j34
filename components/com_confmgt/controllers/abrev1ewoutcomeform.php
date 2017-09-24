@@ -1,8 +1,8 @@
 <?php
 /**
- * @version     2.5.7
+ * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
  */
@@ -12,7 +12,11 @@ defined('_JEXEC') or die;
 require_once JPATH_COMPONENT.'/controller.php';
 
 /**
- * Paper controller class.
+ * Controller class for Abstract review outcome posting
+ *
+ * @package     CONFMGT
+ *
+ * @since version 3.8.0
  */
 class ConfmgtControllerAbrev1ewoutcomeForm extends ConfmgtController
 {
@@ -34,8 +38,7 @@ class ConfmgtControllerAbrev1ewoutcomeForm extends ConfmgtController
 		$app->setUserState('com_confmgt.edit.paper.id', $editId);
 
 		// Get the model.
-		$model = $this->getModel('Abrev1ewoutcomeForm', 'ConfmgtModel'); 
-		$linkid = $model->getLinkid();
+		$model = $this->getModel('Abrev1ewoutcomeForm', 'ConfmgtModel');
 
 		// Check out the item
 		if ($editId) {
@@ -52,7 +55,7 @@ class ConfmgtControllerAbrev1ewoutcomeForm extends ConfmgtController
 	}
 
 	/**
-	 * Method to save a user's profile data.
+	 * Method to save a abstract review outcomes
 	 *
 	 * @return	void
 	 * @since	1.6
@@ -73,7 +76,7 @@ class ConfmgtControllerAbrev1ewoutcomeForm extends ConfmgtController
 		// Validate the posted data.
 		$form = $model->getForm();
 		if (!$form) {
-			JError::raiseError(500, $model->getError());
+			JFactory::$application->enqueueMessage($model->getError(), 'error');
 			return false;
 		}
 
@@ -99,7 +102,7 @@ class ConfmgtControllerAbrev1ewoutcomeForm extends ConfmgtController
 
 			// Redirect back to the edit screen.
 			$id = (int) $app->getUserState('com_confmgt.edit.paper.id');
-			$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=abrev1ewoutcomeform&layout=edit&id='.$id, false));
+			$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=abrev1ewoutcomeform&layout=edit&id='.$id.'&linkid='.$id, false));
 			return false;
 		}
 
@@ -113,7 +116,7 @@ class ConfmgtControllerAbrev1ewoutcomeForm extends ConfmgtController
 
 			// Redirect back to the edit screen.
 			$id = (int)$app->getUserState('com_confmgt.edit.paper.id');
-			$this->setMessage(JText::sprintf('Save failed', $model->getError()), 'warning');
+			JFactory::$application->enqueueMessage(JText::sprintf('Save failed', $model->getError()), 'warning');
 			$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=abrev1ewoutcomeform&layout=edit&linkid='.$id, false)); 
 			return false;
 		}
@@ -127,7 +130,6 @@ class ConfmgtControllerAbrev1ewoutcomeForm extends ConfmgtController
 			$email = emailHelper::getEmailcontent ('abs_outcome');
 			$rawbody = $email->message;
 			$rawsubject = $email->subject;
-			$id = (int)$app->getUserState('com_confmgt.edit.paper.id');
 			$paper = MainHelper::getPaper($return);
 			$paperid = $return;
 			
@@ -194,8 +196,7 @@ class ConfmgtControllerAbrev1ewoutcomeForm extends ConfmgtController
 		// Validate the posted data.
 		$form = $model->getForm();
 		if (!$form) {
-			JError::raiseError(500, $model->getError());
-			return false;
+			throw new Exception($model->getError(),500);
 		}
 
 		// Validate the posted data.
@@ -224,7 +225,7 @@ class ConfmgtControllerAbrev1ewoutcomeForm extends ConfmgtController
 			return false;
 		}
 
-		// Attempt to save the data.
+		// Attempt to delete
 		$return	= $model->delete($data);
 
 		// Check for errors.
@@ -234,8 +235,8 @@ class ConfmgtControllerAbrev1ewoutcomeForm extends ConfmgtController
 
 			// Redirect back to the edit screen.
 			$id = (int)$app->getUserState('com_confmgt.edit.paper.id');
-			$this->setMessage(JText::sprintf('Delete failed', $model->getError()), 'warning');
-			$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=paper&layout=edit&id='.$id, false));
+			JFactory::$application->enqueueMessage(JText::sprintf('Delete failed', $model->getError()), 'warning');
+			$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=paper&layout=edit&id='.$id.'&linkid='.$id, false));
 			return false;
 		}
 

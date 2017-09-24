@@ -64,8 +64,9 @@ echo $this->loadTemplate('alert');
                     <input type="hidden" name="view" value="papers"/>
                     <input type="hidden" name="layout" value="leader_default"/>
                     <button class="btn btn-default" type="submit">
+                        <i class="icon-arrow-left"></i>
                         <?php
-                        echo JText::_("<< Back"); ?>
+                        echo JText::_("Back"); ?>
                     </button>
                 </form>
                 <?php

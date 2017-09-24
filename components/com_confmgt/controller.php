@@ -45,9 +45,6 @@ class ConfmgtController extends JControllerLegacy
             $view = $this->getView('Paper', 'html');
             $view->setModel($this->getModel('Paper'), true);
             $view->setModel($this->getModel('Authors'));
-            $view->setModel($this->getModel('Fullpapers'));
-            $view->setModel($this->getModel('Camerareadypapers'));
-            $view->setModel($this->getModel('Presentations'));
             $view->display();
 
             //set models for the abstractreviewoutcome view (data from other models)
@@ -56,9 +53,7 @@ class ConfmgtController extends JControllerLegacy
             $view->setModel($this->getModel('abrev1ewoutcomeform'), true);
             $view->setModel($this->getModel('Paper'));
             $view->setModel($this->getModel('Authors'));
-            $view->setModel($this->getModel('Fullpapers'));
-            $view->setModel($this->getModel('Camerareadypapers'));
-            $view->setModel($this->getModel('Presentations'));
+
             $view->display();
 
             //set models for the full paper review outcome view (data from other models)
@@ -67,9 +62,7 @@ class ConfmgtController extends JControllerLegacy
             $view->setModel($this->getModel('fullrev1ewoutcomeform'), true);
             $view->setModel($this->getModel('Paper'));
             $view->setModel($this->getModel('Authors'));
-            $view->setModel($this->getModel('Fullpapers'));
-            $view->setModel($this->getModel('Camerareadypapers'));
-            $view->setModel($this->getModel('Presentations'));
+
             $view->display();
 
         } else {

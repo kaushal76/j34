@@ -38,8 +38,8 @@ defined('_JEXEC') or die;
                 echo JText::_('Presentation: '); ?>
             </td>
             <td><?php echo $this->item->presentation_txt; ?>
-                <?php echo $this->item->presentationBtn ?>
-                <?php echo $this->item->presentation_download ?>
+                <?php echo $this->item->presentationBtn; ?>
+                <?php echo $this->item->presentation_download; ?>
             </td>
         </tr>
     </table>

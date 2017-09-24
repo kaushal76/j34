@@ -56,7 +56,7 @@ class ConfmgtControllerFullpaperForm extends ConfmgtController
     /**
      * Method to save the full paper data.
      *
-     * @return    void
+     * @return    void | bool
      * @return bool
      * @since    1.6
      * TODO remove depriciated method $model->getError();
@@ -82,7 +82,6 @@ class ConfmgtControllerFullpaperForm extends ConfmgtController
         $form = $model->getForm();
         if (!$form) {
             throw new Exception($model->getError(), '500');
-            return false;
         }
         //get Link ID
         $linkid = $model->getLinkid();
@@ -148,7 +147,6 @@ class ConfmgtControllerFullpaperForm extends ConfmgtController
         $app->setUserState('com_confmgt.edit.fullpaper.data', null);
 
     }
-
 
     /**
      * Method to redirect when user cancel a paper upload

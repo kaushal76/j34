@@ -104,7 +104,6 @@ abstract class EmailHelper
 		$result = $row;
 		if ($error = $db->getErrorMsg()) {
     		throw new Exception($error);
-			return false;
 		}else{ 
 			return $result;
 		}

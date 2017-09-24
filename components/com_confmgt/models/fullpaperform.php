@@ -241,7 +241,7 @@ class ConfmgtModelFullpaperForm extends JModelForm
 
         $app = JFactory::getApplication();
         $authorised = AclHelper::isAuthor($linkid);
-        if ($authorised !== true) {
+        if (!$authorised) {
             throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 403);
         }
         if ($linkid > 0) {
@@ -257,7 +257,7 @@ class ConfmgtModelFullpaperForm extends JModelForm
             $paperdata = array();
             $paperdata['id'] = $linkid;
             $paperdata['full_paper'] = $table->full_paper;
-            $paperdata['fullpaperid'] = $table->id;
+            $paperdata['fullpaper_id'] = $table->id;
 
             if (!$papertable->save($paperdata) === true) {
                 $app->enqueueMessage($papertable->getError());

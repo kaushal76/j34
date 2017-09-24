@@ -38,7 +38,7 @@ class ConfmgtViewAbrev1ewoutcomeform extends JViewLegacy
      */
     public function display($tpl = null)
     {
-
+        $this->paper = $this->get('Paper', 'Paper');
         $this->state = $this->get('State');
         $this->item = $this->get('Data');
         $this->form = $this->get('Form');
@@ -47,7 +47,8 @@ class ConfmgtViewAbrev1ewoutcomeform extends JViewLegacy
         $this->rev1ewers = $this->get('rev1ewersData');
         $this->rev1ews = $this->get('rev1ewData');
         $this->authors = $this->get('authorsData');
-        $this->item->created_by_name = JFactory::getUser($this->item->created_by)->name;
+
+        $this->paper->paper_created_by = JFactory::getUser($this->paper->paper_created_by)->name;
         $this->isAuthor = AclHelper::isAuthor($this->linkid);
         $this->isRev1ewer = AclHelper::isRev1ewer($this->linkid);
 

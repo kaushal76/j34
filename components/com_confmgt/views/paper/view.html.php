@@ -24,10 +24,6 @@ class ConfmgtViewPaper extends JViewLegacy
     protected $form;
     protected $linkid;
     protected $authors;
-    protected $fullpapers;
-    protected $camerareadypapers;
-    protected $presentations;
-    protected $paper;
 
     /**
      * Display the view
@@ -43,10 +39,6 @@ class ConfmgtViewPaper extends JViewLegacy
 
         //getting the authors and full papers linked with the item
         $this->authors = $this->get('Items', 'Authors');
-        $this->fullpapers = $this->get('Items', 'Fullpapers');
-        $this->camerareadypapers = $this->get('Items', 'Camerareadypapers');
-        $this->presentations = $this->get('Items', 'Presentations');
-
         $this->form = $this->get('Form');
         $this->linkid = $this->get('Linkid');
 
@@ -54,7 +46,7 @@ class ConfmgtViewPaper extends JViewLegacy
         $this->item = $this->get('Paper');
 
         $this->isAuthor = AclHelper::isAuthor($this->item->paper_id);
-
+        $this->item->paper_created_by = JFactory::getUser($this->item->paper_created_by)->name;
 
         // Check for errors.
         if (count($errors = $this->get('Errors'))) {

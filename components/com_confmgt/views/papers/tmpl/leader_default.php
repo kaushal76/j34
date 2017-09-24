@@ -49,8 +49,10 @@ $document->addScript($filterurl);
         </thead>
         <tbody>
         <?php $show = false; ?>
-        <?php foreach ($this->leadersitems as $item) : ?>
-            <?php $show = true; ?>
+        <?php
+        foreach ($this->leadersitems as $item) : ?>
+            <?php
+            $show = true; ?>
             <tr>
                 <td width="5%"><?php echo $item->id; ?></td>
                 <td><?php echo $item->title; ?></td>
@@ -77,9 +79,9 @@ $document->addScript($filterurl);
                     <?php } ?>
                 </td>
                 <td>
-                    <?php if (empty($item->full_paper)) {
+                    <?php if (empty($item->fullpaper_id)) {
                         echo JText::_("Full paper not submitted");
-                    } elseif ((!empty($item->full_paper)) && ($item->full_review_outcome == 0)) { ?>
+                    } elseif ((!empty($item->fullpaper_id)) && ($item->full_review_outcome == 0)) { ?>
                         <?php if ($item->revisions > 1) { ?>
                             <div><span class="label label-important">revision</span></div>
                         <?php } ?>
