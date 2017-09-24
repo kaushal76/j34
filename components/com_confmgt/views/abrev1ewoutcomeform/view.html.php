@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version     3.8.1
+ * @version     3.8.0
  * @package     com_confmgt
  * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -10,10 +10,13 @@
 // No direct access
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.view');
 
 /**
- * View to handle abstract review outcomes
+ * View class for Abstract Review Outcome form
+ *
+ * @package     CONFMGT
+ *
+ * @since version 3.8.0
  */
 class ConfmgtViewAbrev1ewoutcomeform extends JViewLegacy
 {
@@ -25,7 +28,13 @@ class ConfmgtViewAbrev1ewoutcomeform extends JViewLegacy
     protected $linkid;
 
     /**
-     * Display the view
+     * Method to intiate the display
+     *
+     * @param null $tpl
+     *
+     *
+     * @since version 3.8.0
+     * @throws Exception
      */
     public function display($tpl = null)
     {
@@ -34,7 +43,7 @@ class ConfmgtViewAbrev1ewoutcomeform extends JViewLegacy
         $this->item = $this->get('Data');
         $this->form = $this->get('Form');
         $this->linkid = $this->get('Linkid');
-        $this->item = $this->get('paperData');
+        $this->item = $this->get('Data');
         $this->rev1ewers = $this->get('rev1ewersData');
         $this->rev1ews = $this->get('rev1ewData');
         $this->authors = $this->get('authorsData');

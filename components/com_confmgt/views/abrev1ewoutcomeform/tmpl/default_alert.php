@@ -9,7 +9,7 @@
 // no direct access
 defined('_JEXEC') or die;
 
-if (!$this->item->abstract_review_outcome == '') { ?>
+if (!$this->item->abstract_review_outcome) { ?>
 
 <div class="alert alert-block alert-error fade in">
   <button type="button" class="close" data-dismiss="alert">&times;</button>

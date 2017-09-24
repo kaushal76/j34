@@ -8,7 +8,6 @@
  */
 
 // No direct access
-
 defined('_JEXEC') or die;
 
 class ConfmgtController extends JControllerLegacy
@@ -41,8 +40,7 @@ class ConfmgtController extends JControllerLegacy
                 JFactory::getApplication()->input->set('layout', 'entry');
             }
         }
-
-        //set models for the paper view (data from 3 models)
+            //set models for the paper view (data from other models)
         if (JFactory::getApplication()->input->get('view') == 'paper') {
             $view = $this->getView('Paper', 'html');
             $view->setModel($this->getModel('Paper'), true);
@@ -52,8 +50,29 @@ class ConfmgtController extends JControllerLegacy
             $view->setModel($this->getModel('Presentations'));
             $view->display();
 
-        } else {
+            //set models for the abstractreviewoutcome view (data from other models)
+        } elseif (JFactory::getApplication()->input->get('view') == 'abrev1ewoutcomeform') {
+            $view = $this->getView('abrev1ewoutcomeform', 'html');
+            $view->setModel($this->getModel('abrev1ewoutcomeform'), true);
+            $view->setModel($this->getModel('Paper'));
+            $view->setModel($this->getModel('Authors'));
+            $view->setModel($this->getModel('Fullpapers'));
+            $view->setModel($this->getModel('Camerareadypapers'));
+            $view->setModel($this->getModel('Presentations'));
+            $view->display();
 
+            //set models for the full paper review outcome view (data from other models)
+        } elseif (JFactory::getApplication()->input->get('view') == 'fullrev1ewoutcomeform') {
+            $view = $this->getView('fullrev1ewoutcomeform', 'html');
+            $view->setModel($this->getModel('fullrev1ewoutcomeform'), true);
+            $view->setModel($this->getModel('Paper'));
+            $view->setModel($this->getModel('Authors'));
+            $view->setModel($this->getModel('Fullpapers'));
+            $view->setModel($this->getModel('Camerareadypapers'));
+            $view->setModel($this->getModel('Presentations'));
+            $view->display();
+
+        } else {
             //for all other views set the display
             $this->display();
         }

@@ -1,8 +1,8 @@
 <?php
 /**
- * @version     2.5.7
+ * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
  */
@@ -11,12 +11,15 @@ defined('_JEXEC') or die;
 
 require_once JPATH_COMPONENT.'/controller.php';
 
+
 /**
- * Abstract controller class.
+ * Controller class for Abstracts
+ * @package     CONFMGT
+ *
+ * @since version 3.8.0
  */
 class ConfmgtControllerAbstractForm extends ConfmgtController
 {
-
 	/**
 	 * Method to check out an item for editing and redirect to the edit form.
 	 *
@@ -26,22 +29,17 @@ class ConfmgtControllerAbstractForm extends ConfmgtController
 	{
 		$app = JFactory::getApplication();
 
-		// Get the previous edit id (if any) and the current edit id.
 		$previousId = (int) $app->getUserState('com_confmgt.edit.abstract.id');
 		$editId	= JFactory::getApplication()->input->getInt('id', null, 'array');
 
-		// Set the user id for the user to edit in the session.
 		$app->setUserState('com_confmgt.edit.abstract.id', $editId);
 
-		// Get the model.
 		$model = $this->getModel('AbstractForm', 'ConfmgtModel');
 
-		// Check out the item
 		if ($editId) {
             $model->checkout($editId);
 		}
 
-		// Check in the previous user.
 		if ($previousId) {
             $model->checkin($previousId);
 		}
@@ -53,8 +51,9 @@ class ConfmgtControllerAbstractForm extends ConfmgtController
 	/**
 	 * Method to save abstract data.
 	 *
-	 * @return	void
+	 * @return	mixed
 	 * @since	1.6
+     * TODO remove getError() deprecited method
 	 */
 	private function save_common($url_success, $url_fail)
 	{
@@ -64,29 +63,21 @@ class ConfmgtControllerAbstractForm extends ConfmgtController
 		// Initialise variables.
 		$app	= JFactory::getApplication();
 		$model = $this->getModel('AbstractForm', 'ConfmgtModel');
-		
 
-		// Get the user data.
-		$data = JFactory::getApplication()->input->get('jform', array(), 'array'); 
+		$data = JFactory::getApplication()->input->get('jform', array(), 'array');
 
-
-		// Get the form.
 		$form = $model->getForm();
+
 		if (!$form) {
-			JError::raiseError(500, $model->getError());
-			return false;
+            throw new Exception($model->getError(),500);
 		}
-		
-		
-		// Validate the posted data.
+
 		$data = $model->validate($form, $data);
 
-		// Check for errors.
 		if ($data === false) {
-			// Get the validation messages.
+
 			$errors	= $model->getErrors();
 
-			// Push up to three validation messages out to the user.
 			for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++) {
 				if ($errors[$i] instanceof Exception) {
 					$app->enqueueMessage($errors[$i]->getMessage(), 'warning');
@@ -96,18 +87,14 @@ class ConfmgtControllerAbstractForm extends ConfmgtController
 			}
 
 			// Save the data in the session.
-			$app->setUserState('com_confmgt.edit.abstract.data', JRequest::getVar('jform'),array());
+			$app->setUserState('com_confmgt.edit.abstract.data', JFactory::getApplication()->input->get('jform', array(), 'array'));
 
 			// Redirect back to the edit screen.
 			$id = (int) $app->getUserState('com_confmgt.edit.abstract.id');
 			$this->setRedirect($url_fail, false);
-			
-			//$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=authorform&layout=edit&id='.$id, false));
 			return false;
 		}
 
-		
-		// Attempt to save the data.
 		$return	= $model->save($data);
 
 		// Check for errors.
@@ -117,46 +104,52 @@ class ConfmgtControllerAbstractForm extends ConfmgtController
 
 			// Redirect back to the edit screen.
 			$id = (int)$app->getUserState('com_confmgt.edit.abstract.id');
-			$this->setMessage(JText::sprintf('Save failed', $model->getError()), 'warning');
+            $app->enqueueMessage(JText::sprintf('Save failed', $model->getError()), 'warning');
 			
 			$this->setRedirect(JRoute::_($url_fail.$id, false));
 			
 			return false;
 		}
 
-            
-        // Check in the profile.
         if ($return) {
             $model->checkin($return);
         }
-        
-		
-        // Clear the profile id from the session.
+
         $app->setUserState('com_confmgt.edit.abstract.id', null);
 		$app->setUserState('com_confmgt.edit.abstract.data', null);
 
- 
-        $this->setMessage(JText::_('COM_CONFMGT_ITEM_SAVED_SUCCESSFULLY'));
-		$this->setRedirect(JRoute::_($url_success, false));
+
+        $app->enqueueMessage(JText::_('COM_CONFMGT_ITEM_SAVED_SUCCESSFULLY'));
+        $this->setRedirect(JRoute::_($url_success, false));
 
 		// Flush the data from the session.
 		$app->setUserState('com_confmgt.edit.abstract.data', null);
 	}
-    
+
+    /**
+     * Method to save abstract data
+     *
+     * @since version 3.8.0
+     */
 	public function save() {
-		$app	= JFactory::getApplication();
+
 		$model = $this->getModel('AbstractForm', 'ConfmgtModel');
 		$linkid = $model->getLinkid();
-		$url_success = 'index.php?option=com_confmgt&view=paper&id='.$linkid;
-		$url_fail = 'index.php?option=com_confmgt&view=abstractform&layout=edit&id=';
+		$url_success = 'index.php?option=com_confmgt&view=paper&id='.$linkid.'&linkid='.$linkid;
+		$url_fail = 'index.php?option=com_confmgt&view=abstractform&layout=edit&linkid='.$linkid;
 		
 		$this->save_common($url_success, $url_fail);
 	}
-	
-    
-    function cancel() {
-		
-	    // Clear the profile id from the session.
+
+
+    /**
+     * Method to cancel save
+     *
+     * @since version 3.8.0
+     */
+	function cancel() {
+
+        $app	= JFactory::getApplication();
         $app->setUserState('com_confmgt.edit.abstract.id', null);
 		$app->setUserState('com_confmgt.edit.abstract.data', null);
 		$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=papers', false));

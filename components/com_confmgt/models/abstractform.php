@@ -1,19 +1,21 @@
 <?php
 /**
- * @version     2.5.7
+ * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
  */
 // No direct access.
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.modelform');
-jimport('joomla.event.dispatcher');
 
 /**
- * Confmgt model.
+ * Model class for Abstract form
+ *
+ * @package     CONFMGT
+ *
+ * @since version 3.8.0
  */
 class ConfmgtModelAbstractForm extends JModelForm
 {
@@ -31,7 +33,6 @@ class ConfmgtModelAbstractForm extends JModelForm
 	{
 		$app = JFactory::getApplication('com_confmgt');
 
-		// Load state from the request userState on edit or from the passed variable on default
         if (JFactory::getApplication()->input->get('layout') == 'edit') {
             $id = JFactory::getApplication()->getUserState('com_confmgt.edit.abstract.id');
         } else {
@@ -40,37 +41,26 @@ class ConfmgtModelAbstractForm extends JModelForm
         }
 		$this->setState('abstract.id', $id);
 
-		// Load the parameters.
-        $params = $app->getParams();
-        $params_array = $params->toArray();
-        if(isset($params_array['item_id'])){
-            $this->setState('abstract.id', $params_array['item_id']);
-        }
-		$this->setState('params', $params);
-
 	}
-	
-	/**
-     * Method to get the LinkID set in either the user session data or the fget / post data.
+
+    /**
+     * Method to get the paper ID .
      *
-     * @return	linkid
-     * 
+     * @param    none
+     *
+     * @return    paper ID (Int) on success false on failure.
      */
-	public function &getLinkid()
-	{
-		$linkid = JFactory::getApplication()->getUserStateFromRequest( "com_confmgt.linkid", 'linkid', 0 );
-		if ($linkid == 0)
-		{
-			JError::raiseError('500', JText::_('JERROR_NO_PAPERID'));
-			return false;
-		}else{		
-			return $linkid;
-		}		
-	}
+    public function getLinkid()
+    {
+        $linkid = JFactory::getApplication()->input->get('linkid');
+        if (!$linkid) {
+            throw new Exception(JText::_('JERROR_NO_PAPERID'));
+        } else {
+            return $linkid;
+        }
+    }
 
-        
-
-	/**
+    /**
 	 * Method to get an ojbect.
 	 *
 	 * @param	integer	The id of the object to get.
@@ -93,30 +83,19 @@ class ConfmgtModelAbstractForm extends JModelForm
 			// Attempt to load the row.
 			if ($table->load($id))
 			{
-                
-                $user = JFactory::getUser();
+
                 $id = $table->id;
-				
-				//ToDo Confmgt ACL 
-                $canEdit = true;
+
+                $canEdit = AclHelper::isAuthor($this->getLinkid());
 
                 if (!$canEdit) {
-                    JError::raiseError('500', JText::_('JERROR_ALERTNOAUTHOR'));
+                    throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'),403);
                 }
-                
-				// Check published state.
-				if ($published = $this->getState('filter.published'))
-				{
-					if ($table->state != $published) {
-						return $this->_item;
-					}
-				}
 
-				// Convert the JTable to a clean JObject.
 				$properties = $table->getProperties(1);
-				$this->_item = JArrayHelper::toObject($properties, 'JObject');
+				$this->_item = Joomla\Utilities\ArrayHelper::toObject($properties, 'JObject');
 			} elseif ($error = $table->getError()) {
-				$this->setError($error);
+				JFactory::getApplication()->enqueueMessage($error,'error');
 			}
 		}
 
@@ -139,23 +118,19 @@ class ConfmgtModelAbstractForm extends JModelForm
 	 */
 	public function checkin($id = null)
 	{
-		// Get the id.
 		$id = (!empty($id)) ? $id : (int)$this->getState('abstract.id');
 
 		if ($id) {
-            
-			// Initialise the table
+
 			$table = $this->getTable();
 
-			// Attempt to check the row in.
             if (method_exists($table, 'checkin')) {
                 if (!$table->checkin($id)) {
-                    $this->setError($table->getError());
+                    JFactory::getApplication()->enqueueMessage($table->getError());
                     return false;
                 }
             }
 		}
-
 		return true;
 	}
 
@@ -168,21 +143,17 @@ class ConfmgtModelAbstractForm extends JModelForm
 	 */
 	public function checkout($id = null)
 	{
-		// Get the user id.
 		$id = (!empty($id)) ? $id : (int)$this->getState('abstract.id');
 
 		if ($id) {
-            
-			// Initialise the table
+
 			$table = $this->getTable();
 
-			// Get the current user object.
 			$user = JFactory::getUser();
 
-			// Attempt to check the row out.
             if (method_exists($table, 'checkout')) {
                 if (!$table->checkout($user->get('id'), $id)) {
-                    $this->setError($table->getError());
+                    JFactory::getApplication()->enqueueMessage($table->getError());
                     return false;
                 }
             }
@@ -206,7 +177,7 @@ class ConfmgtModelAbstractForm extends JModelForm
 		// Get the form.
 		$form = $this->loadForm('com_confmgt.abstract', 'abstractform', array('control' => 'jform', 'load_data' => $loadData));
 		if (empty($form)) {
-			return false;
+			throw new Exception(JText::_('Cannot load the form'),500);
 		}
 
 		return $form;
@@ -238,48 +209,42 @@ class ConfmgtModelAbstractForm extends JModelForm
 	{
 	
 		$id = (!empty($data['id'])) ? $data['id'] : (int)$this->getState('abstract.id');
+        $linkid = $this->getLinkid();
 		
 		if (empty($data['id'])) {
 			
 			$user = JFactory::getUser();
-			$app = JFactory::getApplication();
-			
-			// check if paper id is set and then get the paper id
-			
-	        $linkid = $this->getLinkid();
 				
 			$data['linkid'] = $linkid;
 			$data['created_by'] = $user->id;
 			
 			// this model is used only in case of an abstract resubmission. Hence setting the flag in the abstract table 
-			$data['resubmitted'] = 1;
+			$data['mode'] = 'resubmit';
 		
 		}
-		
-        $state = (!empty($data['state'])) ? 1 : 0;
-		
-		//To do -- Change to Confmgt ACL	
-		$authorised = true;
+
+		$authorised = AclHelper::isAuthor($linkid);
+
+        if (!$authorised) {
+            throw new Exception(JText::_('Not Authorised'),403);
+        }
         
         $table = $this->getTable();
 		$paper_table = $this->getTable('Paper', 'ConfmgtTable');
 		
         if (!$table->save($data) === true) {
+            JFactory::getApplication()->enqueueMessage(JText::_('Abstract details could not be updated'),'error');
             return false;
         } 
-		
-		$paper_data = $data;
+
 		$paper_data['id'] = $linkid;
-		$paper_data['abstractid'] = $table->id;
-		$paper_data['abstract_review_outcome'] = 0;
-		$paper_data['abstract_review_comments'] = '';
+		$paper_data['abstract_id'] = $table->id;
 		
-		if (!$paper_table->save($paper_data) === true) {
-            return false;
-        } 
-		
-		return $id;
-        
+		if (!$return = $paper_table->save($paper_data) === true) {
+            JFactory::getApplication()->enqueueMessage(JText::_('Paper details could not be updated'),'error');
+		    return false;
+        }
+		return $return;
 	}
     
      function delete($data)
@@ -292,8 +257,6 @@ class ConfmgtModelAbstractForm extends JModelForm
         } else {
             return false;
         }
-        
-        return true;
     }
     
 }

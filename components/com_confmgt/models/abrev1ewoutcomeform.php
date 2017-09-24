@@ -92,6 +92,7 @@ class ConfmgtModelAbrev1ewoutcomeForm extends JModelForm
 
 				// Convert the JTable to a clean JObject.
 				$properties = $table->getProperties(1);
+                $properties['abstract'] = $table_abstract->abstract;
 				$properties['abstract_review_outcome'] = $table_abstract->abstract_review_outcome;
 				$properties['abstract_review_comments'] = $table_abstract->abstract_review_comments;
 				$this->_item = Joomla\Utilities\ArrayHelper::toObject($properties, 'JObject');

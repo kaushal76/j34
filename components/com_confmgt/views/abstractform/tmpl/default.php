@@ -49,11 +49,12 @@ JHtml::_('behavior.formvalidation');
                                 <button type="submit"
                                         class="btn btn-primary"><?php echo JText::_('JSUBMIT'); ?> </button>
                                 <?php echo JText::_('or'); ?> <a
-                                    href="<?php echo jroute::_('index.php?option=com_confmgt&task=abstractform.cancel'); ?>"
+                                    href="<?php echo JRoute::_('index.php?option=com_confmgt&task=abstractform.cancel'); ?>"
                                     title="<?php echo JText::_('JCANCEL'); ?>
 				"><?php echo JText::_('JCANCEL'); ?> </a>
                                 <input type="hidden" name="option" value="com_confmgt"/>
-                                <input type="hidden" name="jform['linkid']" value="<?php echo $this->linkid; ?>"/>
+                                <input type="hidden" name="linkid" value="<?php echo $this->linkid; ?>"/>
+                                <input type="hidden" name="jform[linkid]" value="<?php echo $this->linkid; ?>"/>
                                 <input type="hidden" name="task" value="abstractform.save"/>
                                 <?php echo JHtml::_('form.token'); ?> </div>
                         </div>
