@@ -557,6 +557,7 @@ class ConfmgtModelPaper extends JModelItem
         $html = $html . "<input type=\"hidden\" name=\"view\" value=\"camerareadypaperform\" />";
         $html = $html . "<input type=\"hidden\" name=\"jform[linkid]\" value=\"" . $id . "\" />";
         $html = $html . "<input type=\"hidden\" name=\"jform[mode]\" value=\"" . $mode . "\" />";
+        $html = $html . "<input type=\"hidden\" name=\"linkid\" value=" . $id . " />";
         $html = $html . "<button class=\"btn btn-default\" type=\"submit\">";
         $html = $html . "<i class=\"icon-upload\"></i>";
         if ($mode == 'change') {

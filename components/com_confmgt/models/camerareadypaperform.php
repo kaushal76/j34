@@ -49,25 +49,22 @@ class ConfmgtModelCamerareadypaperForm extends JModelForm
 		$this->setState('params', $params);
 
 	}
-	
-	/**
-	 * Method to get the paper ID .
-	 *
-	 * @param	none
-	 *
-	 * @return	paper ID (Int) on success false on failure.
-	 */
-	public function &getLinkid()
-	{
-		$linkid = JFactory::getApplication()->getUserStateFromRequest( "com_confmgt.linkid", 'linkid', 0 );
-		if ($linkid == 0)
-		{
-			JError::raiseError('500', JText::_('JERROR_NO_PAPERID'));
-			return false;
-		}else{		
-			return $linkid;
-		}		
-	}
+
+    /**
+     * Method to get the paperID
+     * @return bool/mixed
+     * @since version 3.8.0
+     */
+
+    public function getLinkid()
+    {
+        $linkid = JFactory::getApplication()->input->get('linkid');
+        if (!$linkid) {
+            throw new Exception(JText::_('JERROR_NO_PAPERID'),404);
+        } else {
+            return $linkid;
+        }
+    }
         
         
 
