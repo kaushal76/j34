@@ -1,232 +1,181 @@
 <?php
 /**
- * @version     2.5.7
+ * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
  */
 // No direct access
 defined('_JEXEC') or die;
 
-require_once JPATH_COMPONENT.'/controller.php';
+require_once JPATH_COMPONENT . '/controller.php';
 
 /**
- * Camerareadypaper controller class.
+ * Presentation form controller class
+ * @package     CONFMGT
+ *
+ * @since version 3.8.0
  */
 class ConfmgtControllerPresentationForm extends ConfmgtController
 {
 
-	/**
-	 * Method to check out an item for editing and redirect to the edit form.
-	 *
-	 * @since	1.6
-	 */
-	public function edit()
-	{
-		$app			= JFactory::getApplication();
+    /**
+     * Method to check out an item for editing and redirect to the edit form.
+     *
+     * @since    1.6
+     */
+    public function edit()
+    {
+        $app = JFactory::getApplication();
 
-		// Get the previous edit id (if any) and the current edit id.
-		$previousId = (int) $app->getUserState('com_confmgt.edit.presentation.id');
-		$editId	= JFactory::getApplication()->input->getInt('id', null, 'array');
+        // Get the previous edit id (if any) and the current edit id.
+        $previousId = (int)$app->getUserState('com_confmgt.edit.presentation.id');
+        $editId = JFactory::getApplication()->input->getInt('id', null, 'array');
 
-		// Set the user id for the user to edit in the session.
-		$app->setUserState('com_confmgt.edit.presentation.id', $editId);
+        // Set the user id for the user to edit in the session.
+        $app->setUserState('com_confmgt.edit.presentation.id', $editId);
 
-		// Get the model.
-		$model = $this->getModel('PresentationForm', 'ConfmgtModel');
+        // Get the model.
+        $model = $this->getModel('PresentationForm', 'ConfmgtModel');
 
-		// Check out the item
-		if ($editId) {
+        // Check out the item
+        if ($editId) {
             $model->checkout($editId);
-		}
+        }
 
-		// Check in the previous user.
-		if ($previousId) {
+        // Check in the previous user.
+        if ($previousId) {
             $model->checkin($previousId);
-		}
+        }
 
-		// Redirect to the edit screen.
-		$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=presentation&layout=edit', false));
-	}
+        // Redirect to the edit screen.
+        $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=presentation&layout=edit', false));
+    }
 
-	/**
-	 * Method to save a user's profile data.
-	 *
-	 * @return	void
-	 * @since	1.6
-	 */
-	public function save()
-	{
-		// Check for request forgeries.
-		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+    /**
+     * Method to save the Presentation data.
+     *
+     * @return    void | bool
+     * @return bool
+     * @since    1.6
+     * TODO remove depriciated method $model->getError();
+     */
+    public function save()
+    {
+        // Check for request forgeries.
+        JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
-		// Initialise variables.
-		$app	= JFactory::getApplication();
-		$model = $this->getModel('PresentationForm', 'ConfmgtModel');
+        // Initialise variables.
+        $app = JFactory::getApplication();
+        $model = $this->getModel('PresentationForm', 'ConfmgtModel');
 
-		// Get the user data.
-		$data = JFactory::getApplication()->input->get('jform', array(), 'array');
-		
-		//Get files input for validation
-		$data['presentation'] = JFactory::getApplication()->input->files->get('jform');
+        // Get the user data.
+        $data = JFactory::getApplication()->input->get('jform', array(), 'array');
 
-		// Validate the posted data.
-		$form = $model->getForm();
-		if (!$form) {
-			JError::raiseError(500, $model->getError());
-			return false;
-		}
-		
-		//get Link ID
-		$linkid = $model->getLinkid();
+        //Get files inout for validation
+        $files = JFactory::getApplication()->input->files->get('jform');
 
-		// Validate the posted data.
-		$data = $model->validate($form, $data);
+        $data['presentation'] = $files['presentation']['name'];
 
-		// Check for errors.
-		if ($data === false) {
-			// Get the validation messages.
-			$errors	= $model->getErrors();
+        // Validate the posted data.
+        $form = $model->getForm();
+        if (!$form) {
+            throw new Exception($model->getError(), '500');
+        }
+        //get Link ID
+        $linkid = $model->getLinkid();
 
-			// Push up to three validation messages out to the user.
-			for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++) {
-				if ($errors[$i] instanceof Exception) {
-					$app->enqueueMessage($errors[$i]->getMessage(), 'warning');
-				} else {
-					$app->enqueueMessage($errors[$i], 'warning');
-				}
-			}
+        // Validate the posted data.
+        $data = $model->validate($form, $data);
 
-			// Save the data in the session.
-			$app->setUserState('com_confmgt.edit.presentation.data', JRequest::getVar('jform'),array());
+        // Check for errors.
+        if ($data === false) {
+            // Get the validation messages.
+            $errors = $model->getErrors();
+            // Push up to three validation messages out to the user.
+            for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++) {
+                if ($errors[$i] instanceof Exception) {
+                    $app->enqueueMessage($errors[$i]->getMessage(), 'error');
+                } else {
+                    $app->enqueueMessage($errors[$i], 'warning');
+                }
+            }
 
-			// Redirect back to the edit screen.
-			$id = (int) $app->getUserState('com_confmgt.edit.presentation.id');
-			$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=presentationform&layout=edit&id='.$id, false));
-			return false;
-		}
+            // Save the data in the session.
+            $app->setUserState('com_confmgt.edit.presentation.data', JFactory::getApplication()->input->get('jform', array(), 'array'));
 
-		// Attempt to save the data.
-		$return	= $model->save($data);
+            // Redirect back to the edit screen.
+            $id = (int)$app->getUserState('com_confmgt.edit.presentation.id');
 
-		// Check for errors.
-		if ($return === false) {
-			// Save the data in the session.
-			$app->setUserState('com_confmgt.edit.presentation.data', $data);
+            $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=presentationform&layout=edit&linkid=' . $linkid . '&id=' . $id, false));
+            return false;
+        }
 
-			// Redirect back to the edit screen.
-			$id = (int)$app->getUserState('com_confmgt.edit.presentation.id');
-			$this->setMessage(JText::sprintf('Save failed', $model->getError()), 'warning');
-			$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=presentationform&layout=edit&id='.$id, false));
-			return false;
-		}
+        // Attempt to save the data.
+        $return = $model->save($data);
 
-            
+        // Check for errors.
+        if ($return === false) {
+            // Save the data in the session.
+            $app->setUserState('com_confmgt.edit.presentation.data', $data);
+
+            // Redirect back to the edit screen.
+            $id = (int)$app->getUserState('com_confmgt.edit.presentation.id');
+            $app->enqueueMessage(JText::sprintf('Save failed', $model->getError()), 'error');
+            $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=presentationform&layout=edit&linkid=' . $linkid . '&id=' . $id, false));
+            return false;
+        }
+
+
         // Check in the profile.
         if ($return) {
             $model->checkin($return);
         }
-        
+
         // Clear the profile id from the session.
         $app->setUserState('com_confmgt.edit.presentation.id', null);
+        $app->setUserState('com_confmgt.edit.presentation.linkid', null);
 
         // Redirect to the list screen.
-        $this->setMessage(JText::_('COM_CONFMGT_ITEM_SAVED_SUCCESSFULLY'));
-        $item = 'index.php?option=com_confmgt&view=paper&id='.$linkid;
+        $app->enqueueMessage(JText::_('COM_CONFMGT_ITEM_SAVED_SUCCESSFULLY'));
+        $item = 'index.php?option=com_confmgt&view=paper&id=' . $linkid . '&linkid=' . $linkid;
+
         $this->setRedirect(JRoute::_($item, false));
 
-		// Flush the data from the session.
-		$app->setUserState('com_confmgt.edit.presentation.data', null);
-	}
-    
-    
-    function cancel() {
-		$model = $this->getModel('PresentationForm', 'ConfmgtModel');
-		$linkid = $model->getLinkid();
-		
-	    $link = 'index.php?option=com_confmgt&view=paper&id='.$linkid;
+        // Flush the data from the session.
+        $app->setUserState('com_confmgt.edit.presentation.data', null);
+
+    }
+
+    /**
+     * Method to redirect when user cancel a paper upload
+     *
+     * @since version 3.8.0
+     */
+    function cancel()
+    {
+
+        //get model and Link ID
+        $model = $this->getModel('PresentationForm', 'ConfmgtModel');
+        $linkid = $model->getLinkid();
+        if (!$linkid) {
+            $linkid = JFactory::getApplication()->input->getInt('linkid');
+        }
+        $link = 'index.php?option=com_confmgt&view=paper&id=' . $linkid . '&linkid=' . $linkid;
         $this->setRedirect(JRoute::_($link, false));
     }
-    
-	public function remove()
-	{
-		// Check for request forgeries.
-		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
-		// Initialise variables.
-		$app	= JFactory::getApplication();
-		$model = $this->getModel('PresentationForm', 'ConfmgtModel');
+    /**
+     * Method to remove a full paper
+     *
+     * @since version 3.8.0
+     * TODO complete the remove function for full papers
+     */
+    public function remove()
+    {
 
-		// Get the user data.
-		$data = JFactory::getApplication()->input->get('jform', array(), 'array');
-
-		// Validate the posted data.
-		$form = $model->getForm();
-		if (!$form) {
-			JError::raiseError(500, $model->getError());
-			return false;
-		}
-
-		// Validate the posted data.
-		$data = $model->validate($form, $data);
-
-		// Check for errors.
-		if ($data === false) {
-			// Get the validation messages.
-			$errors	= $model->getErrors();
-
-			// Push up to three validation messages out to the user.
-			for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++) {
-				if ($errors[$i] instanceof Exception) {
-					$app->enqueueMessage($errors[$i]->getMessage(), 'warning');
-				} else {
-					$app->enqueueMessage($errors[$i], 'warning');
-				}
-			}
-
-			// Save the data in the session.
-			$app->setUserState('com_confmgt.edit.presentation.data', $data);
-
-			// Redirect back to the edit screen.
-			$id = (int) $app->getUserState('com_confmgt.edit.presentation.id');
-			$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=presentation&layout=edit&id='.$id, false));
-			return false;
-		}
-
-		// Attempt to save the data.
-		$return	= $model->delete($data);
-
-		// Check for errors.
-		if ($return === false) {
-			// Save the data in the session.
-			$app->setUserState('com_confmgt.edit.presentation.data', $data);
-
-			// Redirect back to the edit screen.
-			$id = (int)$app->getUserState('com_confmgt.edit.presentation.id');
-			$this->setMessage(JText::sprintf('Delete failed', $model->getError()), 'warning');
-			$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=presentation&layout=edit&id='.$id, false));
-			return false;
-		}
-
-            
-        // Check in the profile.
-        if ($return) {
-            $model->checkin($return);
-        }
-        
-        // Clear the profile id from the session.
-        $app->setUserState('com_confmgt.edit.presentation.id', null);
-
-        // Redirect to the list screen.
-        $this->setMessage(JText::_('COM_CONFMGT_ITEM_DELETED_SUCCESSFULLY'));
-        $link = 'index.php?option=com_confmgt&view=presenattions&linkid='.$linkid;
-        $this->setRedirect(JRoute::_($link, false));
+    }
 
 
-		// Flush the data from the session.
-		$app->setUserState('com_confmgt.edit.presentation.data', null);
-	}
-    
-    
 }

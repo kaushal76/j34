@@ -589,7 +589,7 @@ class ConfmgtModelRev1ewersforPaperForm extends JModelForm
 		$html = $html." action=\"".JRoute::_('index.php')."\" method=\"post\" class=\"form-validate\" enctype=\"multipart/form-data\">";
 		$html = $html.JHtml::_('form.token');
   		$html = $html."<input type=\"hidden\" name=\"option\" value=\"com_confmgt\" />";
-  		$html = $html."<input type=\"hidden\" name=\"view\" value=\"camerareadypaperform\" />";
+  		$html = $html."<input type=\"hidden\" name=\"view\" value=\"camerareadypaperform_old\" />";
 		$html = $html."<input type=\"hidden\" name=\"jform['linkid']\" value=\"".$id."\" />";
 		$html = $html."<input type=\"hidden\" name=\"jform['mode']\" value=\"".$mode."\" />";
   		$html = $html."<button class=\"btn btn-default\" type=\"submit\">";
