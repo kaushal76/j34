@@ -17,24 +17,7 @@ $url = 'components/com_confmgt/assets/js/jquery_custom.js';
 $document->addScript($url);
 ?>
 <?php
-if (!$this->paper->fullpaper_full_review_outcome == 0) { ?>
-    <div class="alert alert-block alert-error fade in">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <h4 class="alert-heading"><?php echo JText::_('Review results have been posted to the authors'); ?> </h4>
-        <p><?php echo JText::_('Review results for this paper have already been posted to the authors. You can view the posted review results under the "Paper details" tab.'); ?> </p>
-    </div>
-    <?php
-}
-
-if (!$this->rev1ews) { ?>
-    <div class="alert alert-block alert-error fade in">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <h4 class="alert-heading"><?php echo JText::_('No reviews received yet'); ?> </h4>
-        <p><?php echo JText::_('No reviews received from the assigned reviewers for this paper yet. However, you may post a review result to the author by inserting your own comments '); ?> </p>
-    </div>
-    <?php
-}
-
+echo $this->loadTemplate('alert');
 ?>
 <div>
     <ul class="nav nav-tabs" id="tabs">

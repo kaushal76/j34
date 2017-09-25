@@ -14,7 +14,7 @@ defined('_JEXEC') or die;
     <div class="panel-heading">
         <h1>
             <?php
-            echo JText::_('COM_CONFMGT_PAPER_AUTHOR_PANEL_HEADING') . ' - ' . JText::_('Paper ID') . $this->paper->paper_id; ?>
+            echo JText::_('Authors for the paper ') . ' - ' . JText::_('Paper ID') . $this->paper->paper_id; ?>
         </h1>
     </div>
     <div class="panel-body">
@@ -24,7 +24,7 @@ defined('_JEXEC') or die;
         <thead>
         <tr>
             <th width="5%" class="header"><?php echo JText::_('#'); ?></th>
-            <th width="95%" class="header"><?php echo JText::_('COM_CONFMGT_FORM_LBL_PAPER_AUTHORS'); ?></th>
+            <th width="95%" class="header"><?php echo JText::_('Authors'); ?></th>
         </tr>
         </thead>
         <tbody>

@@ -14,15 +14,14 @@ defined('_JEXEC') or die;
     <div class="panel-heading">
         <h1>
             <?php
-            echo JText::_('COM_CONFMGT_PAPER_PANEL_HEADING') . ' - ' . JText::_('Paper ID') . $this->paper->paper_id; ?>
+            echo JText::_('Details of the ') . ' - ' . JText::_('Paper ID') . $this->paper->paper_id; ?>
         </h1>
     </div>
     <div class="panel-body"></div>
     <table class="table table-striped">
         <tr>
             <td width="35%" class="header"><?php
-                echo JText::_('COM_CONFMGT_FORM_LBL_PAPER_ABSTRACT_REVIEW_OUTCOME'); ?>
-                :
+                echo JText::_('Abstract review outcome'); ?>
             </td>
             <td width="65%"><?php
                 if ($this->paper->abstract_abstract_review_outcome == 0) {
@@ -33,8 +32,7 @@ defined('_JEXEC') or die;
         </tr>
         <tr>
             <td class="header"><?php
-                echo JText::_('COM_CONFMGT_FORM_LBL_PAPER_ABSTRACT_REVIEW_COMMENTS'); ?>
-                :
+                echo JText::_('Abstract review comments'); ?>
             </td>
             <td><?php
                 if (empty($this->paper->abstract_abstract_review_comments)) {
@@ -45,8 +43,7 @@ defined('_JEXEC') or die;
         </tr>
         <tr>
             <td class="header"><?php
-                echo JText::_('COM_CONFMGT_FORM_LBL_PAPER_FULL_PAPER'); ?>
-                :
+                echo JText::_('Full paper'); ?>
             </td>
             <td><?php
                 if (empty($this->paper->fullpaper_full_paper)) {
@@ -58,8 +55,7 @@ defined('_JEXEC') or die;
         </tr>
         <tr>
             <td class="header"><?php
-                echo JText::_('COM_CONFMGT_FORM_LBL_PAPER_FULL_REVIEW_OUTCOME'); ?>
-                :
+                echo JText::_('Full paper review outcome'); ?>
             </td>
             <td><?php
                 if (empty($this->paper->fullpaper_full_review_outcome)) {
@@ -70,8 +66,7 @@ defined('_JEXEC') or die;
         </tr>
         <tr>
             <td class="header"><?php
-                echo JText::_('COM_CONFMGT_FORM_LBL_PAPER_FULL_REVIEW_COMMENTS'); ?>
-                :
+                echo JText::_('Full paper review comments'); ?>
             </td>
             <td><?php
                 if (empty($this->paper->fullpaper_full_review_comments)) {
@@ -82,32 +77,31 @@ defined('_JEXEC') or die;
         </tr>
         <tr>
             <td class="header"><?php
-                echo JText::_('COM_CONFMGT_FORM_LBL_PAPER_CAMERA_READY'); ?>
-                :
+                echo JText::_('Camera ready paper'); ?>
             </td>
             <td><?php
                 if (empty($this->paper->camera_camera_ready)) {
                     echo JText::_('N/A');
                 } else {
                     echo $this->paper->camera_camera_ready;
+                    echo $this->paper->cameraready_download;
                 } ?></td>
         </tr>
         <tr>
             <td class="header"><?php
-                echo JText::_('COM_CONFMGT_FORM_LBL_PAPER_PRESENTATION'); ?>
-                :
+                echo JText::_('Presentation'); ?>
             </td>
             <td><?php
                 if (empty($this->paper->presentation)) {
                     echo JText::_('N/A');
                 } else {
                     echo $this->paper->presentation_presentation;
+                    echo $this->paper->presentation_download;
                 } ?></td>
         </tr>
         <tr>
             <td class="header"><?php
-                echo JText::_('COM_CONFMGT_FORM_LBL_PAPER_CREATED_BY'); ?>
-                :
+                echo JText::_('Submitted by: '); ?>
             </td>
             <td><?php
                 echo $this->paper->paper_created_by; ?></td>

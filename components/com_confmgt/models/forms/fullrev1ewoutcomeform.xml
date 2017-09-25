@@ -26,9 +26,6 @@
 
        <field name="created_by" type="createdby" default="" 
             label="COM_CONFMGT_FORM_LBL_PAPER_CREATED_BY"
-            description="COM_CONFMGT_FORM_DESC_PAPER_CREATED_BY"  /> 
-
-        <field name="checked_out" type="hidden" filter="unset" />
-        <field name="checked_out_time" type="hidden" filter="unset" />
+            description="COM_CONFMGT_FORM_DESC_PAPER_CREATED_BY"  />
 	</fieldset>
 </form>

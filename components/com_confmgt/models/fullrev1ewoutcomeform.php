@@ -20,6 +20,7 @@ class ConfmgtModelfullrev1ewoutcomeForm extends JModelForm
 {
 
     var $_item = null;
+    var $_paper_item = null;
 
     /**
      * Method to auto-populate the model state.
@@ -38,7 +39,6 @@ class ConfmgtModelfullrev1ewoutcomeForm extends JModelForm
         } else {
             $id = JFactory::getApplication()->input->get('linkid');
             JFactory::getApplication()->setUserState('com_confmgt.edit.paper.id', $id);
-            $linkid = JFactory::getApplication()->setUserState('com_confmgt.linkid', $id);
         }
         $this->setState('paper.id', $id);
 
@@ -86,9 +86,6 @@ class ConfmgtModelfullrev1ewoutcomeForm extends JModelForm
 
             if (empty($id)) {
                 $id = $this->getState('paper.id');
-                if (empty($id)) {
-                    $this->getLinkid();
-                }
             }
 
             // Get a level row instance.
@@ -114,7 +111,6 @@ class ConfmgtModelfullrev1ewoutcomeForm extends JModelForm
                 JFactory::getApplication()->enqueueMessage($error, 'error');
             }
         }
-
         return $this->_item;
     }
 
@@ -258,9 +254,8 @@ class ConfmgtModelfullrev1ewoutcomeForm extends JModelForm
         // Get the form.
         $form = $this->loadForm('com_confmgt.paper', 'fullrev1ewoutcomeform', array('control' => 'jform', 'load_data' => $loadData));
         if (empty($form)) {
-            throw new Exception('Cound not load form', 500);
+            throw new Exception('Cound not load form',500);
         }
-
         return $form;
     }
 
@@ -290,22 +285,17 @@ class ConfmgtModelfullrev1ewoutcomeForm extends JModelForm
     public function save($data)
     {
         $id = (!empty($data['id'])) ? $data['id'] : (int)$this->getState('paper.id');
-
-        $authorised = AclHelper::isThemeleader(0, $id);
-
-        if (!$authorised) {
-            throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 403);
-        }
-
         $table = $this->getTable();
         $fullpaper_table = $this->getTable('fullpaper', 'ConfmgtTable');
-        if (!$table->load($table->id)) {
+
+        if (!$table->load($id)) {
             JFactory::getApplication()->enqueueMessage('Could not load the paper data', 'error');
             return false;
         }
 
         $fullpaper_data = $data;
         $fullpaper_data['id'] = $table->fullpaper_id;
+
 
         //save to the fullpapers table
         if (!$fullpaper_table->save($fullpaper_data) === true) {

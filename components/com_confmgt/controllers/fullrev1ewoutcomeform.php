@@ -1,8 +1,8 @@
 <?php
 /**
- * @version     2.5.7
+ * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
  */
@@ -12,7 +12,11 @@ defined('_JEXEC') or die;
 require_once JPATH_COMPONENT.'/controller.php';
 
 /**
- * Paper controller class.
+ * Controller class for Full Paper Review Outcomes
+ *
+ * @package  CONFMGT
+ *
+ * @since version 3.8.0
  */
 class ConfmgtControllerfullrev1ewoutcomeForm extends ConfmgtController
 {
@@ -34,8 +38,7 @@ class ConfmgtControllerfullrev1ewoutcomeForm extends ConfmgtController
 		$app->setUserState('com_confmgt.edit.paper.id', $editId);
 
 		// Get the model.
-		$model = $this->getModel('fullrev1ewoutcomeForm', 'ConfmgtModel'); 
-		$linkid = $model->getLinkid();
+		$model = $this->getModel('fullrev1ewoutcomeForm', 'ConfmgtModel');
 
 		// Check out the item
 		if ($editId) {
@@ -71,11 +74,14 @@ class ConfmgtControllerfullrev1ewoutcomeForm extends ConfmgtController
 		$data = JFactory::getApplication()->input->get('jform', array(), 'array');
 
 		// Validate the posted data.
+
+
 		$form = $model->getForm();
 		if (!$form) {
-			JError::raiseError(500, $model->getError());
+            JFactory::$application->enqueueMessage($model->getError(),'error');
 			return false;
 		}
+
 
 		// Validate the posted data.
 		$data = $model->validate($form, $data);
@@ -99,7 +105,7 @@ class ConfmgtControllerfullrev1ewoutcomeForm extends ConfmgtController
 
 			// Redirect back to the edit screen.
 			$id = (int) $app->getUserState('com_confmgt.edit.paper.id');
-			$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=fullrev1ewoutcomeform&layout=edit&id='.$id, false));
+			$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=fullrev1ewoutcomeform&layout=edit&id='.$id.'&linkid='.$id, false));
 			return false;
 		}
 
@@ -186,7 +192,7 @@ class ConfmgtControllerfullrev1ewoutcomeForm extends ConfmgtController
 		// Validate the posted data.
 		$form = $model->getForm();
 		if (!$form) {
-			JError::raiseError(500, $model->getError());
+            throw new Exception($model->getError(),500);
 			return false;
 		}
 
@@ -231,8 +237,7 @@ class ConfmgtControllerfullrev1ewoutcomeForm extends ConfmgtController
 			return false;
 		}
 
-            
-        // Check in the profile.
+        // Check in
         if ($return) {
             $model->checkin($return);
         }

@@ -20,40 +20,35 @@ defined('_JEXEC') or die;
     <table class="table table-striped">
         <tr>
             <td width="23%" class="header"><?php
-                echo JText::_('COM_CONFMGT_FORM_LBL_PAPER_ID'); ?>
-                :
+                echo JText::_('Paper ID: '); ?>
             </td>
             <td width="77%"><?php
                 echo $this->paper->paper_id; ?></td>
         </tr>
         <tr>
             <td class="header"><?php
-                echo JText::_('COM_CONFMGT_FORM_LBL_PAPER_TITLE'); ?>
-                :
+                echo JText::_('Paper Title: '); ?>
             </td>
             <td><?php
                 echo $this->paper->paper_title; ?></td>
         </tr>
         <tr>
             <td class="header"><?php
-                echo JText::_('COM_CONFMGT_FORM_LBL_PAPER_ABSTRACT'); ?>
-                :
+                echo JText::_('Abstract: '); ?>
             </td>
             <td><?php
                 echo nl2br($this->paper->abstract_abstract); ?></td>
         </tr>
         <tr>
             <td class="header"><?php
-                echo JText::_('COM_CONFMGT_FORM_LBL_PAPER_KEYWORDS'); ?>
-                :
+                echo JText::_('Keywords: '); ?>
             </td>
             <td><?php
                 echo $this->paper->paper_keywords; ?></td>
         </tr>
         <tr>
             <td class="header"><?php
-                echo JText::_('COM_CONFMGT_FORM_LBL_PAPER_TYPE'); ?>
-                :
+                echo JText::_('Type of Submission: '); ?>
             </td>
             <td><?php
                 echo $this->paper->type_txt; ?></td>
