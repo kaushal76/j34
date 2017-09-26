@@ -228,7 +228,7 @@ class ConfmgtControllerPaper extends ConfmgtController
 
     /**
      * Method to download a Camera Ready Paper.
-     * @return void
+     *
      *
      * @since version 3.8.0
      */
@@ -244,7 +244,7 @@ class ConfmgtControllerPaper extends ConfmgtController
 
     /**
      * Method to download a Presentation.
-     * @return void
+     *
      *
      * @since version 3.8.0
      */

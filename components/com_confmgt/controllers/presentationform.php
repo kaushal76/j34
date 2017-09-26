@@ -170,7 +170,7 @@ class ConfmgtControllerPresentationForm extends ConfmgtController
      * Method to remove a full paper
      *
      * @since version 3.8.0
-     * TODO complete the remove function for full papers
+     * TODO complete the remove function for presentations
      */
     public function remove()
     {
