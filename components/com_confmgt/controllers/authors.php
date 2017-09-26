@@ -1,8 +1,8 @@
 <?php
 /**
- * @version     2.5.7
+ * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
  */
@@ -11,8 +11,11 @@ defined('_JEXEC') or die;
 
 require_once JPATH_COMPONENT.'/controller.php';
 
+
 /**
- * Authors list controller class.
+ * @package     Controller class for authors list
+ *
+ * @since version 3.8.0
  */
 class ConfmgtControllerAuthors extends ConfmgtController
 {
@@ -71,8 +74,6 @@ class ConfmgtControllerAuthors extends ConfmgtController
 	 */
 	public function saveorder()
 	{
-		// Check for request forgeries.
-		//JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
 		// Get the input
 		$pks = JFactory::getApplication()->input->get('cid', null, 'array');
@@ -80,8 +81,8 @@ class ConfmgtControllerAuthors extends ConfmgtController
 		
 
 		// Sanitize the input
-		JArrayHelper::toInteger($pks);
-		JArrayHelper::toInteger($order);
+        Joomla\Utilities\ArrayHelper::toInteger($pks);
+        Joomla\Utilities\ArrayHelper::toInteger($order);
 
 		// Get the model
 		$model = $this->getModel();
@@ -94,7 +95,8 @@ class ConfmgtControllerAuthors extends ConfmgtController
 		{
 			// Reorder failed
 			$message = JText::sprintf('JLIB_APPLICATION_ERROR_REORDER_FAILED', $model->getError());
-			$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=authors&layout=reorder&linkid='.$linkid, false), $message, 'error');
+            JFactory::$application->enqueueMessage($message,'error');
+			$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=authors&layout=reorder&linkid='.$linkid, false));
 			return false;
 		}
 		else

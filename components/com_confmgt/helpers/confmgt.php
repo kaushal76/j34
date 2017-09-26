@@ -90,9 +90,15 @@ abstract class MainHelper
         $query->select('a.*')
             ->select($db->quoteName('b.userid', 'leaderid'))
             ->select($db->quoteName('b.id', 'themeid'))
-            ->select($db->quoteName('b.title', 'themename'));
+            ->select($db->quoteName('b.title', 'themename'))
+            ->select($db->quoteName('c.full_review_outcome', 'c.full_review_outcome'))
+            ->select($db->quoteName('c.full_review_comments', 'full_review_comments'))
+            ->select($db->quoteName('d.abstract_review_outcome', 'abstract_review_outcome'))
+            ->select($db->quoteName('d.abstract_review_comments', 'abstract_review_comments'));
         $query->from($db->quoteName('#__confmgt_papers', 'a'));
-        $query->join('INNER', $db->quoteName('#__confmgt_themes', 'b') . ' ON (' . $db->quoteName('a.theme') . ' = ' . $db->quoteName('b.id') . ')');
+        $query->join('LEFT', $db->quoteName('#__confmgt_themes', 'b') . ' ON (' . $db->quoteName('a.theme') . ' = ' . $db->quoteName('b.id') . ')');
+        $query->join('LEFT', $db->quoteName('#__confmgt_abstracts', 'd') . ' ON (' . $db->quoteName('a.abstract_id') . ' = ' . $db->quoteName('d.id') . ')');
+        $query->join('LEFT', $db->quoteName('#__confmgt_fullpapers', 'c') . ' ON (' . $db->quoteName('a.fullpaper_id') . ' = ' . $db->quoteName('c.id') . ')');
         $query->where('a.id = ' . (int)$paperid);
 
         // get the number of records

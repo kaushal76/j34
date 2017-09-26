@@ -1,8 +1,8 @@
 <?php
 /**
- * @version     2.5.7
+ * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
  */
@@ -11,8 +11,13 @@ defined('_JEXEC') or die;
 
 require_once JPATH_COMPONENT.'/controller.php';
 
+
 /**
- * Author controller class.
+ * Controller class for Author
+ *
+ * @package     CONFMGT
+ *
+ * @since version 3.8.0
  */
 class ConfmgtControllerAuthorForm extends ConfmgtController
 {
@@ -52,7 +57,7 @@ class ConfmgtControllerAuthorForm extends ConfmgtController
 	}
 
 	/**
-	 * Method to save a user's profile data.
+	 * Method to save a Author data.
 	 *
 	 * @return	void
 	 * @since	1.6
@@ -74,8 +79,7 @@ class ConfmgtControllerAuthorForm extends ConfmgtController
 		// Get the form.
 		$form = $model->getForm();
 		if (!$form) {
-			JError::raiseError(500, $model->getError());
-			return false;
+			throw new Exception($model->getError(),500);
 		}
 		
 		
@@ -97,13 +101,12 @@ class ConfmgtControllerAuthorForm extends ConfmgtController
 			}
 
 			// Save the data in the session.
-			$app->setUserState('com_confmgt.edit.author.data', JRequest::getVar('jform'),array());
+			$app->setUserState('com_confmgt.edit.author.data', JFactory::getApplication()->input->get('jform', array(), 'array'),array());
 
 			// Redirect back to the edit screen.
 			$id = (int) $app->getUserState('com_confmgt.edit.author.id');
 			$this->setRedirect($url_fail, false);
-			
-			//$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=authorform&layout=edit&id='.$id, false));
+
 			return false;
 		}
 
@@ -121,24 +124,22 @@ class ConfmgtControllerAuthorForm extends ConfmgtController
 			$this->setMessage(JText::sprintf('Save failed', $model->getError()), 'warning');
 			
 			$this->setRedirect(JRoute::_($url_fail.$id, false));
-			//$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=authorform&layout=edit&id='.$id, false));
 			return false;
 		}
 
             
-        // Check in the profile.
+        // Check in the item
         if ($return) {
             $model->checkin($return);
         }
         
 		
-        // Clear the profile id from the session.
+        // Clear the  id from the session.
         $app->setUserState('com_confmgt.edit.author.id', null);
 
  
         $this->setMessage(JText::_('COM_CONFMGT_ITEM_SAVED_SUCCESSFULLY'));
 		$this->setRedirect(JRoute::_($url_success, false));
-        //$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=authors', false)); 
 
 		// Flush the data from the session.
 		$app->setUserState('com_confmgt.edit.author.data', null);
@@ -181,6 +182,7 @@ class ConfmgtControllerAuthorForm extends ConfmgtController
 		// Initialise variables.
 		$app	= JFactory::getApplication();
 		$model = $this->getModel('AuthorForm', 'ConfmgtModel');
+        $linkId	= JFactory::getApplication()->input->getInt('linkid', null, 'array');
 
 		// Get the user data.
 		$data = JFactory::getApplication()->input->get('jform', array(), 'array');
@@ -188,7 +190,7 @@ class ConfmgtControllerAuthorForm extends ConfmgtController
 		// Validate the posted data.
 		$form = $model->getForm();
 		if (!$form) {
-			JError::raiseError(500, $model->getError());
+			throw new Exception($model->getError(),500);
 			return false;
 		}
 
@@ -241,16 +243,13 @@ class ConfmgtControllerAuthorForm extends ConfmgtController
         
         // Clear the profile id from the session.
         $app->setUserState('com_confmgt.edit.author.id', null);
+        // Flush the data from the session.
+        $app->setUserState('com_confmgt.edit.author.data', null);
 
         // Redirect to the list screen.
         $this->setMessage(JText::_('COM_CONFMGT_ITEM_DELETED_SUCCESSFULLY'));
-        $menu = & JSite::getMenu();
-        $item = $menu->getActive();
-        $this->setRedirect(JRoute::_($item->link, false));
+        $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=authors&linkid='.$linkId, false));
 
-		// Flush the data from the session.
-		$app->setUserState('com_confmgt.edit.author.data', null);
 	}
-    
     
 }
