@@ -1,220 +1,176 @@
 <?php
 /**
- * @version     2.5.7
+ * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
  */
 // No direct access
 defined('_JEXEC') or die;
 
-require_once JPATH_COMPONENT.'/controller.php';
+require_once JPATH_COMPONENT . '/controller.php';
 
 /**
- * Theme controller class.
+ * Controller class for the ThemeForm
+ *
+ * @package  CONFMGT
+ *
+ * @since version 3.8.0
  */
 class ConfmgtControllerThemeForm extends ConfmgtController
 {
+    /**
+     * Method to check out an item for editing and redirect to the edit form.
+     *
+     * @since    1.6
+     */
+    public function edit()
+    {
+        $app = JFactory::getApplication();
 
-	/**
-	 * Method to check out an item for editing and redirect to the edit form.
-	 *
-	 * @since	1.6
-	 */
-	public function edit()
-	{
-		$app			= JFactory::getApplication();
+        $previousId = (int)$app->getUserState('com_confmgt.edit.theme.id');
+        $editId = JFactory::getApplication()->input->getInt('id', null, 'array');
+        $app->setUserState('com_confmgt.edit.theme.id', $editId);
 
-		// Get the previous edit id (if any) and the current edit id.
-		$previousId = (int) $app->getUserState('com_confmgt.edit.theme.id');
-		$editId	= JFactory::getApplication()->input->getInt('id', null, 'array');
+        $model = $this->getModel('ThemeForm', 'ConfmgtModel');
 
-		// Set the user id for the user to edit in the session.
-		$app->setUserState('com_confmgt.edit.theme.id', $editId);
-
-		// Get the model.
-		$model = $this->getModel('ThemeForm', 'ConfmgtModel');
-
-		// Check out the item
-		if ($editId) {
+        if ($editId) {
             $model->checkout($editId);
-		}
+        }
 
-		// Check in the previous user.
-		if ($previousId) {
+        if ($previousId) {
             $model->checkin($previousId);
-		}
+        }
+        $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=theme&layout=edit', false));
+    }
 
-		// Redirect to the edit screen.
-		$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=theme&layout=edit', false));
-	}
+    /**
+     * Method to save data.
+     *
+     * @return    void
+     * @since    1.6
+     */
+    public function save()
+    {
+        JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
-	/**
-	 * Method to save a user's profile data.
-	 *
-	 * @return	void
-	 * @since	1.6
-	 */
-	public function save()
-	{
-		// Check for request forgeries.
-		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+        $app = JFactory::getApplication();
+        $model = $this->getModel('ThemeForm', 'ConfmgtModel');
+        $data = JFactory::getApplication()->input->get('jform', array(), 'array');
 
-		// Initialise variables.
-		$app	= JFactory::getApplication();
-		$model = $this->getModel('ThemeForm', 'ConfmgtModel');
+        $form = $model->getForm();
+        if (!$form) {
+            throw new Exception($model->getError(), 500);
+        }
 
-		// Get the user data.
-		$data = JFactory::getApplication()->input->get('jform', array(), 'array');
+        $data = $model->validate($form, $data);
 
-		// Validate the posted data.
-		$form = $model->getForm();
-		if (!$form) {
-			JError::raiseError(500, $model->getError());
-			return false;
-		}
+        if ($data === false) {
+            $errors = $model->getErrors();
 
-		// Validate the posted data.
-		$data = $model->validate($form, $data);
+            for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++) {
+                if ($errors[$i] instanceof Exception) {
+                    $app->enqueueMessage($errors[$i]->getMessage(), 'warning');
+                } else {
+                    $app->enqueueMessage($errors[$i], 'warning');
+                }
+            }
 
-		// Check for errors.
-		if ($data === false) {
-			// Get the validation messages.
-			$errors	= $model->getErrors();
+            $app->setUserState('com_confmgt.edit.theme.data', JFactory::getApplication()->input->get('jform', array(), 'array'), array());
+            $id = (int)$app->getUserState('com_confmgt.edit.theme.id');
+            $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=themeform&layout=edit&id=' . $id, false));
+            return false;
+        }
 
-			// Push up to three validation messages out to the user.
-			for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++) {
-				if ($errors[$i] instanceof Exception) {
-					$app->enqueueMessage($errors[$i]->getMessage(), 'warning');
-				} else {
-					$app->enqueueMessage($errors[$i], 'warning');
-				}
-			}
+        $return = $model->save($data);
 
-			// Save the data in the session.
-			$app->setUserState('com_confmgt.edit.theme.data', JRequest::getVar('jform'),array());
+        if ($return === false) {
+            $app->setUserState('com_confmgt.edit.theme.data', $data);
+            $id = (int)$app->getUserState('com_confmgt.edit.theme.id');
+            JFactory::$application->enqueueMessage(JText::sprintf('Save failed', $model->getError()), 'warning');
+            $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=themeform&layout=edit&id=' . $id, false));
+            return false;
+        }
 
-			// Redirect back to the edit screen.
-			$id = (int) $app->getUserState('com_confmgt.edit.theme.id');
-			$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=themeform&layout=edit&id='.$id, false));
-			return false;
-		}
-
-		// Attempt to save the data.
-		$return	= $model->save($data);
-
-		// Check for errors.
-		if ($return === false) {
-			// Save the data in the session.
-			$app->setUserState('com_confmgt.edit.theme.data', $data);
-
-			// Redirect back to the edit screen.
-			$id = (int)$app->getUserState('com_confmgt.edit.theme.id');
-			$this->setMessage(JText::sprintf('Save failed', $model->getError()), 'warning');
-			$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=themeform&layout=edit&id='.$id, false));
-			return false;
-		}
-
-            
-        // Check in the profile.
         if ($return) {
             $model->checkin($return);
         }
-        
-        // Clear the profile id from the session.
-        $app->setUserState('com_confmgt.edit.theme.id', null);
 
-        // Redirect to the list screen.
+        $app->setUserState('com_confmgt.edit.theme.id', null);
         $this->setMessage(JText::_('COM_CONFMGT_ITEM_SAVED_SUCCESSFULLY'));
         $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=papers&layout=leader_default', false));
-
-		// Flush the data from the session.
-		$app->setUserState('com_confmgt.edit.theme.data', null);
-	}
-    
-    
-    function cancel() {
-		$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=papers&layout=leader_default', false));
+        $app->setUserState('com_confmgt.edit.theme.data', null);
     }
-    
-	public function remove()
-	{
-		// Check for request forgeries.
-		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
-		// Initialise variables.
-		$app	= JFactory::getApplication();
-		$model = $this->getModel('ThemeForm', 'ConfmgtModel');
+    /**
+     * Method to cancel a form save
+     *
+     * @since version 3.8.0
+     */
 
-		// Get the user data.
-		$data = JFactory::getApplication()->input->get('jform', array(), 'array');
+    function cancel()
+    {
+        $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=papers&layout=leader_default', false));
+    }
 
-		// Validate the posted data.
-		$form = $model->getForm();
-		if (!$form) {
-			JError::raiseError(500, $model->getError());
-			return false;
-		}
+    /**
+     * Method to remove theme
+     *
+     * @return bool
+     *
+     * @since version 3.8.0
+     */
+    public function remove()
+    {
+        JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+        $app = JFactory::getApplication();
+        $model = $this->getModel('ThemeForm', 'ConfmgtModel');
 
-		// Validate the posted data.
-		$data = $model->validate($form, $data);
+        $data = JFactory::getApplication()->input->get('jform', array(), 'array');
 
-		// Check for errors.
-		if ($data === false) {
-			// Get the validation messages.
-			$errors	= $model->getErrors();
+        $form = $model->getForm();
+        if (!$form) {
+            throw new Exception($model->getError(), 500);
+        }
+        $data = $model->validate($form, $data);
 
-			// Push up to three validation messages out to the user.
-			for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++) {
-				if ($errors[$i] instanceof Exception) {
-					$app->enqueueMessage($errors[$i]->getMessage(), 'warning');
-				} else {
-					$app->enqueueMessage($errors[$i], 'warning');
-				}
-			}
+        if ($data === false) {
+            $errors = $model->getErrors();
 
-			// Save the data in the session.
-			$app->setUserState('com_confmgt.edit.theme.data', $data);
+            for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++) {
+                if ($errors[$i] instanceof Exception) {
+                    $app->enqueueMessage($errors[$i]->getMessage(), 'warning');
+                } else {
+                    $app->enqueueMessage($errors[$i], 'warning');
+                }
+            }
 
-			// Redirect back to the edit screen.
-			$id = (int) $app->getUserState('com_confmgt.edit.theme.id');
-			$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=theme&layout=edit&id='.$id, false));
-			return false;
-		}
+            $app->setUserState('com_confmgt.edit.theme.data', $data);
+            $id = (int)$app->getUserState('com_confmgt.edit.theme.id');
+            $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=theme&layout=edit&id=' . $id, false));
+            return false;
+        }
 
-		// Attempt to save the data.
-		$return	= $model->delete($data);
+        $return = $model->delete($data);
 
-		// Check for errors.
-		if ($return === false) {
-			// Save the data in the session.
-			$app->setUserState('com_confmgt.edit.theme.data', $data);
+        if ($return === false) {
+            $app->setUserState('com_confmgt.edit.theme.data', $data);
+            $id = (int)$app->getUserState('com_confmgt.edit.theme.id');
+            $this->setMessage(JText::sprintf('Delete failed', $model->getError()), 'warning');
+            $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=theme&layout=edit&id=' . $id, false));
+            return false;
+        }
 
-			// Redirect back to the edit screen.
-			$id = (int)$app->getUserState('com_confmgt.edit.theme.id');
-			$this->setMessage(JText::sprintf('Delete failed', $model->getError()), 'warning');
-			$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=theme&layout=edit&id='.$id, false));
-			return false;
-		}
-
-            
-        // Check in the profile.
         if ($return) {
             $model->checkin($return);
         }
-        
-        // Clear the profile id from the session.
+
         $app->setUserState('com_confmgt.edit.theme.id', null);
 
-        // Redirect to the list screen.
-        $this->setMessage(JText::_('COM_CONFMGT_ITEM_DELETED_SUCCESSFULLY'));
-        $menu = & JSite::getMenu();
-        $item = $menu->getActive();
-        $this->setRedirect(JRoute::_($item->link, false));
+        JFactory::$application->enqueueMessage(JText::_('COM_CONFMGT_ITEM_DELETED_SUCCESSFULLY'));
+        $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=themes', false));
+        $app->setUserState('com_confmgt.edit.theme.data', null);
+    }
 
-		// Flush the data from the session.
-		$app->setUserState('com_confmgt.edit.theme.data', null);
-	}
-    
 }

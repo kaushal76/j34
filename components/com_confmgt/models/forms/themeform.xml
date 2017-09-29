@@ -5,8 +5,8 @@
 			
 		<field name="title" type="text" 
 		
-		label="COM_CONFMGT_FORM_LBL_THEME_TITLE" 
-		description="COM_CONFMGT_FORM_DESC_THEME_TITLE" 
+		label="Theme title"
+		description="Please provide a theme title"
 		class="input-block-level"
 		required="true" 
 		filter="string"
@@ -15,8 +15,8 @@
 	
 		<field name="description" type="textarea"
                 
-            label="COM_CONFMGT_FORM_LBL_THEME_DESCRIPTION"
-            description="COM_CONFMGT_FORM_DESC_THEME_DESCRIPTION"        
+            label="Theme description"
+            description="Please provide a theme description"
             required="true" 
 			class="input-block-level"		
 			menu_published="0"
@@ -28,8 +28,8 @@
 		
 		<field name="userid" type="users"
                 
-            label="COM_CONFMGT_FORM_LBL_THEME_USERID"
-			description="COM_CONFMGT_FORM_DESC_THEME_USERID"  
+            label="Theme leader"
+			description="Please select a theme leader"
 			class="input-block-level"
 			input-type = "list"
 			required = "true"

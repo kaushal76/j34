@@ -1,8 +1,8 @@
 <?php
 /**
- * @version     2.5.7
+ * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - http://www.confmgt.com
  */
@@ -10,212 +10,170 @@
 // No direct access
 defined('_JEXEC') or die;
 
-require_once JPATH_COMPONENT.'/controller.php';
+require_once JPATH_COMPONENT . '/controller.php';
 
 /**
- * Paper controller class.
+ *
+ * Controller class for review outcome form
+ *
+ * @package CONFMGT
+ *
+ * @since version 3.8.0
  */
 class ConfmgtControllerRev1ewoutcomeForm extends ConfmgtController
 {
 
-	/**
-	 * Method to check out an item for editing and redirect to the edit form.
-	 *
-	 * @since	1.6
-	 */
-	public function edit()
-	{
-		$app = JFactory::getApplication();
+    /**
+     * Method to check out an item for editing and redirect to the edit form.
+     *
+     * @since    1.6
+     */
+    public function edit()
+    {
+        $app = JFactory::getApplication();
+        $previousId = (int)$app->getUserState('com_confmgt.edit.paper.id');
+        $editId = JFactory::getApplication()->input->getInt('id', null, 'array');
+        $app->setUserState('com_confmgt.edit.paper.id', $editId);
 
-		// Get the previous edit id (if any) and the current edit id.
-		$previousId = (int) $app->getUserState('com_confmgt.edit.paper.id');
-		$editId	= JFactory::getApplication()->input->getInt('id', null, 'array');
+        $model = $this->getModel('Rev1ewoutcomeForm', 'ConfmgtModel');
 
-		// Set the user id for the user to edit in the session.
-		$app->setUserState('com_confmgt.edit.paper.id', $editId);
-
-		// Get the model.
-		$model = $this->getModel('Rev1ewoutcomeForm', 'ConfmgtModel');
-
-		// Check out the item
-		if ($editId) {
+        if ($editId) {
             $model->checkout($editId);
-		}
+        }
 
-		// Check in the previous user.
-		if ($previousId) {
+        if ($previousId) {
             $model->checkin($previousId);
-		}
-
-		// Redirect to the edit screen.
-		$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=paper&layout=edit', false));
-	}
-
-	/**
-	 * Method to save a user's profile data.
-	 *
-	 * @return	void
-	 * @since	1.6
-	 */
-	public function save()
-	{
-		// Check for request forgeries.
-		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
-
-		// Initialise variables.
-		$app	= JFactory::getApplication();
-		$model = $this->getModel('Rev1ewoutcomeForm', 'ConfmgtModel');
-
-		// Get the user data.
-		$data = JFactory::getApplication()->input->get('jform', array(), 'array');
-
-		// Validate the posted data.
-		$form = $model->getForm();
-		if (!$form) {
-			JError::raiseError(500, $model->getError());
-			return false;
-		}
-
-		// Validate the posted data.
-		$data = $model->validate($form, $data);
-
-		// Check for errors.
-		if ($data === false) {
-			// Get the validation messages.
-			$errors	= $model->getErrors();
-
-			// Push up to three validation messages out to the user.
-			for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++) {
-				if ($errors[$i] instanceof Exception) {
-					$app->enqueueMessage($errors[$i]->getMessage(), 'warning');
-				} else {
-					$app->enqueueMessage($errors[$i], 'warning');
-				}
-			}
-
-			// Save the data in the session.
-			$app->setUserState('com_confmgt.edit.paper.data', JFactory::getApplication()->input->get('jform', array(), 'array'));
-
-			// Redirect back to the edit screen.
-			$id = (int) $app->getUserState('com_confmgt.edit.paper.id');
-			$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=rev1ewoutcomeform&layout=edit&id='.$id, false));
-			return false;
-		}
-
-		// Attempt to save the data.
-		$return	= $model->save($data);
-
-		// Check for errors.
-		if ($return === false) {
-			// Save the data in the session.
-			$app->setUserState('com_confmgt.edit.paper.data', $data);
-
-			// Redirect back to the edit screen.
-			$id = (int)$app->getUserState('com_confmgt.edit.paper.id');
-			$this->setMessage(JText::sprintf('Save failed', $model->getError()), 'warning');
-			$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=rev1ewoutcomeform&layout=edit&id='.$id, false)); 
-			return false;
-		}
-
-            
-        // Check in the profile.
-        if ($return) {
-            $model->checkin($return);
         }
-         
-	    // Clear the profile id from the session.
-        $app->setUserState('com_confmgt.edit.paper.id', null);
 
-        // Redirect to the list screen.
-        $this->setMessage(JText::_('COM_CONFMGT_ITEM_SAVED_SUCCESSFULLY'));
-        $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=paper&id='.$return.'&linkid='.$return, false));
-
-		// Flush the data from the session.
-		$app->setUserState('com_confmgt.edit.paper.data', null);
-		$app->setUserState('com_confmgt.new.abstract.id', null);
-	}
-    
-    
-    function cancel() {
-		$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=papers', false));
+        $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=paper&layout=edit', false));
     }
-    
-	public function remove()
-	{
-		// Check for request forgeries.
-		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
-		// Initialise variables.
-		$app	= JFactory::getApplication();
-		$model = $this->getModel('Rev1ewoutcomeForm', 'ConfmgtModel');
+    /**
+     * Method to save data.
+     *
+     * @return    void
+     * @since    1.6
+     */
+    public function save()
+    {
+        JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
-		// Get the user data.
-		$data = JFactory::getApplication()->input->get('jform', array(), 'array');
+        $app = JFactory::getApplication();
+        $model = $this->getModel('Rev1ewoutcomeForm', 'ConfmgtModel');
+        $data = JFactory::getApplication()->input->get('jform', array(), 'array');
 
-		// Validate the posted data.
-		$form = $model->getForm();
-		if (!$form) {
-			JError::raiseError(500, $model->getError());
-			return false;
-		}
+        // Validate the posted data.
+        $form = $model->getForm();
+        if (!$form) {
+            throw new Exception($model->getError(), 500);
+        }
+        $data = $model->validate($form, $data);
 
-		// Validate the posted data.
-		$data = $model->validate($form, $data);
+        if ($data === false) {
+            $errors = $model->getErrors();
 
-		// Check for errors.
-		if ($data === false) {
-			// Get the validation messages.
-			$errors	= $model->getErrors();
+            for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++) {
+                if ($errors[$i] instanceof Exception) {
+                    $app->enqueueMessage($errors[$i]->getMessage(), 'warning');
+                } else {
+                    $app->enqueueMessage($errors[$i], 'warning');
+                }
+            }
 
-			// Push up to three validation messages out to the user.
-			for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++) {
-				if ($errors[$i] instanceof Exception) {
-					$app->enqueueMessage($errors[$i]->getMessage(), 'warning');
-				} else {
-					$app->enqueueMessage($errors[$i], 'warning');
-				}
-			}
+            $app->setUserState('com_confmgt.edit.paper.data', JFactory::getApplication()->input->get('jform', array(), 'array'));
+            $id = (int)$app->getUserState('com_confmgt.edit.paper.id');
+            $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=rev1ewoutcomeform&layout=edit&id=' . $id, false));
+            return false;
+        }
 
-			// Save the data in the session.
-			$app->setUserState('com_confmgt.edit.paper.data', $data);
+        $return = $model->save($data);
 
-			// Redirect back to the edit screen.
-			$id = (int) $app->getUserState('com_confmgt.edit.paper.id');
-			$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=paper&layout=edit&id='.$id, false));
-			return false;
-		}
+        if ($return === false) {
+            $app->setUserState('com_confmgt.edit.paper.data', $data);
+            $id = (int)$app->getUserState('com_confmgt.edit.paper.id');
+            $this->setMessage(JText::sprintf('Save failed', $model->getError()), 'warning');
+            $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=rev1ewoutcomeform&layout=edit&id=' . $id, false));
+            return false;
+        }
 
-		// Attempt to save the data.
-		$return	= $model->delete($data);
-
-		// Check for errors.
-		if ($return === false) {
-			// Save the data in the session.
-			$app->setUserState('com_confmgt.edit.paper.data', $data);
-
-			// Redirect back to the edit screen.
-			$id = (int)$app->getUserState('com_confmgt.edit.paper.id');
-			$this->setMessage(JText::sprintf('Delete failed', $model->getError()), 'warning');
-			$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=paper&layout=edit&id='.$id, false));
-			return false;
-		}
-
-            
-        // Check in the profile.
         if ($return) {
             $model->checkin($return);
         }
-        
-        // Clear the profile id from the session.
+
         $app->setUserState('com_confmgt.edit.paper.id', null);
+        $this->setMessage(JText::_('COM_CONFMGT_ITEM_SAVED_SUCCESSFULLY'));
+        $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=paper&id=' . $return . '&linkid=' . $return, false));
 
-        // Redirect to the list screen.
+        $app->setUserState('com_confmgt.edit.paper.data', null);
+        $app->setUserState('com_confmgt.new.abstract.id', null);
+    }
+
+    /**
+     * Function to cancel
+     *
+     * @since version 3.8.0
+     */
+
+    function cancel()
+    {
+        $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=papers', false));
+    }
+
+    /**
+     * Function to remove a review outcome
+     *
+     * @return bool
+     *
+     * @since version 3.8.0
+     */
+    public function remove()
+    {
+        JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+        $app = JFactory::getApplication();
+        $model = $this->getModel('Rev1ewoutcomeForm', 'ConfmgtModel');
+        $data = JFactory::getApplication()->input->get('jform', array(), 'array');
+
+        $form = $model->getForm();
+        if (!$form) {
+            throw new Exception($model->getError(), 500);
+        }
+        $data = $model->validate($form, $data);
+
+        if ($data === false) {
+            $errors = $model->getErrors();
+
+            for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++) {
+                if ($errors[$i] instanceof Exception) {
+                    $app->enqueueMessage($errors[$i]->getMessage(), 'warning');
+                } else {
+                    $app->enqueueMessage($errors[$i], 'warning');
+                }
+            }
+
+            $app->setUserState('com_confmgt.edit.paper.data', $data);
+            $id = (int)$app->getUserState('com_confmgt.edit.paper.id');
+            $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=paper&layout=edit&id=' . $id, false));
+            return false;
+        }
+
+        $return = $model->delete($data);
+        if ($return === false) {
+            $app->setUserState('com_confmgt.edit.paper.data', $data);
+            $id = (int)$app->getUserState('com_confmgt.edit.paper.id');
+            $this->setMessage(JText::sprintf('Delete failed', $model->getError()), 'warning');
+            $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=paper&layout=edit&id=' . $id, false));
+            return false;
+        }
+
+        if ($return) {
+            $model->checkin($return);
+        }
+
+        $app->setUserState('com_confmgt.edit.paper.id', null);
         $this->setMessage(JText::_('COM_CONFMGT_ITEM_DELETED_SUCCESSFULLY'));
-		$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=papers', false));;
+        $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=papers', false));;
+        $app->setUserState('com_confmgt.edit.paper.data', null);
+    }
 
-		// Flush the data from the session.
-		$app->setUserState('com_confmgt.edit.paper.data', null);
-	}
-    
-    
+
 }

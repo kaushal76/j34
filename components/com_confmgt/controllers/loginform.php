@@ -12,7 +12,11 @@ defined('_JEXEC') or die;
 require_once JPATH_COMPONENT.'/controller.php';
 
 /**
- * Login controller class.
+ * Controller class for login
+ *
+ * @package  CONFGMT
+ *
+ * @since version 3.8.0
  */
 class ConfmgtControllerLoginForm extends ConfmgtController
 {
@@ -64,7 +68,7 @@ class ConfmgtControllerLoginForm extends ConfmgtController
 					$app->enqueueMessage($errors[$i], 'error');
 				}
 			}
-	
+
 			// Save the data in the session.
 			$app->setUserState('com_confmgt.edit.loginform.data', JFactory::getApplication()->input->get('jform', array(), 'array'));
 	
@@ -91,13 +95,23 @@ class ConfmgtControllerLoginForm extends ConfmgtController
 			$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=entrypage', false));
 		}
 	}
- 
-    public function cancel() 
+
+    /**
+     * Method to cancel a login
+     *
+     * @since version 3.8.0
+     */
+	public function cancel()
     {
 		$this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=entrypage', false)); 
 	}
-	
-	public function logout() 
+
+    /**
+     * Method to logout
+     *
+     * @since version 3.8.0
+     */
+	public function logout()
 	{
 		$app = JFactory::getApplication();
 		if ($app->logout()) 

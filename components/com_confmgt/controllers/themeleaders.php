@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     2.5.7
+ * @version     3.8.0
  * @package     com_confmgt
  * @copyright   Copyright (C) 2015. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -11,8 +11,13 @@ defined('_JEXEC') or die;
 
 require_once JPATH_COMPONENT.'/controller.php';
 
+
 /**
- * Themeleaders list controller class.
+ * Controller class for theme leaders
+ *
+ * @package  CONFMGT
+ *
+ * @since version 3.8.0
  */
 class ConfmgtControllerThemeleaders extends ConfmgtController
 {

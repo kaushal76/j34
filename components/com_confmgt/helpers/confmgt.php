@@ -221,7 +221,7 @@ abstract class MainHelper
 
     public static function getUsers()
     {
-        $db =& JFactory::getDBO();
+        $db = JFactory::getDBO();
         $query = "SELECT * FROM #__users";
         $db->setQuery($query);
 
