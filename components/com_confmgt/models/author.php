@@ -49,13 +49,12 @@ class ConfmgtModelAuthor extends JModelItem {
 	public function getLinkid()
 	{
         $linkid = JFactory::getApplication()->input->get('linkid',0,'int');
-		if ($linkid == 0)
-		{
-            throw new Exception(JText::_('JERROR_NO_PAPERID'),'500');
-            return false;
-		}else{		
-			return $linkid;
-		}		
+        if ($linkid == 0)
+        {
+            throw new Exception(JText::_('JERROR_NO_PAPERID'),500);
+        }else{
+            return $linkid;
+        }
 	}
 
 
@@ -88,7 +87,7 @@ class ConfmgtModelAuthor extends JModelItem {
 
                 // Convert the JTable to a clean JObject.
                 $properties = $table->getProperties(1);
-                $this->_item = JArrayHelper::toObject($properties, 'JObject');
+                $this->_item = Joomla\Utilities\ArrayHelper::toObject($properties, 'JObject');
             } elseif ($error = $table->getError()) {
                 $this->setError($error);
             }
@@ -101,7 +100,7 @@ class ConfmgtModelAuthor extends JModelItem {
 
 			if (isset($this->_item->full_review_outcome) && $this->_item->full_review_outcome != '') {
 				if(is_object($this->_item->full_review_outcome)){
-					$this->_item->full_review_outcome = JArrayHelper::fromObject($this->_item->full_review_outcome);
+					$this->_item->full_review_outcome = Joomla\Utilities\ArrayHelper::fromObject($this->_item->full_review_outcome);
 				}
 				$values = (is_array($this->_item->full_review_outcome)) ? $this->_item->full_review_outcome : explode(',',$this->_item->full_review_outcome);
 
@@ -116,13 +115,13 @@ class ConfmgtModelAuthor extends JModelItem {
 					}
 				}
 
-			$this->_item->full_review_outcome = !empty($textValue) ? implode(', ', $textValue) : $oneItem->full_review_outcome;
+			$this->_item->full_review_outcome = !empty($textValue) ? implode(', ', $textValue) : $this->_item->full_review_outcome;
 
 			}
 
 			if (isset($this->_item->abstract_review_outcome) && $this->_item->abstract_review_outcome != '') {
 				if(is_object($this->_item->abstract_review_outcome)){
-					$this->_item->abstract_review_outcome = JArrayHelper::fromObject($this->_item->abstract_review_outcome);
+					$this->_item->abstract_review_outcome = Joomla\Utilities\ArrayHelper::fromObject($this->_item->abstract_review_outcome);
 				}
 				$values = (is_array($this->_item->abstract_review_outcome)) ? $this->_item->abstract_review_outcome : explode(',',$this->_item->abstract_review_outcome);
 
@@ -137,7 +136,7 @@ class ConfmgtModelAuthor extends JModelItem {
 					}
 				}
 
-			$this->_item->abstract_review_outcome = !empty($textValue) ? implode(', ', $textValue) : $oneItem->abstract_review_outcome;
+			$this->_item->abstract_review_outcome = !empty($textValue) ? implode(', ', $textValue) : $this->_item->abstract_review_outcome;
 
 			}
 
@@ -168,7 +167,7 @@ class ConfmgtModelAuthor extends JModelItem {
             // Attempt to check the row in.
             if (method_exists($table, 'checkin')) {
                 if (!$table->checkin($id)) {
-                    $this->setError($table->getError());
+                    JFactory::$application->enqueueMessage($table->getError());
                     return false;
                 }
             }
@@ -199,7 +198,7 @@ class ConfmgtModelAuthor extends JModelItem {
             // Attempt to check the row out.
             if (method_exists($table, 'checkout')) {
                 if (!$table->checkout($user->get('id'), $id)) {
-                    $this->setError($table->getError());
+                    JFactory::$application->enqueueMessage($table->getError());
                     return false;
                 }
             }

@@ -52,10 +52,11 @@ class ConfmgtModelAbstractForm extends JModelForm
      */
     public function getLinkid()
     {
-        $linkid = JFactory::getApplication()->input->get('linkid');
-        if (!$linkid) {
-            throw new Exception(JText::_('JERROR_NO_PAPERID'));
-        } else {
+        $linkid = JFactory::getApplication()->input->get('linkid',0,'int');
+        if ($linkid == 0)
+        {
+            throw new Exception(JText::_('JERROR_NO_PAPERID'),500);
+        }else{
             return $linkid;
         }
     }
@@ -101,7 +102,18 @@ class ConfmgtModelAbstractForm extends JModelForm
 
 		return $this->_item;
 	}
-    
+
+    /**
+     * Method to get a table object
+     *
+     * @param string $type
+     * @param string $prefix
+     * @param array $config
+     *
+     * @return bool|JTable
+     *
+     * @since version 3.8.0
+     */
 	public function getTable($type = 'Abstract', $prefix = 'ConfmgtTable', $config = array())
 	{   
         $this->addTablePath(JPATH_COMPONENT_ADMINISTRATOR.'/tables');
@@ -246,10 +258,24 @@ class ConfmgtModelAbstractForm extends JModelForm
         }
 		return $return;
 	}
-    
-     function delete($data)
+
+    /**
+     * Function to delete a record
+     * @param $data
+     *
+     * @return bool|int
+     *
+     * @since version 3.8.0
+     */
+	function delete($data)
     {
         $id = (!empty($data['id'])) ? $data['id'] : (int)$this->getState('abstract.id');
+
+        $authorised = AclHelper::isAuthor($this->getLinkid());
+
+        if (!$authorised) {
+            throw new Exception('You are not authorised to view this resouce',403);
+        }
         
         $table = $this->getTable();
         if ($table->delete($data['id']) === true) {

@@ -48,12 +48,13 @@ class ConfmgtModelAbrev1ewoutcomeForm extends JModelForm
 
 	public function getLinkid()
 	{
-		$linkid = JFactory::getApplication()->input->get('linkid');
-		if (!$linkid) {
-			throw new Exception(JText::_('JERROR_NO_PAPERID'),404);
-		} else {
-			return $linkid;
-		}
+        $linkid = JFactory::getApplication()->input->get('linkid',0,'int');
+        if ($linkid == 0)
+        {
+            throw new Exception(JText::_('JERROR_NO_PAPERID'),500);
+        }else{
+            return $linkid;
+        }
 	}
 
 	/**
@@ -147,7 +148,6 @@ class ConfmgtModelAbrev1ewoutcomeForm extends JModelForm
 	 */
 	public function getAuthorsData()
 	{
-		// get the paper id		
 		$linkid = $this->getLinkid();
 		$rows = MainHelper::getAuthors((int)$linkid);
 		if ($rows) {

@@ -44,7 +44,7 @@ class ConfmgtViewAuthorform extends JViewLegacy {
         $authorised  = AclHelper::isAuthor($this->linkid);
 
         if ($authorised !== true) {
-            throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'));
+            throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'),500);
         }
 
         parent::display($tpl);

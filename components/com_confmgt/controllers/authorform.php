@@ -70,19 +70,16 @@ class ConfmgtControllerAuthorForm extends ConfmgtController
 		// Initialise variables.
 		$app	= JFactory::getApplication();
 		$model = $this->getModel('AuthorForm', 'ConfmgtModel');
-		
 
 		// Get the user data.
         $data = JFactory::getApplication()->input->get('jform', array(), 'array');
-
 
 		// Get the form.
 		$form = $model->getForm();
 		if (!$form) {
 			throw new Exception($model->getError(),500);
 		}
-		
-		
+
 		// Validate the posted data.
 		$data = $model->validate($form, $data);
 
@@ -121,7 +118,7 @@ class ConfmgtControllerAuthorForm extends ConfmgtController
 
 			// Redirect back to the edit screen.
 			$id = (int)$app->getUserState('com_confmgt.edit.author.id');
-			$this->setMessage(JText::sprintf('Save failed', $model->getError()), 'warning');
+			JFactory::$application->enqueueMessage(JText::sprintf('Save failed', $model->getError()), 'warning');
 			
 			$this->setRedirect(JRoute::_($url_fail.$id, false));
 			return false;
@@ -158,7 +155,6 @@ class ConfmgtControllerAuthorForm extends ConfmgtController
         $linkId	= JFactory::getApplication()->input->getInt('linkid', null, 'array');
 		$url_success = 'index.php?option=com_confmgt&view=authors&layout=update&linkid='.$linkId;
 		$url_fail = 'index.php?option=com_confmgt&view=authorform&layout=update_form&id=';
-		
 		$this->save_common($url_success, $url_fail);
 	}
     
