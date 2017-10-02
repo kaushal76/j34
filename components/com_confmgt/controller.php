@@ -65,7 +65,16 @@ class ConfmgtController extends JControllerLegacy
 
             $view->display();
 
+        } elseif (JFactory::getApplication()->input->get('view') == 'rev1ewersforpaperform') {
+            $view = $this->getView('rev1ewersforpaperform', 'html');
+            $view->setModel($this->getModel('rev1ewersforpaperform'), true);
+            $view->setModel($this->getModel('Paper'));
+            $view->setModel($this->getModel('Authors'));
+
+            $view->display();
+
         } else {
+
             //for all other views set the display
             $this->display();
         }

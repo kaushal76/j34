@@ -1,8 +1,8 @@
 <?php
 /**
- * @version     2.5.7
+ * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
  */
@@ -14,78 +14,78 @@ defined('_JEXEC') or die;
   <div class="panel-heading">
     <h1>
       <?php
-		echo JText::_('COM_CONFMGT_PAPER_PANEL_HEADING') . ' - ' . JText::_('Paper ID') . $this->item->id; ?>
+		echo JText::_('COM_CONFMGT_PAPER_PANEL_HEADING') . ' - ' . JText::_('Paper ID') . $this->item->paper_id; ?>
     </h1>
   </div>
   <div class="panel-body"> </div>
   <table class="table table-striped">
     <tr>
       <td width="25%"><?php
-		echo JText::_('COM_CONFMGT_FORM_LBL_PAPER_ABSTRACT_REVIEW_OUTCOME'); ?>
-        :</td>
+		echo JText::_('Abstract review outcome: '); ?>
+        </td>
       <td><?php
-			echo  $this->item->abstract_review_outcome_text;
+			echo  $this->item->abstract_review_outcome_txt;
 		?></td>
     </tr>
     <tr>
       <td><?php
-		echo JText::_('COM_CONFMGT_FORM_LBL_PAPER_ABSTRACT_REVIEW_COMMENTS'); ?>
-        :</td>
+		echo JText::_('Abstract review comments: '); ?>
+        </td>
       <td><?php
-			echo nl2br ($this->item->abstract_review_comments);
+			echo nl2br ($this->item->abstract_abstract_review_comments);
 		?></td>
     </tr>
     <tr>
       <td><?php
-		echo JText::_('COM_CONFMGT_FORM_LBL_PAPER_FULL_PAPER'); ?>
-        :</td>
+		echo JText::_('Full paper: '); ?>
+        </td>
       <td><?php
-			echo $this->item->full_paper;
+			echo $this->item->fullpaper_full_paper;
 			echo $this->item->full_paper_download;
 		?></td>
     </tr>
     <tr>
       <td><?php
-		echo JText::_('COM_CONFMGT_FORM_LBL_PAPER_FULL_REVIEW_OUTCOME'); ?>
-        :</td>
+		echo JText::_('Full paper review outcome: '); ?>
+        </td>
       <td><?php
 		
-			echo $this->item->full_review_outcome_text;
+			echo $this->item->full_review_outcome_txt;
 		?></td>
     </tr>
     <tr>
       <td><?php
-		echo JText::_('COM_CONFMGT_FORM_LBL_PAPER_FULL_REVIEW_COMMENTS'); ?>
-        :</td>
+		echo JText::_('Full paper review comments: '); ?>
+        </td>
       <td><?php
 		
-			echo nl2br ($this->item->full_review_comments);
+			echo nl2br ($this->item->fullpaper_full_review_comments);
 		?></td>
     </tr>
     <tr>
       <td><?php
-		echo JText::_('COM_CONFMGT_FORM_LBL_PAPER_CAMERA_READY'); ?>
-        :</td>
+		echo JText::_('Camera ready paper: '); ?>
+        </td>
       <td><?php
 	
-			echo $this->item->camera_ready;
+			echo $this->item->camera_ready_txt;
 		?></td>
     </tr>
     <tr>
       <td><?php
-		echo JText::_('COM_CONFMGT_FORM_LBL_PAPER_PRESENTATION'); ?>
-        :</td>
+		echo JText::_('Presentation: '); ?>
+        </td>
       <td><?php
 	
-			echo $this->item->presentation;
+			echo $this->item->presentation_txt;
 		?></td>
     </tr>
     <tr>
       <td><?php
-		echo JText::_('COM_CONFMGT_FORM_LBL_PAPER_CREATED_BY'); ?>
-        :</td>
+		echo JText::_('Submitted by: '); ?>
+        </td>
       <td><?php
-		echo $this->item->created_by_name; ?></td>
+		echo $this->item->paper_created_by; ?></td>
     </tr>
   </table>
 </div>

@@ -154,15 +154,13 @@ class ConfmgtModelPapers extends JModelList
             ->from('#__confmgt_papers as a')
             ->select('b.title as theme')
             ->join('LEFT', '#__confmgt_themes as b ON a.theme = b.id')
-            ->select('COUNT(g.id) AS revisions')
-            ->join('LEFT', '#__confmgt_fullpapers as g ON a.id = g.linkid')
+            ->select('COUNT(d.reviewerid) as rev1ewers')
+            ->join('LEFT', $db->quoteName('#__confmgt_rev1ewers_papers', 'd') . ' ON (' . $db->quoteName('d.paperid') . ' = ' . $db->quoteName('a.id') . ')')
             ->select('f.type as type')
             ->join('LEFT', '#__confmgt_submission_types as f ON a.type = f.id')
             ->select('uc.name as author')
             ->select('uc.email as email')
-            ->select('COUNT(d.reviewerid) AS rev1ewers')
             ->join('LEFT', '#__users as uc ON uc.id = a.created_by')
-            ->join('LEFT', $db->quoteName('#__confmgt_rev1ewers_papers', 'd') . ' ON (' . $db->quoteName('a.id') . ' = ' . $db->quoteName('d.paperid') . ')')
             ->select('e.abstract_review_outcome as abstract_review_outcome')
             ->join('LEFT', $db->quoteName('#__confmgt_abstracts', 'e') . ' ON (' . $db->quoteName('a.abstract_id') . ' = ' . $db->quoteName('e.id') . ')')
             ->select('h.full_review_outcome as full_review_outcome')
@@ -206,6 +204,9 @@ class ConfmgtModelPapers extends JModelList
 
         // Load the results as a list of stdClass objects (
         $results = $db->loadObjectList();
+
+
+
         return $results;
     }
 

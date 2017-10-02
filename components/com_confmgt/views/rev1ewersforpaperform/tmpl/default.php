@@ -1,8 +1,8 @@
 <?php
 /**
- * @version     2.5.7
+ * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
  */
@@ -11,23 +11,16 @@ defined('_JEXEC') or die;
 
 JHtml::_('behavior.keepalive');
 JHtml::_('behavior.formvalidation');
-JHtml::_('bootstrap.loadCss', 'true', 'ltr');
-JHtml::_('bootstrap.framework');
-JHtml::_('jquery.framework');
-JHtml::_('bootstrap.modal');
 JHtml::_('bootstrap.alert', 'error');
 
-//Load admin language file
-$lang = JFactory::getLanguage();
-$lang->load('com_confmgt', JPATH_ADMINISTRATOR);
 $document = JFactory::getDocument();
 $url = 'components/com_confmgt/assets/js/jquery_custom.js';
 $document->addScript($url);
 
 
-if ($this->item->student_submission) {
-	$canView = $this->isStudentCoordinator;
-	$canEdit = $this->isStudentCoordinator;
+if ($this->item->paper_student_submission) {
+	$canView = $this->isThemeleader;
+	$canEdit = $this->isThemeleader;
 }else{
 	$canView = $this->isThemeleader;
 	$canEdit = $this->isThemeleader;
@@ -76,7 +69,7 @@ echo $this->loadTemplate('paper');
 ?>
     </div>
     <form id="form-paper-list-<?php
-		echo $this->item->id ?>" style="display:inline" action="<?php
+		echo $this->item->paper_id ?>" style="display:inline" action="<?php
 		echo JRoute::_('index.php'); ?>" method="post" class="form-validate" enctype="multipart/form-data">
       <?php
 		echo JHtml::_('form.token'); ?>
@@ -84,8 +77,9 @@ echo $this->loadTemplate('paper');
       <input type="hidden" name="view" value="papers" />
       <input type="hidden" name="layout" value="leader_default" />
       <button class="btn btn-default" type="submit">
+        <i class="icon-arrow-left"></i>
       <?php
-		echo JText::_("<< Back"); ?>
+		echo JText::_("Back"); ?>
       </button>
     </form>
     <?php

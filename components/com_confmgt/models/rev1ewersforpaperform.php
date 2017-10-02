@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     2.5.7
+ * @version     3.8.0
  * @package     com_confmgt
  * @copyright   Copyright (C) 2015. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -9,12 +9,14 @@
 // No direct access.
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.modelform');
-jimport('joomla.event.dispatcher');
-
 /**
- * Confmgt model.
+ * Model class for reviewers for paper
+ *
+ * @package  CONFMGT
+ *
+ * @since version 3.8.0
  */
+
 class ConfmgtModelRev1ewersforPaperForm extends JModelForm
 {
     
@@ -52,24 +54,20 @@ class ConfmgtModelRev1ewersforPaperForm extends JModelForm
 	}
 	
 	/**
-     * Method to get the LinkID set in either the user session data or the fget / post data.
+     * Method to get the LinkID set in either the the get / post data.
      *
      * @return	linkid
      * 
      */
-	public function &getLinkid()
+	public function getLinkid()
 	{
-		$linkid = JFactory::getApplication()->getUserStateFromRequest( "com_confmgt.linkid", 'linkid', 0 );
-		if ($linkid == 0)
-		{
-			JError::raiseError('500', JText::_('JERROR_NO_PAPERID'));
-			return false;
-		}else{		
-			return $linkid;
-		}		
+        $linkid = JFactory::getApplication()->input->get('linkid');
+        if (!$linkid) {
+            throw new Exception(JText::_('JERROR_NO_PAPERID'));
+        } else {
+            return $linkid;
+        }
 	}
-
-        
 
 	/**
 	 * Method to get an ojbect.
@@ -115,142 +113,15 @@ class ConfmgtModelRev1ewersforPaperForm extends JModelForm
 
 				// Convert the JTable to a clean JObject.
 				$properties = $table->getProperties(1);
-				$this->_item = JArrayHelper::toObject($properties, 'JObject');
+				$this->_item =Joomla\Utilities\ArrayHelper::toObject($properties, 'JObject');
 			} elseif ($error = $table->getError()) {
-				$this->setError($error);
+				JFactory::$application->enqueueMessage($error,'error');
 			}
 		}
 
 		return $this->_item;
 	}
-	
-	public function getPaperData($id = null)
-	{
-		if ($this->_paper_item === null)
-		{
-			$this->_paper_item = false;
 
-			if (empty($id)||$id==0) {
-				$id = $this->getLinkid();
-			}
-
-			// Get a level row instance.
-			$table = $this->getTable('Paper','ConfmgtTable',array());
-
-			// Attempt to load the row.
-			if ($table->load($id))
-			{
-                
-                $user = JFactory::getUser(); 
-                $id = $table->id;
-				
-                $canEdit = AclHelper::isThemeleader(0,$id);
-
-                if (!$canEdit) {
-                    JError::raiseError('500', JText::_('JERROR_ALERTNOAUTHOR'));
-                }
-				
-				$properties = $table->getProperties(1);
-				
-				$this->_paper_item = JArrayHelper::toObject($properties, 'JObject');
-			} elseif ($error = $table->getError()) {
-				$this->setError($error);
-			}
-		}
-				
-			  //Deal with the abstract review outcome		
-			  switch ($this->_paper_item->abstract_review_outcome) {
-				  case 1:
-					  $this->_paper_item->abstract_review_outcome_text = JText::_('COM_CONFMGT_MODEL_PAPER_ABSTRACT_OUTCOME_ACCEPT');
-					  if (!empty($this->_paper_item->full_paper)) {
-						  $this->_paper_item->full_paper_download = $this->_FullPaperDownloadBtn($this->_paper_item->full_paper);
-					  }
-						  
-				  break;
-				  
-				  case 2:
-					  $this->_paper_item->abstract_review_outcome_text = JText::_('COM_CONFMGT_MODEL_PAPER_ABSTRACT_OUTCOME_MINOR_CHANGE');
-					  if (!empty($this->_paper_item->full_paper)) {
-						  $this->_paper_item->full_paper_download = $this->_FullPaperDownloadBtn($this->_paper_item->full_paper);
-					  }	
-				  break;
-				  
-				  case 3:
-					  $this->_paper_item->abstract_review_outcome_text = JText::_('COM_CONFMGT_MODEL_PAPER_ABSTRACT_OUTCOME_RESUBMIT');
-				  break;
-				  
-				  case 4:
-					  $this->_paper_item->abstract_review_outcome_text = JText::_('COM_CONFMGT_MODEL_PAPER_ABSTRACT_OUTCOME_REJECT');
-				  break;
-				  
-				  case '':
-				  default:
-					  $this->_paper_item->abstract_review_outcome_text = JText::_('COM_CONFMGT_MODEL_PAPER_ABSTRACT_OUTCOME_PENDING');
-					  if (empty($this->_paper_item->abstract_review_comments)) {
-						  $this->_paper_item->abstract_review_comments = JText::_('COM_CONFMGT_MODEL_PAPER_ABSTRACT_COMMENTS_PENDING');
-					  }
-				  break;
-			  }
-			  
-			  //Deal with the full paper review outcome		
-			  switch ($this->_paper_item->full_review_outcome) {
-				  case 1:
-					  $this->_paper_item->full_review_outcome_text = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_OUTCOME_ACCEPT');
-				  break;
-				  
-				  case 2:
-					  $this->_paper_item->full_review_outcome_text = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_OUTCOME_MINOR_CHANGE');
-				  break;
-				  
-				  case 3:
-					  $this->_paper_item->full_review_outcome_text = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_OUTCOME_RESUBMIT');
-				  break;
-				  
-				  case 4:
-					  $this->_paper_item->full_review_outcome_text = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_OUTCOME_REJECT');
-				  break;
-				  
-				  case '':
-				  default:
-					  if (empty($this->_paper_item->full_paper)) {
-						  $this->_paper_item->full_review_outcome_text = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_OUTCOME_NA');	
-						  $this->_paper_item->full_review_comments = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_COMMENTS_NA');	
-					  }else{
-						  $this->_paper_item->full_review_outcome_text = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_OUTCOME_PENDING');
-						  $this->_paper_item->full_review_comments = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_COMMENTS_PENDING');
-					  }
-				  break;
-			  }
-			  
-			  //Deal with the camera ready papers
-				  if (empty($this->_paper_item->camera_ready)) {
-					  if (($this->_paper_item->full_review_outcome ==1) || ($this->_paper_item->full_review_outcome ==2)) {
-						  $this->_paper_item->camera_ready = JText::_('COM_CONFMGT_MODEL_PAPER_CAMERA_READY_PENDING');
-						  $this->_paper_item->presentation = JText::_('COM_CONFMGT_MODEL_PAPER_PRESENTATION_NA');
-					  }else{
-						  $this->_paper_item->camera_ready = JText::_('COM_CONFMGT_MODEL_PAPER_CAMERA_READY_NA');
-						  $this->_paper_item->presentation = JText::_('COM_CONFMGT_MODEL_PAPER_PRESENTATION_NA');
-					  }
-				  }
-			  
-			  //Deal with the presentations
-				  if (empty($this->_paper_item->presentation)) {				
-					  $this->_paper_item->presentation = JText::_('COM_CONFMGT_MODEL_PAPER_PRESENTATION_PENDING');
-				  }
-				  
-			  //If still the $this->item->full_paper is blank, it must be not due
-				  
-				  if (empty($this->_paper_item->full_paper)) {
-					  if (($this->_paper_item->abstract_review_outcome ==1) || ($this->_paper_item->abstract_review_outcome ==2)){
-						  $this->_paper_item->full_paper = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_PENDING');
-					  }else{
-						  $this->_paper_item->full_paper = JText::_('COM_CONFMGT_MODEL_PAPER_FULLPAPER_NA');
-					  }			
-				  }
-					
-		return $this->_paper_item;
-	}
-	
 	 protected function getRev1ewersQuery() {
 		$db		= $this->getDbo();
 		$query	= $db->getQuery(true);
@@ -268,8 +139,7 @@ class ConfmgtModelRev1ewersforPaperForm extends JModelForm
 		if (!$linkid==0) { 
 			$query->where('a.paperid ='.$linkid);
 		}else{
-			JError::raiseError(500, 'No paper id');
-			return false;
+			throw new Exception('No paper id',500);
 		}
 		$query->order('a.reviewerid ASC');
 		return $query;
@@ -303,8 +173,7 @@ class ConfmgtModelRev1ewersforPaperForm extends JModelForm
 		if (!$linkid==0) { 
 			$query->where('linkid ='.$linkid);
 		}else{
-			JError::raiseError(500, 'No paper id');
-			return false;
+            throw new Exception('No paper id',500);
 		}
 		$query->order('a.ordering ASC');
 		return $query;
@@ -430,7 +299,7 @@ class ConfmgtModelRev1ewersforPaperForm extends JModelForm
 		protected function checkRev1ewerExists($data)
 	{
         if (!($data['reviewerid'] > 0 && $data['paperid'] > 0)) {
-            JError::raiseError(500, 'No paper id');
+            throw new Exception('No paper id',500);
 			return false;
         }
         $db		= $this->getDbo();
@@ -453,7 +322,7 @@ class ConfmgtModelRev1ewersforPaperForm extends JModelForm
 		$num_rows = $db->getNumRows();
 		
 		if ($num_rows > 0) {
-			JError::raiseWarning(233, 'This Reviewer is already added to this paper. Please select a different reviewer or cancel.');
+			JFactory::$application->enqueueMessage('This Reviewer is already added to this paper. Please select a different reviewer or cancel.','error');
 			return true;
 		}else{
 			return false;
@@ -471,21 +340,13 @@ class ConfmgtModelRev1ewersforPaperForm extends JModelForm
 	{
 	
 		$id = (!empty($data['id'])) ? $data['id'] : (int)$this->getState('rev1ewersforpaper.id');
-		
-		if (empty($data['id'])) {
-			
-			$user = JFactory::getUser();
-			$app = JFactory::getApplication();
 
-		}
-	
-		//Change to Confmgt ACL
 		$linkid = $this->getLinkid();
 		
 		$authorised = AclHelper::isThemeleader(0,$linkid);
 		
 		 if (!$authorised) {
-				JError::raiseError('500', JText::_('JERROR_ALERTNOAUTHOR'));
+				throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'),500);
 		  }
 		
 		$data['paperid'] = $linkid;
@@ -513,11 +374,11 @@ class ConfmgtModelRev1ewersforPaperForm extends JModelForm
 		$authorised = AclHelper::isThemeleader(0,$linkid);
 		
 		 if (!$authorised) {
-				JError::raiseError('500', JText::_('JERROR_ALERTNOAUTHOR'));
+				throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'),500);
 		  }
 
         $table = $this->getTable();
-        if ($table->delete($data['rev_id']) === true) {
+        if ($id = $table->delete($data['rev_id']) === true) {
             return $id;
         } else {
             return false;
@@ -525,145 +386,4 @@ class ConfmgtModelRev1ewersforPaperForm extends JModelForm
         
         return true;
     }
-	
-			//Generate abstract button
-	private function _AbstractBtn ($id=0, $mode='change')
-	{
-		$html =  "<div style=\"display:inline\">";
-		$html = $html. "<form id=\"form-abstract-resubmit-". $id."\"";
-		$html = $html." action=\"".JRoute::_('index.php')."\" method=\"post\" class=\"form-validate\" enctype=\"multipart/form-data\">";
-		$html = $html.JHtml::_('form.token');
-  		$html = $html."<input type=\"hidden\" name=\"option\" value=\"com_confmgt\" />";
-		$html = $html."<input type=\"hidden\" name=\"jform['linkid']\" value=".$id." />";
-		$html = $html."<input type=\"hidden\" name=\"linkid\" value=".$id." />";
-		$html = $html."<input type=\"hidden\" name=\"jform['mode']\" value=\"".$mode."\" />";
-		if ($mode =='resubmit') {
-			$html = $html."<input type=\"hidden\" name=\"view\" value=\"abstractform\" />";
-		}else{
-			$html = $html."<input type=\"hidden\" name=\"view\" value=\"paperform\" />";
-		}
-  		$html = $html."<button class=\"btn btn-default\" type=\"submit\">";
-		if ($mode =='change') {
-			$html =	$html.JText::_("Change the abstract");
-		}elseif ($mode =='resubmit') {
-			$html =	$html.JText::_("Resubmit the abstract");
-		}
-		$html = $html."</button></form></div>";
-		
-	
-		return $html;
-		
-		
-	}
-	
-	//Generate full paper change button
-	private function _FullPaperBtn ($id=0, $mode='new')
-	{
-		$html =  "<div style=\"display:inline\">";
-		$html = $html. "<form id=\"form-fullpaper-resubmit-". $id."\"";
-		$html = $html." action=\"".JRoute::_('index.php')."\" method=\"post\" class=\"form-validate\" enctype=\"multipart/form-data\">";
-		$html = $html.JHtml::_('form.token');
-  		$html = $html."<input type=\"hidden\" name=\"option\" value=\"com_confmgt\" />";
-  		$html = $html."<input type=\"hidden\" name=\"view\" value=\"fullpaperform\" />";
-		$html = $html."<input type=\"hidden\" name=\"jform['linkid']\" value=\"".$id."\" />";
-		$html = $html."<input type=\"hidden\" name=\"jform['mode']\" value=\"".$mode."\" />";
-  		$html = $html."<button class=\"btn btn-default\" type=\"submit\">";
-		if ($mode =='change') {
-			$html =	$html.JText::_("Change the full Paper");
-		}elseif ($mode =='resubmit') {
-			$html =	$html.JText::_("Resubmit the full paper");
-		}elseif ($mode == 'new') {
-			$html =	$html.JText::_("Upload the full paper");
-		}
-		$html = $html."</button></form></div>";
-		
-		return $html;
-		
-	}
-	
-	//Generate camera ready paper change button
-	private function _CameraReadyPaperBtn ($id=0, $mode = 'new')
-	{
-		$html =  "<div style=\"display:inline\">";
-		$html = $html. "<form id=\"form-camerapaper-resubmit-". $id."\"";
-		$html = $html." action=\"".JRoute::_('index.php')."\" method=\"post\" class=\"form-validate\" enctype=\"multipart/form-data\">";
-		$html = $html.JHtml::_('form.token');
-  		$html = $html."<input type=\"hidden\" name=\"option\" value=\"com_confmgt\" />";
-  		$html = $html."<input type=\"hidden\" name=\"view\" value=\"camerareadypaperform_old\" />";
-		$html = $html."<input type=\"hidden\" name=\"jform['linkid']\" value=\"".$id."\" />";
-		$html = $html."<input type=\"hidden\" name=\"jform['mode']\" value=\"".$mode."\" />";
-  		$html = $html."<button class=\"btn btn-default\" type=\"submit\">";
-		if ($mode =='change') {
-			$html =	$html.JText::_("Change the Camera Ready paper");
-		}elseif ($mode =='resubmit') {
-			$html =	$html.JText::_("Resubmit the Camera Ready paper");
-		}elseif ($mode == 'new') {
-			$html =	$html.JText::_("Upload the Camera Ready paper");
-		}
-		$html = $html."</button></form></div>";
-		
-		return $html;
-		
-	}
-	
-	//Generate presentation change button
-	private function _PresentationBtn ($id=0, $mode = 'new')
-	{ 
-		$html =  "<div style=\"display:inline\">";
-		$html = $html. "<form id=\"form-camerapaper-resubmit-". $id."\"";
-		$html = $html." action=\"".JRoute::_('index.php')."\" method=\"post\" class=\"form-validate\" enctype=\"multipart/form-data\">";
-		$html = $html.JHtml::_('form.token');
-  		$html = $html."<input type=\"hidden\" name=\"option\" value=\"com_confmgt\" />";
-  		$html = $html."<input type=\"hidden\" name=\"view\" value=\"presenationform\" />";
-		$html = $html."<input type=\"hidden\" name=\"jform['linkid']\" value=\"".$id."\" />";
-		$html = $html."<input type=\"hidden\" name=\"jform['mode']\" value=\"".$mode."\" />";
-  		$html = $html."<button class=\"btn btn-default\" type=\"submit\">";
-		if ($mode =='change') {
-			$html =	$html.JText::_("Change presenation");
-		}elseif ($mode =='resubmit') {
-			$html =	$html.JText::_("Resubmit the presenation");
-		}elseif ($mode == 'new') {
-			$html =	$html.JText::_("Upload the presenation");
-		}
-		$html = $html."</button></form></div>";
-		
-		return $html;
-		
-	}
-	
-		//Generate full paper change button
-	private function _FullPaperBtnModal ($id=0, $mode='new')
-	{
-
-        $html =  "<button data-toggle=\"modal\" class=\"btn btn-default\" style=\"display:inline\" type=\"button\" data-target=\"#FullPaperModal\" data-remote=\"".JRoute::_('index.php?option=com_confmgt&amp;view=fullpaperform&amp;linkid='.$id.'&amp;mode='.$mode.'&amp;tmpl=component')."\">";
-		if ($mode =='change') {
-			$html =	$html.JText::_("Change the full Paper");
-		}elseif ($mode =='resubmit') {
-			$html =	$html.JText::_("Resubmit the full paper");
-		}elseif ($mode == 'new') {
-			$html =	$html.JText::_("Upload the full paper");
-		}
-		$html = $html."</button>";
-		
-		return $html;
-		
-	}
-	
-		//Generate presentation change button
-	private function _FullPaperDownloadBtn ($filename)
-	{ 
-		$html =  "<div style=\"display:inline\">";
-		$html = $html. "<form id=\"form-download\"";
-		$html = $html." action=\"".JRoute::_('index.php')."\" method=\"post\" class=\"form-validate\" enctype=\"multipart/form-data\">";
-		$html = $html.JHtml::_('form.token');
-  		$html = $html."<input type=\"hidden\" name=\"option\" value=\"com_confmgt\" />";
-  		$html = $html."<input type=\"hidden\" name=\"task\" value=\"paper.downloadfullpaper\" />";
-		$html = $html."<input type=\"hidden\" name=\"filename\" value=\"".$filename."\" />";
-  		$html = $html."<button class=\"btn btn-default\" type=\"submit\">";
-		$html =	$html.JText::_("Download");
-		$html = $html."</button></form></div>";
-		return $html;
-		
-	}
-    
 }

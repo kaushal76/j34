@@ -118,9 +118,11 @@ class ConfmgtControllerRev1ewersforPaperForm extends ConfmgtController
     public function save()
     {
         $app = JFactory::getApplication();
+        $model = $this->getModel('rev1ewersforpaperForm', 'ConfmgtModel');
+        $linkid = $model->getLinkid();
         $id = (int)$app->getUserState('com_confmgt.edit.rev1ewersforpaper.id');
-        $url_success = 'index.php?option=com_confmgt&view=rev1ewersforpaperform';
-        $url_fail = 'index.php?option=com_confmgt&view=rev1ewersforpaperform&layout=edit&id=' . $id;
+        $url_success = 'index.php?option=com_confmgt&view=rev1ewersforpaperform&linkid='.$linkid;
+        $url_fail = 'index.php?option=com_confmgt&view=rev1ewersforpaperform&linkid='.$linkid.'&layout=edit&id=' . $id;
 
         $this->save_common($url_success, $url_fail);
     }
@@ -128,9 +130,11 @@ class ConfmgtControllerRev1ewersforPaperForm extends ConfmgtController
     public function update_save()
     {
         $app = JFactory::getApplication();
+        $model = $this->getModel('rev1ewersforpaperForm', 'ConfmgtModel');
+        $linkid = $model->getLinkid();
         $id = (int)$app->getUserState('com_confmgt.edit.rev1ewersforpaper.id');
-        $url_success = 'index.php?option=com_confmgt&view=rev1ewersforpaperform';
-        $url_fail = 'index.php?option=com_confmgt&view=rev1ewersforpaperform&id=' . $id;
+        $url_success = 'index.php?option=com_confmgt&view=rev1ewersforpaperform&linkid='.$linkid;
+        $url_fail = 'index.php?option=com_confmgt&view=rev1ewersforpaperform&linkid='.$linkid.'&id=' . $id;
 
         $this->save_common($url_success, $url_fail);
     }
@@ -148,8 +152,6 @@ class ConfmgtControllerRev1ewersforPaperForm extends ConfmgtController
 
     public function remove()
     {
-        JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
-
         $app = JFactory::getApplication();
         $model = $this->getModel('Rev1ewersforPaperForm', 'ConfmgtModel');
         $linkid = $model->getLinkid();
@@ -162,7 +164,7 @@ class ConfmgtControllerRev1ewersforPaperForm extends ConfmgtController
 
             $id = (int)$app->getUserState('com_confmgt.edit.rev1ewersforpaper.id');
             $this->setMessage(JText::sprintf('Delete failed', $model->getError()), 'warning');
-            $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=rev1ewersforpaperForm&layout=edit&id=' . $id, false));
+            $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=rev1ewersforpaperform&linkid='.$linkid.'&id=' . $id, false));
             return false;
         }
 
@@ -172,7 +174,7 @@ class ConfmgtControllerRev1ewersforPaperForm extends ConfmgtController
 
         $app->setUserState('com_confmgt.edit.rev1ewersforpaper.id', null);
         JFactory::$application->enqueueMessage(JText::_('COM_CONFMGT_ITEM_DELETED_SUCCESSFULLY'));
-        $link = "index.php?option=com_confmgt&view=rev1ewersforpaperForm&layout=edit&linkid=".$linkid;
+        $link = "index.php?option=com_confmgt&view=rev1ewersforpaperform&linkid=".$linkid;
         $this->setRedirect(JRoute::_($link, false));
 
         $app->setUserState('com_confmgt.edit.rev1ewersforpaper.data', null);

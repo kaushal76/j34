@@ -1,30 +1,28 @@
 <?php
 /**
- * @version     2.5.7
+ * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
  */
 // no direct access
+
+$document = JFactory::getDocument();
+$bootboxurl = "components/com_confmgt/assets/js/bootbox.min.js";
+$delurl = "components/com_confmgt/assets/js/del.js";
+$document->addScript($bootboxurl);
+$document->addScript($delurl);
+
 defined('_JEXEC') or die;
 ?>
-<script type="text/javascript">
-    function deleteItem(item_id){
-        if(confirm("<?php echo JText::_('COM_CONFMGT_DELETE_MESSAGE'); ?>")){
-            document.getElementById('form-rev-delete-' + item_id).submit();
-        }
-    }
-</script>
-
 <div class="panel panel-default">
   <div class="panel-heading">
     <h1>
       <?php
-		echo JText::_('COM_CONFMGT_PAPER_REVIEWER_PANEL_HEADING') . ' - ' . JText::_('Paper ID') . $this->item->id; ?>
+		echo JText::_('COM_CONFMGT_PAPER_REVIEWER_PANEL_HEADING') . ' - ' . JText::_('Paper ID') . $this->item->paper_id; ?>
     </h1>
   </div>
-  <div class="panel-body">
     <?php
   if ($this->rev1ewers)
   { ?>
@@ -47,13 +45,16 @@ defined('_JEXEC') or die;
           <td width="90%"><?php
 			echo ( $rev1ewer->revtitle . ' ' . $rev1ewer->revfirstname . ' ' . $rev1ewer->revsurname );  
 		  ?></td>
-          <td><form id="form-rev-delete-<?php echo $rev1ewer->id; ?>" style="display:inline" action="<?php echo JRoute::_('index.php'); ?>" method="post" class="form-validate" enctype="multipart/form-data">
-              <button class="btn btn-danger" type="button" onclick="javascript:deleteItem(<?php echo $rev1ewer->id; ?>);"><i class="icon-trash icon-white"></i></button>
-              <input type="hidden" name="jform[rev_id]" value="<?php echo $rev1ewer->id; ?>" />
-              <input type="hidden" name="option" value="com_confmgt" />
-              <input type="hidden" name="task" value="rev1ewersforpaperform.remove" />
-              <?php echo JHtml::_('form.token'); ?>
-            </form></td>
+          <td>
+
+              <a
+                  data-toggle="confirm"
+                  data-header="Delete confirmation"
+                  data-title="Do you really want to delete the record?"
+                  href="<?php echo JRoute::_('index.php?option=com_confmgt&task=rev1ewersforpaperform.remove&jform[rev_id]=' . $rev1ewer->id.'&linkid='.$this->item->paper_id); ?>">
+                  <i class="icon-trash icon-white"></i>
+              </a>
+          </td>
         </tr>
         <?php $i = $i+1;
   }  ?>
@@ -67,4 +68,4 @@ defined('_JEXEC') or die;
     </div>
     <?php } ?>
   </div>
-</div>
+
