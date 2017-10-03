@@ -1,8 +1,8 @@
 <?php
 /**
- * @version     2.5.7
+ * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - http://www.confmgt.com
  */
@@ -10,11 +10,12 @@
 // No direct access.
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.modelform');
-jimport('joomla.event.dispatcher');
-
 /**
- * Confmgt model.
+ * Model class for the Review outcome form
+ *
+ * @package CONFMGT
+ *
+ * @since version 3.8.0
  */
 class ConfmgtModelRev1ewoutcomeForm extends JModelForm
 {
@@ -51,29 +52,26 @@ class ConfmgtModelRev1ewoutcomeForm extends JModelForm
 		$this->setState('params', $params);
 
 	}
-	
-		/**
-	 * Method to get the paper ID .
-	 *
-	 * @param	none
-	 *
-	 * @return	paper ID (Int) on success false on failure.
-	 */
-	public function &getLinkid()
-	{
-		$linkid = JFactory::getApplication()->getUserStateFromRequest( "com_confmgt.linkid", 'linkid', 0 );
-		if ($linkid == 0)
-		{
-			JError::raiseError('500', JText::_('JERROR_NO_PAPERID'));
-			return false;
-		}else{		
-			return $linkid;
-		}		
-	}
+
+    /**
+     * Method to get the paperID
+     * @return bool/mixed
+     * @since version 3.8.0
+     */
+
+    public function getLinkid()
+    {
+        $linkid = JFactory::getApplication()->input->get('linkid');
+        if (!$linkid) {
+            throw new Exception(JText::_('JERROR_NO_PAPERID'),404);
+        } else {
+            return $linkid;
+        }
+    }
         
 
 	/**
-	 * Method to get an ojbect.
+	 * Method to get the object
 	 *
 	 * @param	integer	The id of the object to get.
 	 *
@@ -95,21 +93,15 @@ class ConfmgtModelRev1ewoutcomeForm extends JModelForm
 			// Attempt to load the row.
 			if ($table->load($id))
 			{
-                
-                // Can the user edit the paper
+
 				$user = JFactory::getUser();
                 $id = $table->id;
-				
-				//Temp measure - must add proper check
-				$canEdit = true;
-               // $canEdit = $user->authorise('core.edit', 'com_confmgt') || $user->authorise('core.create', 'com_confmgt');
-                //if (!$canEdit && $user->authorise('core.edit.own', 'com_confmgt')) {
-                //    $canEdit = $user->id == $table->created_by;
-                //}
 
-                //if (!$canEdit) {
-                //    JError::raiseError('500', JText::_('JERROR_ALERTNOAUTHOR'));
-               // }
+				$canEdit = AclHelper::isThemeleader();
+
+                if (!$canEdit) {
+                    throw new Exception('Not Authorised',403);
+                }
                 
 				// Check published state.
 				if ($published = $this->getState('filter.published'))
@@ -121,15 +113,27 @@ class ConfmgtModelRev1ewoutcomeForm extends JModelForm
 
 				// Convert the JTable to a clean JObject.
 				$properties = $table->getProperties(1);
-				$this->_item = JArrayHelper::toObject($properties, 'JObject');
+				$this->_item = Joomla\Utilities\ArrayHelper::toObject($properties, 'JObject');
 			} elseif ($error = $table->getError()) {
-				$this->setError($error);
+				JFactory::$application->enqueueMessage($error);
+                return false;
 			}
 		}
 
 		return $this->_item;
 	}
-    
+
+    /**
+     * Method to get the table object
+     *
+     * @param string $type
+     * @param string $prefix
+     * @param array $config
+     *
+     * @return bool|JTable
+     *
+     * @since version 3.8.0
+     */
 	public function getTable($type = 'Paper', $prefix = 'ConfmgtTable', $config = array())
 	{   
         $this->addTablePath(JPATH_COMPONENT_ADMINISTRATOR.'/tables');
@@ -157,7 +161,7 @@ class ConfmgtModelRev1ewoutcomeForm extends JModelForm
 			// Attempt to check the row in.
             if (method_exists($table, 'checkin')) {
                 if (!$table->checkin($id)) {
-                    $this->setError($table->getError());
+                    JFactory::$application->enqueueMessage($table->getError());
                     return false;
                 }
             }
@@ -189,7 +193,7 @@ class ConfmgtModelRev1ewoutcomeForm extends JModelForm
 			// Attempt to check the row out.
             if (method_exists($table, 'checkout')) {
                 if (!$table->checkout($user->get('id'), $id)) {
-                    $this->setError($table->getError());
+                    JFactory::$application->enqueueMessage($table->getError());
                     return false;
                 }
             }
@@ -199,7 +203,7 @@ class ConfmgtModelRev1ewoutcomeForm extends JModelForm
 	}    
     
 	/**
-	 * Method to get the profile form.
+	 * Method to get the form.
 	 *
 	 * The base form is loaded from XML 
      * 
@@ -246,30 +250,12 @@ class ConfmgtModelRev1ewoutcomeForm extends JModelForm
 	{
 		$id = (!empty($data['id'])) ? $data['id'] : (int)$this->getState('paper.id');
         $state = (!empty($data['state'])) ? 1 : 0;
-        $user = JFactory::getUser();
-		
-		//Allow save as a temp measyre -- Add authorisation test
-		$authorised = true;
 
-        /*
-		if($id) {
-            //Check the user can edit this item
-            $authorised = $user->authorise('core.edit', 'com_confmgt') || $authorised = $user->authorise('core.edit.own', 'com_confmgt');
-            if($user->authorise('core.edit.state', 'com_confmgt') !== true && $state == 1){ //The user cannot edit the state of the item.
-                $data['state'] = 0;
-            }
-        } else {
-            //Check the user can create new items in this section
-            $authorised = $user->authorise('core.create', 'com_confmgt');
-            if($user->authorise('core.edit.state', 'com_confmgt') !== true && $state == 1){ //The user cannot edit the state of the item.
-                $data['state'] = 0;
-            }
-        }
-		
-		*/	
+		$authorised = AclHelper::isThemeleader();
+
 
         if ($authorised !== true) {
-            JError::raiseError(403, JText::_('JERROR_ALERTNOAUTHOR'));
+            throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'),403);
             return false;
         }
         
@@ -281,52 +267,26 @@ class ConfmgtModelRev1ewoutcomeForm extends JModelForm
         }
         
 	}
-	
-		/**
-	 * Method to create a new abstract - reserve and retuen the paper ID.
-	 *
-	 * @param	boolian		
-	 * @return	mixed		The newly created paper id on success, false on failure.
-	 * 
-	 */
-	
-	
-	public function newAbstract($data)	{
-		$user = JFactory::getUser();
-		$data = array();
-		
-		//insert the author ID
-		$data['created_by'] = $user->id;
-		
-		//get the table
-		$table = $this->getTable();
-		
-		//save an empty record to reserve the paper id
-        if ($table->save($data) === true) {
-			
-		//get the last created paper id	
-    	$id = $table->id; 
-		//check the author and return the last paper id
-			if ($table->created_by == $user->id) {
-				return $id; 
-			}else{
-				JError::raiseError(403, JText::_('JERROR_ALERTNOAUTHOR'));
-            	return false;
-			}
-							
-        } else {
-            return false;
-        } 
-		
-	}
-    
-     function delete($data)
+
+    /**
+     * Method to remove a review outcome
+     *
+     * @param $data
+     *
+     * @return bool|int
+     *
+     * @since version 3.8.0
+     */
+	function delete($data)
     {
         $id = (!empty($data['id'])) ? $data['id'] : (int)$this->getState('paper.id');
-        //if(JFactory::getUser()->authorise('core.delete', 'com_confmgt') !== true){
-        //    JError::raiseError(403, JText::_('JERROR_ALERTNOAUTHOR'));
-        //    return false;
-        //}
+
+        $authorised = AclHelper::isRev1ewer();
+
+        if (!$authorised) {
+            throw new Exception('Not Authorised',403);
+        }
+
         $table = $this->getTable();
         if ($table->delete($data['id']) === true) {
             return $id;

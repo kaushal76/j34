@@ -10,9 +10,12 @@
 defined('_JEXEC') or die;
 
 /**
- * Entry page model.
+ * Model class for the Entry Page
+ *
+ * @package  CONFMGT
+ *
+ * @since version 3.8.0
  */
-
 class ConfmgtModelEntrypage extends JModelForm
 {  
     var $_item = null;
@@ -47,7 +50,7 @@ class ConfmgtModelEntrypage extends JModelForm
 	}
     
 	/**
-	 * Method to get the profile form.
+	 * Method to get the form.
 	 *
 	 * The base form is loaded from XML 
      * 
@@ -64,12 +67,23 @@ class ConfmgtModelEntrypage extends JModelForm
 		$form = $this->loadForm('com_confmgt.login', 'loginform', 
 		array('control' => 'jform', 'load_data' => $loadData));
 		if (empty($form)) {
+		    JFactory::$application->enqueueMessage('Form is empty');
 			return false;
 		}
 
 		return $form;
 	}
-	
+
+    /**
+     * Get the registration Form
+     * @param array $data
+     * @param bool $loadData
+     *
+     * @return bool|JForm
+     *
+     * @since version 3.8.0
+     */
+
 	public function getRegForm($data = array(), $loadData = true)
 	{
 		// Get the form.

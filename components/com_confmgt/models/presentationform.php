@@ -270,6 +270,15 @@ class ConfmgtModelPresentationForm extends JModelForm
     }
 
 
+    /**
+     * Method to delete a presentation
+     *
+     * @param $data
+     *
+     * @return bool|int
+     *
+     * @since version 3.8.0
+     */
     function delete($data)
     {
         $id = (!empty($data['id'])) ? $data['id'] : (int)$this->getState('presentation.id');
@@ -277,7 +286,7 @@ class ConfmgtModelPresentationForm extends JModelForm
         $table = $this->getTable();
         if ($table->delete($data['id']) === true) {
             return $id;
-        } //$table->delete( $data[ 'id' ] ) === true
+        }
         else {
             return false;
         }

@@ -1,19 +1,22 @@
 <?php
 
 /**
- * @version     2.5.7
+ * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
  */
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.modellist');
-
 /**
- * Methods supporting a list of Confmgt records.
+ * Model class for reviews
+ *
+ * @package  CONFMGT
+ *
+ * @since version 3.8.0
  */
+
 class ConfmgtModelRev1ews extends JModelList {
 
     /**
@@ -51,24 +54,22 @@ class ConfmgtModelRev1ews extends JModelList {
         // List state information.
         parent::populateState($ordering, $direction);
     }
-	
-	/**
-     * BMethod to get the LinkID set in either the user session data or the fget / post data.
-     *
-     * @return	linkid
-     * 
+
+    /**
+     * Method to get the paperID
+     * @return bool/mixed
+     * @since version 3.8.0
      */
-	public function &getLinkid()
-	{
-		$linkid = JFactory::getApplication()->getUserStateFromRequest( "com_confmgt.linkid", 'linkid', 0 ); 
-		if ($linkid == 0)
-		{
-			JError::raiseError('500', JText::_('JERROR_NO_PAPERID'));
-			return false;
-		}else{		
-			return $linkid;
-		}		
-	}
+
+    public function getLinkid()
+    {
+        $linkid = JFactory::getApplication()->input->get('linkid');
+        if (!$linkid) {
+            throw new Exception(JText::_('JERROR_NO_PAPERID'),404);
+        } else {
+            return $linkid;
+        }
+    }
 
     /**
      * Build an SQL query to load the Abstract Pending Review List for a Given reviewer.
@@ -82,7 +83,7 @@ class ConfmgtModelRev1ews extends JModelList {
 		$sub_query = $db->getQuery(true);
 		$user = JFactory::getUser();
 	
-		$sub_query->select(array('abstractid'));
+		$sub_query->select(array('abstract_id'));
 		$sub_query->from('#__confmgt_reviews');
 		$sub_query->where('created_by = '.(int)$user->id);
 		
@@ -92,8 +93,7 @@ class ConfmgtModelRev1ews extends JModelList {
 		$query->join('LEFT', $db->quoteName('#__confmgt_rev1ewers_papers', 'b') . ' ON (' . $db->quoteName('a.id') . ' = ' . $db->quoteName('b.paperid') . ')');
 		$query->join('LEFT', $db->quoteName('#__confmgt_rev1ewers', 'c') . ' ON (' . $db->quoteName('b.reviewerid') . ' = ' . $db->quoteName('c.id') . ')');
 		$query->where('c.userid ='.(int)$user->id);
-		$query->where('a.abstractid NOT IN ('.$sub_query.')');
-		$query->where('a.abstract_review_outcome = 0');
+		$query->where('a.abstract_id NOT IN ('.$sub_query.')');
 		$query->order('a.id ASC');  
 		return $query;
 		
@@ -111,7 +111,7 @@ class ConfmgtModelRev1ews extends JModelList {
 		$sub_query = $db->getQuery(true);
 		$user = JFactory::getUser();
 	
-		$sub_query->select(array('fullpaperid'));
+		$sub_query->select(array('fullpaper_id'));
 		$sub_query->from('#__confmgt_reviews');
 		$sub_query->where('created_by = '.(int)$user->id);
 	
@@ -121,9 +121,8 @@ class ConfmgtModelRev1ews extends JModelList {
 		$query->join('LEFT', $db->quoteName('#__confmgt_rev1ewers_papers', 'b') . ' ON (' . $db->quoteName('a.id') . ' = ' . $db->quoteName('b.paperid') . ')');
 		$query->join('LEFT', $db->quoteName('#__confmgt_rev1ewers', 'c') . ' ON (' . $db->quoteName('b.reviewerid') . ' = ' . $db->quoteName('c.id') . ')');
 		$query->where('c.userid ='.(int)$user->id);
-		$query->where('a.fullpaperid NOT IN ('.$sub_query.')');
-		$query->where('a.full_review_outcome = 0');
-		$query->where('a.fullpaperid > 0');
+		$query->where('a.fullpaper_id NOT IN ('.$sub_query.')');
+		$query->where('a.fullpaper_id > 0');
 		$query->order('a.id ASC');
 		return $query;
 	
@@ -142,7 +141,7 @@ class ConfmgtModelRev1ews extends JModelList {
 		$user = JFactory::getUser();
 	
 		// Select the required fields from the table.
-		$query->select( array('a.paperid AS paperid', 'a.reviewerid AS rev1ewerid', 'b.userid AS userid', 'b.last_updated AS revassigned', 'c.title as title', 'c.abstract_review_outcome as abreviewoutcome', 'c.full_review_outcome as fullreviewoutcome', 'c.abstract as abtract', 'c.full_paper as fullpaper', 'COUNT(d.id) AS reviewsposted'));
+		$query->select( array('a.paperid AS paperid', 'a.reviewerid AS rev1ewerid', 'b.userid AS userid', 'b.last_updated AS revassigned', 'c.title as title', 'c.abstract_id as abtract', 'c.fullpaper_id as fullpaper', 'COUNT(d.id) AS reviewsposted'));
 		$query->from('#__confmgt_rev1ewers_papers AS a');
 		$query->join('LEFT', $db->quoteName('#__confmgt_rev1ewers', 'b') . ' ON (' . $db->quoteName('a.reviewerid') . ' = ' . $db->quoteName('b.id') . ')');
 		$query->join('LEFT', $db->quoteName('#__confmgt_papers', 'c') . ' ON (' . $db->quoteName('a.paperid') . ' = ' . $db->quoteName('c.id') . ')');

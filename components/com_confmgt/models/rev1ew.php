@@ -1,21 +1,24 @@
 <?php
 
 /**
- * @version     2.5.7
+ * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
  */
 // No direct access.
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.modelitem');
-jimport('joomla.event.dispatcher');
 
 /**
- * Confmgt model.
+ * Model class for a Review
+ *
+ * @package CONFMGT
+ *
+ * @since version 3.8.0
  */
+
 class ConfmgtModelRev1ew extends JModelItem {
 
     /**
@@ -45,18 +48,22 @@ class ConfmgtModelRev1ew extends JModelItem {
         }
         $this->setState('params', $params);
     }
-	
-		public function &getLinkid()
-	{
-		$linkid = JFactory::getApplication()->getUserStateFromRequest( "com_confmgt.linkid", 'linkid', 0 );
-		if ($linkid == 0)
-		{
-			JError::raiseError('500', JText::_('JERROR_NO_PAPERID'));
-			return false;
-		}else{		
-			return $linkid;
-		}		
-	}
+
+    /**
+     * Method to get the paperID
+     * @return bool/mixed
+     * @since version 3.8.0
+     */
+
+    public function getLinkid()
+    {
+        $linkid = JFactory::getApplication()->input->get('linkid');
+        if (!$linkid) {
+            throw new Exception(JText::_('JERROR_NO_PAPERID'),404);
+        } else {
+            return $linkid;
+        }
+    }
 
     /**
      * Method to get an ojbect.
@@ -87,9 +94,9 @@ class ConfmgtModelRev1ew extends JModelItem {
 
                 // Convert the JTable to a clean JObject.
                 $properties = $table->getProperties(1);
-                $this->_item = JArrayHelper::toObject($properties, 'JObject');
+                $this->_item = Joomla\Utilities\ArrayHelper::toObject($properties, 'JObject');
             } elseif ($error = $table->getError()) {
-                $this->setError($error);
+                JFactory::$application->enqueueMessage($error);
             }
         }
 
@@ -101,6 +108,17 @@ class ConfmgtModelRev1ew extends JModelItem {
         return $this->_item;
     }
 
+    /**
+     * Get the table object
+     *
+     * @param string $type
+     * @param string $prefix
+     * @param array $config
+     *
+     * @return bool|JTable
+     *
+     * @since version 3.8.0
+     */
     public function getTable($type = 'Rev1ew', $prefix = 'ConfmgtTable', $config = array()) {
         $this->addTablePath(JPATH_COMPONENT_ADMINISTRATOR . '/tables');
         return JTable::getInstance($type, $prefix, $config);
@@ -125,7 +143,7 @@ class ConfmgtModelRev1ew extends JModelItem {
             // Attempt to check the row in.
             if (method_exists($table, 'checkin')) {
                 if (!$table->checkin($id)) {
-                    $this->setError($table->getError());
+                    JFactory::$application->enqueueMessage($table->getError());
                     return false;
                 }
             }
@@ -156,7 +174,7 @@ class ConfmgtModelRev1ew extends JModelItem {
             // Attempt to check the row out.
             if (method_exists($table, 'checkout')) {
                 if (!$table->checkout($user->get('id'), $id)) {
-                    $this->setError($table->getError());
+                    JFactory::$application->enqueueMessage($table->getError());
                     return false;
                 }
             }
@@ -165,17 +183,17 @@ class ConfmgtModelRev1ew extends JModelItem {
         return true;
     }
 
-    public function getCategoryName($id) {
-        $db = JFactory::getDbo();
-        $query = $db->getQuery(true);
-        $query
-                ->select('title')
-                ->from('#__categories')
-                ->where('id = ' . $id);
-        $db->setQuery($query);
-        return $db->loadObject();
-    }
 
+    /**
+     * Method to publish a review
+     *
+     * @param $id
+     * @param $state
+     *
+     * @return bool
+     *
+     * @since version 3.8.0
+     */
     public function publish($id, $state) {
         $table = $this->getTable();
         $table->load($id);
@@ -183,65 +201,19 @@ class ConfmgtModelRev1ew extends JModelItem {
         return $table->store();
     }
 
+
+    /**
+     * Method to delete a review
+     *
+     * @param $id
+     *
+     * @return bool
+     *
+     * @since version 3.8.0
+     */
     public function delete($id) {
         $table = $this->getTable();
         return $table->delete($id);
     }
-	
-		public function getPaper($id = null)
-	{
-			$this->_paperItem = false;
-		
-			if (empty($id)) {
-					$id = $this->getLinkid();
-			}
-			
-			$table = $this->getTable('Paper', 'ConfmgtTable');
-			if ($table->load($id))
-			{
-				
-				$user = JFactory::getUser();
-				$id = $table->id;
-				
-				//ToDo Confmgt ACL 
-				$canEdit = true;
-				
-				//$canEdit = $user->authorise('core.edit', 'com_confmgt') || $user->authorise('core.create', 'com_confmgt');
-				//if (!$canEdit && $user->authorise('core.edit.own', 'com_confmgt')) {
-				//    $canEdit = $user->id == $table->created_by;
-				//}
-	
-				if (!$canEdit) {
-					JError::raiseError('500', JText::_('JERROR_ALERTNOAUTHOR'));
-				}
-				
-	
-				// Convert the JTable to a clean JObject.
-				$properties = $table->getProperties(1);
-				$this->_paperItem = JArrayHelper::toObject($properties, 'JObject');
-				$this->_paperItem->full_paper_download = $this->_FullPaperDownloadBtn($this->_paperItem->full_paper);
-			} elseif ($error = $table->getError()) {
-				$this->setError($error);
-			}
-		return $this->_paperItem;
-	}
-	
-				//Generate presentation change button
-	private function _FullPaperDownloadBtn ($filename)
-	{ 
-		$html =  "<div style=\"display:inline\">";
-		$html = $html. "<form id=\"form-download\"";
-		$html = $html." action=\"".JRoute::_('index.php')."\" method=\"post\" class=\"form-validate\" enctype=\"multipart/form-data\">";
-		$html = $html.JHtml::_('form.token');
-  		$html = $html."<input type=\"hidden\" name=\"option\" value=\"com_confmgt\" />";
-  		$html = $html."<input type=\"hidden\" name=\"task\" value=\"paper.downloadfullpaper\" />";
-		$html = $html."<input type=\"hidden\" name=\"filename\" value=\"".$filename."\" />";
-  		$html = $html."<button class=\"btn btn-default\" type=\"submit\">";
-		$html =	$html.JText::_("Download");
-		$html = $html."</button></form></div>";
-		return $html;
-		
-	}
-
 
 }

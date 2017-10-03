@@ -87,7 +87,7 @@ class ConfmgtModelRegForm extends JModelForm
 		$form = $this->loadForm('com_confmgt.reg', 'regform', array('control' => 'jform', 'load_data' => $loadData));
 		if (empty($form))
 		{
-			return false;
+			throw new Exception('Form could not be loaded',500);
 		}
 
 		return $form;

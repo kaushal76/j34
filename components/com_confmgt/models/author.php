@@ -89,7 +89,7 @@ class ConfmgtModelAuthor extends JModelItem {
                 $properties = $table->getProperties(1);
                 $this->_item = Joomla\Utilities\ArrayHelper::toObject($properties, 'JObject');
             } elseif ($error = $table->getError()) {
-                $this->setError($error);
+                JFactory::$application->enqueueMessage($error);
             }
         }
 
@@ -207,17 +207,17 @@ class ConfmgtModelAuthor extends JModelItem {
         return true;
     }
 
-    public function getCategoryName($id) {
-        $db = JFactory::getDbo();
-        $query = $db->getQuery(true);
-        $query
-                ->select('title')
-                ->from('#__categories')
-                ->where('id = ' . $id);
-        $db->setQuery($query);
-        return $db->loadObject();
-    }
 
+    /**
+     * Method to publish  an author
+     *
+     * @param $id
+     * @param $state
+     *
+     * @return bool
+     *
+     * @since version 3.8.0
+     */
     public function publish($id, $state) {
         $table = $this->getTable();
         $table->load($id);
@@ -225,6 +225,17 @@ class ConfmgtModelAuthor extends JModelItem {
         return $table->store();
     }
 
+    /**
+     * Method to delete an author
+     *
+     * @param $id
+     * @param $linkId
+     *
+     * @return bool
+     *
+     * @since version 3.8.0
+     * @throws Exception
+     */
     public function delete($id, $linkId) {
 
         $authorised = AclHelper::isAuthor($linkId);

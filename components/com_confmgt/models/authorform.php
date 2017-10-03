@@ -112,7 +112,18 @@ class ConfmgtModelAuthorForm extends JModelForm
 
 		return $this->_item;
 	}
-    
+
+    /**
+     * Method to get a table object
+     *
+     * @param string $type
+     * @param string $prefix
+     * @param array $config
+     *
+     * @return bool|JTable
+     *
+     * @since version 3.8.0
+     */
 	public function getTable($type = 'Author', $prefix = 'ConfmgtTable', $config = array())
 	{   
         $this->addTablePath(JPATH_COMPONENT_ADMINISTRATOR.'/tables');
@@ -182,7 +193,7 @@ class ConfmgtModelAuthorForm extends JModelForm
 	}    
     
 	/**
-	 * Method to get the profile form.
+	 * Method to get the author form.
 	 *
 	 * The base form is loaded from XML 
      * 

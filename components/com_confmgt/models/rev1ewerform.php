@@ -1,20 +1,20 @@
 <?php
 /**
- * @version     2.5.7
+ * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
  */
 // No direct access.
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.modelform');
-jimport('joomla.event.dispatcher');
-
 /**
- * Confmgt model.
+ * @package CONFMGT
+ *
+ * @since version 3.8.0
  */
+
 class ConfmgtModelRev1ewerForm extends JModelForm
 {
     
@@ -90,9 +90,9 @@ class ConfmgtModelRev1ewerForm extends JModelForm
 
 				// Convert the JTable to a clean JObject.
 				$properties = $table->getProperties(1);
-				$this->_item = JArrayHelper::toObject($properties, 'JObject');
+				$this->_item = Joomla\Utilities\ArrayHelper::toObject($properties, 'JObject');
 			} elseif ($error = $table->getError()) {
-				$this->setError($error);
+				JFactory::$application->enqueueMessage($error);
 			}
 		}
 
@@ -123,15 +123,26 @@ class ConfmgtModelRev1ewerForm extends JModelForm
 			{
 				// Convert the JTable to a clean JObject.
 				$properties = $table->getProperties(1);
-				$return = JArrayHelper::toObject($properties, 'JObject');
+				$return = Joomla\Utilities\ArrayHelper::toObject($properties, 'JObject');
 			} elseif ($error = $table->getError()) {
-				$this->setError($error);
+				JFactory::$application->enqueueMessage($error);
 				$return = false;
 		}
 
 		return $return;
 	}
-    
+
+    /**
+     * Method to get the table object
+     *
+     * @param string $type
+     * @param string $prefix
+     * @param array $config
+     *
+     * @return bool|JTable
+     *
+     * @since version 3.8.0
+     */
 	public function getTable($type = 'Rev1ewer', $prefix = 'ConfmgtTable', $config = array())
 	{   
         $this->addTablePath(JPATH_COMPONENT_ADMINISTRATOR.'/tables');
@@ -159,7 +170,7 @@ class ConfmgtModelRev1ewerForm extends JModelForm
 			// Attempt to check the row in.
             if (method_exists($table, 'checkin')) {
                 if (!$table->checkin($id)) {
-                    $this->setError($table->getError());
+                    JFactory::$application->enqueueMessage($table->getError());
                     return false;
                 }
             }
@@ -191,7 +202,7 @@ class ConfmgtModelRev1ewerForm extends JModelForm
 			// Attempt to check the row out.
             if (method_exists($table, 'checkout')) {
                 if (!$table->checkout($user->get('id'), $id)) {
-                    $this->setError($table->getError());
+                    JFactory::$application->enqueueMessage($table->getError());
                     return false;
                 }
             }
@@ -272,12 +283,22 @@ class ConfmgtModelRev1ewerForm extends JModelForm
         if ($table->save($data) === true) {
             return $table->id;
         } else {
-			$this->setError($table->getError());
+            JFactory::$application->enqueueMessage($table->getError());
             return false;
         }
         
 	}
-	
+
+    /**
+     * Method to make a reviewer "Agree" to an invitation
+     *
+     * @param $id
+     * @param int $userid
+     *
+     * @return bool
+     *
+     * @since version 3.8.0
+     */
 	public function agree($id, $userid = 0)
 	{
 		$user = JFactory::getUser();
@@ -300,7 +321,17 @@ class ConfmgtModelRev1ewerForm extends JModelForm
         }
         
 	}
-	
+
+    /**
+     * Method to make a reviewer "Reject" an invitation
+     *
+     * @param $id
+     * @param int $userid
+     *
+     * @return bool
+     *
+     * @since version 3.8.0
+     */
 	public function reject($id, $userid=0)
 	{
 		$user = JFactory::getUser();
@@ -322,8 +353,17 @@ class ConfmgtModelRev1ewerForm extends JModelForm
         }
         
 	}
-    
-     function delete($data)
+
+    /**
+     * Method to delete a reviewer
+     *
+     * @param $data
+     *
+     * @return bool
+     *
+     * @since version 3.8.0
+     */
+	function delete($data)
     {
         $id = (!empty($data['id'])) ? $data['id'] : (int)$this->getState('rev1ewer.id');
        
@@ -331,15 +371,15 @@ class ConfmgtModelRev1ewerForm extends JModelForm
         if ($table->delete($data['id']) === true) {
             return true;
         } else {
-			$this->setError($table->getError());
+            JFactory::$application->enqueueMessage($table->getError());
             return false;
         }
         
         return true;
     }
-	
-		/**
-	 * Method to save the form data.
+
+    /**
+	 * Method to save the user based on the reviewer data
 	 *
 	 * @param	array		The form data.
 	 * @return	mixed		The user id on success, false on failure.
@@ -366,20 +406,29 @@ class ConfmgtModelRev1ewerForm extends JModelForm
 
 		if (!$user->bind($userdata)) { // bind the data and if it fails raise an error
 	
-		 JError::raiseWarning('', JText::_( $user->getError())); // something went wrong!!
+		 JFactory::$application->enqueueMessage(JText::_( $user->getError()),'error'); // something went wrong!!
 			return false;
 		}
 	
 		if (!$user->save()) { // now check if the new user is saved
-		 JError::raiseWarning('', JText::_( $user->getError())); // something went wrong!!  
+            JFactory::$application->enqueueMessage(JText::_( $user->getError()),'error'); // something went wrong!!
 			return false;
 		}
 	 
 	return true;
 
 	}
-	
-		//Function to get Reviewer ID by the agree column random number
+
+
+    /**
+     * Method to get Reviewer ID by the agree column random number
+     *
+     * @param $rnd
+     *
+     * @return bool|mixed
+     *
+     * @since version 3.8.0
+     */
 	public static function getRev1ewerDetails($rnd)
 	{
 		//Obtain a database connection

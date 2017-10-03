@@ -92,7 +92,7 @@ class ConfmgtModelAuthors extends JModelList {
 
 				if (!$table->move($delta, $where))
 				{
-					$this->setError($table->getError());
+					JFactory::$application->enqueueMessage($table->getError());
 					unset($pks[$i]);
 					$result = false;
 				}
@@ -101,7 +101,7 @@ class ConfmgtModelAuthors extends JModelList {
 			}
 			else
 			{
-				$this->setError($table->getError());
+                JFactory::$application->enqueueMessage($table->getError());
 				unset($pks[$i]);
 				$result = false;
 			}
@@ -140,7 +140,7 @@ class ConfmgtModelAuthors extends JModelList {
 
 		if (empty($pks))
 		{
-			return JError::raiseWarning(500, JText::_($this->text_prefix . '_ERROR_NO_ITEMS_SELECTED'));
+			throw new Exception(JText::_($this->text_prefix . '_ERROR_NO_ITEMS_SELECTED'),500);
 		}
 
 		// Update ordering values
@@ -154,7 +154,7 @@ class ConfmgtModelAuthors extends JModelList {
 
 				if (!$table->store())
 				{
-					$this->setError($table->getError());
+					JFactory::$application->enqueueMessage($table->getError());
 					return false;
 				}
 
@@ -191,9 +191,19 @@ class ConfmgtModelAuthors extends JModelList {
 
 		return true;
 	}
-	
-	
-	
+
+
+    /**
+     * Method to get the table object
+     *
+     * @param string $type
+     * @param string $prefix
+     * @param array $config
+     *
+     * @return bool|JTable
+     *
+     * @since version 3.8.0
+     */
 	public function getTable($type = 'Author', $prefix = 'ConfmgtTable', $config = array())
 	{   
         $this->addTablePath(JPATH_COMPONENT_ADMINISTRATOR.'/tables');
@@ -241,7 +251,7 @@ class ConfmgtModelAuthors extends JModelList {
 		if (!$linkid==0) { 
 			$query->where('linkid ='.$linkid);
 		}else{
-			JError::raiseError(500, 'No paper id');
+			JFactory::$application->enqueueMessage('No paper id',500);
 			return false;
 		}
 		$query->order('a.ordering ASC');
@@ -261,6 +271,14 @@ class ConfmgtModelAuthors extends JModelList {
 		
 	}
 
+    /**
+     * Method to get items
+     *
+     * @return mixed
+     *
+     * @since version 3.8.0
+     */
+
 	public function getItems() {
 		
 		// This is the best place to compact the ordering..
@@ -273,6 +291,15 @@ class ConfmgtModelAuthors extends JModelList {
         return parent::getItems();
     }
 
+    /**
+     * Method to get a list of authors for a given paper.
+     *
+     * @param $paperid
+     *
+     * @return mixed
+     *
+     * @since version 3.8.0
+     */
     public function getAuthorsForPaper($paperid)
     {
 	    $linkid = $paperid;

@@ -187,11 +187,23 @@ class ConfmgtModelRev1ewersforPaperForm extends JModelForm
 		$db->setQuery($this->getAuthorsQuery()); 
 		
 		// Load the row.
-		$rows = $db->loadObjectlist();	
+		$rows = $db->loadObjectList();
 		return $rows; 
 	}
-    
-    
+
+
+    /**
+     *
+     * Method to get the table object
+     *
+     * @param string $type
+     * @param string $prefix
+     * @param array $config
+     *
+     * @return bool|JTable
+     *
+     * @since version 3.8.0
+     */
 	public function getTable($type = 'Rev1ewersforpaper', $prefix = 'ConfmgtTable', $config = array())
 	{   
         $this->addTablePath(JPATH_COMPONENT_ADMINISTRATOR.'/tables');
@@ -219,7 +231,7 @@ class ConfmgtModelRev1ewersforPaperForm extends JModelForm
 			// Attempt to check the row in.
             if (method_exists($table, 'checkin')) {
                 if (!$table->checkin($id)) {
-                    $this->setError($table->getError());
+                    JFactory::$application->enqueueMessage($table->getError());
                     return false;
                 }
             }
@@ -251,7 +263,7 @@ class ConfmgtModelRev1ewersforPaperForm extends JModelForm
 			// Attempt to check the row out.
             if (method_exists($table, 'checkout')) {
                 if (!$table->checkout($user->get('id'), $id)) {
-                    $this->setError($table->getError());
+                    JFactory::$application->enqueueMessage($table->getError());
                     return false;
                 }
             }
@@ -304,7 +316,6 @@ class ConfmgtModelRev1ewersforPaperForm extends JModelForm
         }
         $db		= $this->getDbo();
 		$query	= $db->getQuery(true);
-		$user = JFactory::getUser();
 		
 		// get the paper id		
 		$linkid = $data['paperid'];
@@ -366,8 +377,18 @@ class ConfmgtModelRev1ewersforPaperForm extends JModelForm
 			return false;
 		}
 	}
-    
-     function delete($data)
+
+    /**
+     * Method to remove reviewer assignment to a paper
+     *
+     * @param $data
+     *
+     * @return bool
+     *
+     * @since version 3.8.0
+     * @throws Exception
+     */
+	function delete($data)
     {
         
 		$linkid = $this->getLinkid();
@@ -383,7 +404,6 @@ class ConfmgtModelRev1ewersforPaperForm extends JModelForm
         } else {
             return false;
         }
-        
-        return true;
+
     }
 }

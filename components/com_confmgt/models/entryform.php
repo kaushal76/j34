@@ -1,8 +1,8 @@
 <?php
 /**
- * @version     2.5.7
+ * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - http://www.confmgt.com
  */
@@ -10,11 +10,12 @@
 // No direct access.
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.modelform');
-jimport('joomla.event.dispatcher');
-
 /**
- * Confmgt model.
+ * Model class for the Entry form
+ *
+ * @package  CONFMGT
+ *
+ * @since version 3.8.0
  */
 class ConfmgtModelEntryForm extends JModelForm
 {
@@ -71,7 +72,7 @@ class ConfmgtModelEntryForm extends JModelForm
 	}
     
 	/**
-	 * Method to get the profile form.
+	 * Method to get the form.
 	 *
 	 * The base form is loaded from XML 
      * 
@@ -85,6 +86,7 @@ class ConfmgtModelEntryForm extends JModelForm
 		// Get the form.
 		$form = $this->loadForm('com_confmgt.login', 'loginform', array('control' => 'jform', 'load_data' => $loadData));
 		if (empty($form)) {
+		    JFactory::$application->enqueueMessage('Count not load the form',500);
 			return false;
 		}
 

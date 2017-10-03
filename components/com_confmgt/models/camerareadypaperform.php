@@ -123,6 +123,17 @@ class ConfmgtModelCameraReadyPaperForm extends JModelForm
         return $this->_item;
     }
 
+    /**
+     * Method to get the table object
+     *
+     * @param string $type
+     * @param string $prefix
+     * @param array $config
+     *
+     * @return bool|JTable
+     *
+     * @since version 3.8.0
+     */
     public function getTable($type = 'CameraReady', $prefix = 'ConfmgtTable', $config = array())
     {
         $this->addTablePath(JPATH_COMPONENT_ADMINISTRATOR . '/tables');

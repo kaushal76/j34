@@ -1,21 +1,24 @@
 <?php
 
 /**
- * @version     2.5.7
+ * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
  */
 // No direct access.
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.modelitem');
-jimport('joomla.event.dispatcher');
 
 /**
- * Confmgt model.
+ * Model class for a Reviewer object
+ *
+ * @package  CONFMGT
+ *
+ * @since version 3.8.0
  */
+
 class ConfmgtModelRev1ewer extends JModelItem {
 
     /**
@@ -61,23 +64,18 @@ class ConfmgtModelRev1ewer extends JModelItem {
                 $id = $this->getState('rev1ewer.id');
             }
 
-            // Get a level row instance.
             $table = $this->getTable();
-
-            // Attempt to load the row.
             if ($table->load($id)) {
-                // Check published state.
                 if ($published = $this->getState('filter.published')) {
                     if ($table->state != $published) {
                         return $this->_item;
                     }
                 }
 
-                // Convert the JTable to a clean JObject.
                 $properties = $table->getProperties(1);
-                $this->_item = JArrayHelper::toObject($properties, 'JObject');
+                $this->_item = Joomla\Utilities\ArrayHelper::toObject($properties, 'JObject');
             } elseif ($error = $table->getError()) {
-                $this->setError($error);
+                JFactory::$application->enqueueMessage($error);
             }
         }
 
@@ -88,7 +86,7 @@ class ConfmgtModelRev1ewer extends JModelItem {
 
 			if (isset($this->_item->full_review_outcome) && $this->_item->full_review_outcome != '') {
 				if(is_object($this->_item->full_review_outcome)){
-					$this->_item->full_review_outcome = JArrayHelper::fromObject($this->_item->full_review_outcome);
+					$this->_item->full_review_outcome = Joomla\Utilities\ArrayHelper::fromObject($this->_item->full_review_outcome);
 				}
 				$values = (is_array($this->_item->full_review_outcome)) ? $this->_item->full_review_outcome : explode(',',$this->_item->full_review_outcome);
 
@@ -109,7 +107,7 @@ class ConfmgtModelRev1ewer extends JModelItem {
 
 			if (isset($this->_item->abstract_review_outcome) && $this->_item->abstract_review_outcome != '') {
 				if(is_object($this->_item->abstract_review_outcome)){
-					$this->_item->abstract_review_outcome = JArrayHelper::fromObject($this->_item->abstract_review_outcome);
+					$this->_item->abstract_review_outcome = Joomla\Utilities\ArrayHelper::fromObject($this->_item->abstract_review_outcome);
 				}
 				$values = (is_array($this->_item->abstract_review_outcome)) ? $this->_item->abstract_review_outcome : explode(',',$this->_item->abstract_review_outcome);
 
@@ -131,6 +129,17 @@ class ConfmgtModelRev1ewer extends JModelItem {
         return $this->_item;
     }
 
+    /**
+     * Method to get the table object
+     *
+     * @param string $type
+     * @param string $prefix
+     * @param array $config
+     *
+     * @return bool|JTable
+     *
+     * @since version 3.8.0
+     */
     public function getTable($type = 'Rev1ewer', $prefix = 'ConfmgtTable', $config = array()) {
         $this->addTablePath(JPATH_COMPONENT_ADMINISTRATOR . '/tables');
         return JTable::getInstance($type, $prefix, $config);
@@ -155,7 +164,7 @@ class ConfmgtModelRev1ewer extends JModelItem {
             // Attempt to check the row in.
             if (method_exists($table, 'checkin')) {
                 if (!$table->checkin($id)) {
-                    $this->setError($table->getError());
+                    JFactory::$application->enqueueMessage($table->getError());
                     return false;
                 }
             }
@@ -186,7 +195,7 @@ class ConfmgtModelRev1ewer extends JModelItem {
             // Attempt to check the row out.
             if (method_exists($table, 'checkout')) {
                 if (!$table->checkout($user->get('id'), $id)) {
-                    $this->setError($table->getError());
+                    JFactory::$application->enqueueMessage($table->getError());
                     return false;
                 }
             }
@@ -195,23 +204,32 @@ class ConfmgtModelRev1ewer extends JModelItem {
         return true;
     }
 
-    public function getCategoryName($id) {
-        $db = JFactory::getDbo();
-        $query = $db->getQuery(true);
-        $query
-                ->select('title')
-                ->from('#__categories')
-                ->where('id = ' . $id);
-        $db->setQuery($query);
-        return $db->loadObject();
-    }
-
+    /**
+     * Method to publish a reviewer
+     *
+     * @param $id
+     * @param $state
+     *
+     * @return bool
+     *
+     * @since version 3.8.0
+     */
     public function publish($id, $state) {
         $table = $this->getTable();
         $table->load($id);
         $table->state = $state;
         return $table->store();
     }
+
+    /**
+     * Method to delete a reviewer
+     *
+     * @param $id
+     *
+     * @return bool
+     *
+     * @since version 3.8.0
+     */
 
     public function delete($id) {
         $table = $this->getTable();

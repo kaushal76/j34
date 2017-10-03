@@ -62,8 +62,7 @@ class ConfmgtModelLoginForm extends JModelForm
 		// Get the form.
 		$form = $this->loadForm('com_confmgt.login', 'loginform', array('control' => 'jform', 'load_data' => $loadData));
 		if (empty($form)) {
-			throw new RuntimeException("Could not load the login form");
-		    return false;
+			throw new Exception("Could not load the login form");
 		}
 		return $form;
 	}

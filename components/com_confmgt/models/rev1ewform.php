@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     2.5.7
+ * @version     3.8.0
  * @package     com_confmgt
  * @copyright   Copyright (C) 2015. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -9,11 +9,11 @@
 // No direct access.
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.modelform');
-jimport('joomla.event.dispatcher');
 
 /**
- * Confmgt model.
+ * @package  CONFMGT
+ *
+ * @since version 3.8.0
  */
 class ConfmgtModelRev1ewForm extends JModelForm
 {
@@ -49,24 +49,22 @@ class ConfmgtModelRev1ewForm extends JModelForm
 		$this->setState('params', $params);
 
 	}
-	
-	/**
-     * Method to get the LinkID set in either the user session data or the fget / post data.
-     *
-     * @return	linkid
-     * 
+
+    /**
+     * Method to get the paperID
+     * @return bool/mixed
+     * @since version 3.8.0
      */
-	public function &getLinkid()
-	{
-		$linkid = JFactory::getApplication()->getUserStateFromRequest( "com_confmgt.linkid", 'linkid', 0 );
-		if ($linkid == 0)
-		{
-			JError::raiseError('500', JText::_('JERROR_NO_PAPERID'));
-			return false;
-		}else{		
-			return $linkid;
-		}		
-	}
+
+    public function getLinkid()
+    {
+        $linkid = JFactory::getApplication()->input->get('linkid');
+        if (!$linkid) {
+            throw new Exception(JText::_('JERROR_NO_PAPERID'),404);
+        } else {
+            return $linkid;
+        }
+    }
 	
 	public function getPaper($id = null)
 	{
@@ -79,29 +77,19 @@ class ConfmgtModelRev1ewForm extends JModelForm
 			$table = $this->getTable('Paper', 'ConfmgtTable');
 			if ($table->load($id))
 			{
-				
-				$user = JFactory::getUser();
 				$id = $table->id;
-				
-				//ToDo Confmgt ACL 
-				$canEdit = true;
-				
-				//$canEdit = $user->authorise('core.edit', 'com_confmgt') || $user->authorise('core.create', 'com_confmgt');
-				//if (!$canEdit && $user->authorise('core.edit.own', 'com_confmgt')) {
-				//    $canEdit = $user->id == $table->created_by;
-				//}
+
+				$canEdit = AclHelper::isAuthor($id);
 	
 				if (!$canEdit) {
-					JError::raiseError('500', JText::_('JERROR_ALERTNOAUTHOR'));
+					throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'),500);
 				}
-				
-	
-				// Convert the JTable to a clean JObject.
+
 				$properties = $table->getProperties(1);
-				$this->_paperItem = JArrayHelper::toObject($properties, 'JObject');
+				$this->_paperItem = Joomla\Utilities\ArrayHelper::toObject($properties, 'JObject');
 				$this->_paperItem->full_paper_download = $this->_FullPaperDownloadBtn($this->_paperItem->full_paper);
 			} elseif ($error = $table->getError()) {
-				$this->setError($error);
+				JFactory::$application->enqueueMessage($error);
 			}
 		return $this->_paperItem;
 	}
@@ -131,23 +119,13 @@ class ConfmgtModelRev1ewForm extends JModelForm
 			// Attempt to load the row.
 			if ($table->load($id))
 			{
-                
-                $user = JFactory::getUser();
                 $id = $table->id;
-				
-				//ToDo Confmgt ACL 
-                $canEdit = true;
-				
-				//$canEdit = $user->authorise('core.edit', 'com_confmgt') || $user->authorise('core.create', 'com_confmgt');
-                //if (!$canEdit && $user->authorise('core.edit.own', 'com_confmgt')) {
-                //    $canEdit = $user->id == $table->created_by;
-                //}
+                $canEdit = AclHelper::isThemeleader();
 
                 if (!$canEdit) {
-                    JError::raiseError('500', JText::_('JERROR_ALERTNOAUTHOR'));
+                    throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'),500);
                 }
-                
-				// Check published state.
+
 				if ($published = $this->getState('filter.published'))
 				{
 					if ($table->state != $published) {
@@ -155,17 +133,27 @@ class ConfmgtModelRev1ewForm extends JModelForm
 					}
 				}
 
-				// Convert the JTable to a clean JObject.
 				$properties = $table->getProperties(1);
-				$this->_item = JArrayHelper::toObject($properties, 'JObject');
+				$this->_item = Joomla\Utilities\ArrayHelper::toObject($properties, 'JObject');
 			} elseif ($error = $table->getError()) {
-				$this->setError($error);
+				JFactory::$application->enqueueMessage($error);
 			}
 		}
 
 		return $this->_item;
 	}
-    
+
+    /**
+     * Method to get a Table object
+     *
+     * @param string $type
+     * @param string $prefix
+     * @param array $config
+     *
+     * @return bool|JTable
+     *
+     * @since version 3.8.0
+     */
 	public function getTable($type = 'Rev1ew', $prefix = 'ConfmgtTable', $config = array())
 	{   
         $this->addTablePath(JPATH_COMPONENT_ADMINISTRATOR.'/tables');
@@ -193,7 +181,7 @@ class ConfmgtModelRev1ewForm extends JModelForm
 			// Attempt to check the row in.
             if (method_exists($table, 'checkin')) {
                 if (!$table->checkin($id)) {
-                    $this->setError($table->getError());
+                    JFactory::$application->enqueueMessage($table->getError());
                     return false;
                 }
             }
@@ -225,7 +213,7 @@ class ConfmgtModelRev1ewForm extends JModelForm
 			// Attempt to check the row out.
             if (method_exists($table, 'checkout')) {
                 if (!$table->checkout($user->get('id'), $id)) {
-                    $this->setError($table->getError());
+                    JFactory::$application->enqueueMessage($table->getError());
                     return false;
                 }
             }
@@ -286,86 +274,74 @@ class ConfmgtModelRev1ewForm extends JModelForm
 			
 			$user = JFactory::getUser();
 			$app = JFactory::getApplication();
-			
-			// check if paper id is set and then get the paper id
 			$data['created_by'] = $user->id;
 		
 		}
-		//print_r($data);
         $state = (!empty($data['state'])) ? 1 : 0;
-	
-        /*
-		if($id) {
-            //Check the user can edit this item
-            $authorised = $user->authorise('core.edit', 'com_confmgt') || $authorised = $user->authorise('core.edit.own', 'com_confmgt');
-            if($user->authorise('core.edit.state', 'com_confmgt') !== true && $state == 1){ //The user cannot edit the state of the item.
-                $data['state'] = 0;
-            }
-        } else {
-            //Check the user can create new items in this section
-            $authorised = $user->authorise('core.create', 'com_confmgt');
-            if($user->authorise('core.edit.state', 'com_confmgt') !== true && $state == 1){ //The user cannot edit the state of the item.
-                $data['state'] = 0;
-            }
-        }
-		*/
 		
-		//Change to Confmgt ACL
-		
-		$authorised = true;
+		$authorised = AclHelper::isThemeleader();
 
-        //if ($authorised !== true) {
-        //    JError::raiseError(403, JText::_('JERROR_ALERTNOAUTHOR'));
-        //    return false;
-        //}
+        if (!$authorised) {
+            throw new Exception('Not Authorised',403);
+        }
 		
         $table = $this->getTable();
 		$paper_table = $this->getTable('Paper', 'ConfmgtTable');
-		
-		//loading the paper details table
+
 		if (!$paper_table->load($data['linkid'])) {
-			
-			//something wrong with loading the paper data, returning false;
+            JFactory::$application->enqueueMessage('Could not load the paper','error');
 			return false;
 		}
-		
-		//set the abstract ID and full paper ID in the review table
+
 		$data['abstractid'] = $paper_table->abstractid;
 		$data['fullpaperid'] = $paper_table->fullpaperid;
 		
         if ($table->save($data) === true) {
-			//all fine, returning true
             return $id;
         } else {
-			
-			//something wrong with saving data to the reviews table
+            JFactory::$application->enqueueMessage('Error saving the review','error');
             return false;
         }
         
 	}
-    
-     function delete($data)
+
+    /**
+     * Method to delete a review
+     *
+     * @param $data
+     *
+     * @return bool|int
+     *
+     * @since version 3.8.0
+     */
+
+	public function delete($data)
     {
         $id = (!empty($data['id'])) ? $data['id'] : (int)$this->getState('rev1ew.id');
-        
-		/*
-		if(JFactory::getUser()->authorise('core.delete', 'com_confmgt') !== true){
-            JError::raiseError(403, JText::_('JERROR_ALERTNOAUTHOR'));
-          		    return false;
+
+        $authrosied = AclHelper::isThemeleader();
+
+        if (!$authrosied) {
+            throw new Exception('Not authorised',403);
         }
-		
-		*/
+
         $table = $this->getTable();
         if ($table->delete($data['id']) === true) {
             return $id;
         } else {
             return false;
         }
-        
-        return true;
     }
-	
-			//Generate presentation change button
+
+    /**
+     * Generate the download Btn
+     *
+     * @param $filename
+     *
+     * @return string
+     *
+     * @since version 3.8.0
+     */
 	private function _FullPaperDownloadBtn ($filename)
 	{ 
 		$html =  "<div style=\"display:inline\">";
