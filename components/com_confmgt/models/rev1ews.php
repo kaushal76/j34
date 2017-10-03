@@ -22,7 +22,7 @@ class ConfmgtModelRev1ews extends JModelList {
     /**
      * Constructor.
      *
-     * @param    array    An optional associative array of configuration settings.
+     * @param    array an optional associative array of configuration settings.
      * @see        JController
      * @since    1.6
      */
@@ -155,13 +155,27 @@ class ConfmgtModelRev1ews extends JModelList {
 		return $query;
 	
 	}
- 
-	
+
+
+    /**
+     * Method to get the item
+     *
+     * @return mixed
+     *
+     * @since version 3.8.0
+     */
 	public function getItems() {
         return parent::getItems();
     }
-	
-	public function getAbstractItemsPending() {
+
+    /**
+     * Method to get the Pending Abstract Reviews
+     *
+     * @return array|bool
+     *
+     * @since version 3.8.0
+     */
+    public function getAbstractItemsPending() {
 		 
 		$abstract_items  = $this->_getItemsAbstractRvPending();
 
@@ -182,7 +196,14 @@ class ConfmgtModelRev1ews extends JModelList {
 			return false;
 		}						 
 	}
-	
+
+    /**
+     * Method to get Full Paper Pending Reviews
+     *
+     * @return array|bool
+     *
+     * @since version 3.8.0
+     */
 	public function getFullpaperItemsPending() {
 			
 		$fullpaper_items  = $this->_getItemsFullpaperRvPending();
@@ -206,7 +227,13 @@ class ConfmgtModelRev1ews extends JModelList {
 		}
 	}
 
-	
+
+    /**
+     * Provate method to get Pending Abstract Reviews
+     * @return mixed
+     *
+     * @since version 3.8.0
+     */
 	protected function _getItemsAbstractRvPending()
 	{		
 		$db		= $this->getDbo();
@@ -217,7 +244,14 @@ class ConfmgtModelRev1ews extends JModelList {
 		return $results;
 		
 	}
-	
+
+    /**
+     * Private method to get Pending Full Paper Reviews
+     *
+     * @return mixed
+     *
+     * @since version 3.8.0
+     */
 	protected function _getItemsFullpaperRvPending()
 	{
 		$db		= $this->getDbo();
@@ -228,8 +262,18 @@ class ConfmgtModelRev1ews extends JModelList {
 		return $results;
 	
 	}
-	
-	
+
+
+    /**
+     * Method to get completed reviews
+     *
+     * @param int $paperid
+     * @param int $mode
+     *
+     * @return bool|mixed
+     *
+     * @since version 3.8.0
+     */
 	public function getItemsCompleted($paperid=0, $mode=0) {
 		$db		= $this->getDbo();
 		$query	= $db->getQuery(true);

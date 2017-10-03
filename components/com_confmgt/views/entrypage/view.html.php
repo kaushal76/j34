@@ -51,6 +51,7 @@ class ConfmgtViewEntrypage extends JViewLegacy {
 		// if the user has been invited (and agreed) to be a reviewer,
 		// he needs to be authenticate as a reviewer
 		$this->role['isRev1ewer'] = AclHelper::isRev1ewer();
+        $this->role['isSuperCoordinator'] = AclHelper::isSuperCoordinator();
 			
 		// get the sitename to make a part of the heading
 		$this->sitename = $config->get('sitename' );
