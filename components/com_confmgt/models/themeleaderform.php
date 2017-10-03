@@ -1,19 +1,20 @@
 <?php
 /**
- * @version     2.5.7
+ * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
  */
 // No direct access.
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.modelform');
-jimport('joomla.event.dispatcher');
-
 /**
- * Confmgt model.
+ * Method to get the theme leader form
+ *
+ * @package  CONFMGT
+ *
+ * @since version 3.8.0
  */
 class ConfmgtModelThemeleaderForm extends JModelForm
 {
@@ -30,8 +31,6 @@ class ConfmgtModelThemeleaderForm extends JModelForm
 	protected function populateState()
 	{
 		$app = JFactory::getApplication('com_confmgt');
-
-		// Load state from the request userState on edit or from the passed variable on default
         if (JFactory::getApplication()->input->get('layout') == 'edit') {
             $id = JFactory::getApplication()->getUserState('com_confmgt.edit.themeleader.id');
         } else {
@@ -68,25 +67,18 @@ class ConfmgtModelThemeleaderForm extends JModelForm
 				$id = $this->getState('themeleader.id');
 			}
 
-			// Get a level row instance.
 			$table = $this->getTable();
-
-			// Attempt to load the row.
 			if ($table->load($id))
 			{
                 
                 $user = JFactory::getUser();
                 $id = $table->id;
-                $canEdit = $user->authorise('core.edit', 'com_confmgt') || $user->authorise('core.create', 'com_confmgt');
-                if (!$canEdit && $user->authorise('core.edit.own', 'com_confmgt')) {
-                    $canEdit = $user->id == $table->created_by;
-                }
+                $canEdit = AclHelper::isSuperCoordinator();
 
                 if (!$canEdit) {
-                    JError::raiseError('500', JText::_('JERROR_ALERTNOAUTHOR'));
+                    throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'),500);
                 }
-                
-				// Check published state.
+
 				if ($published = $this->getState('filter.published'))
 				{
 					if ($table->state != $published) {
@@ -94,17 +86,27 @@ class ConfmgtModelThemeleaderForm extends JModelForm
 					}
 				}
 
-				// Convert the JTable to a clean JObject.
 				$properties = $table->getProperties(1);
-				$this->_item = JArrayHelper::toObject($properties, 'JObject');
+				$this->_item = Joomla\Utilities\ArrayHelper::toObject($properties, 'JObject');
 			} elseif ($error = $table->getError()) {
-				$this->setError($error);
+				JFactory::$application->enqueueMessage($error);
 			}
 		}
 
 		return $this->_item;
 	}
-    
+
+    /**
+     * Method to get the table object
+     *
+     * @param string $type
+     * @param string $prefix
+     * @param array $config
+     *
+     * @return bool|JTable
+     *
+     * @since version 3.8.0
+     */
 	public function getTable($type = 'Themeleader', $prefix = 'ConfmgtTable', $config = array())
 	{   
         $this->addTablePath(JPATH_COMPONENT_ADMINISTRATOR.'/tables');
@@ -121,18 +123,13 @@ class ConfmgtModelThemeleaderForm extends JModelForm
 	 */
 	public function checkin($id = null)
 	{
-		// Get the id.
 		$id = (!empty($id)) ? $id : (int)$this->getState('themeleader.id');
 
 		if ($id) {
-            
-			// Initialise the table
 			$table = $this->getTable();
-
-			// Attempt to check the row in.
             if (method_exists($table, 'checkin')) {
                 if (!$table->checkin($id)) {
-                    $this->setError($table->getError());
+                    JFactory::$application->enqueueMessage($table->getError());
                     return false;
                 }
             }
@@ -164,7 +161,7 @@ class ConfmgtModelThemeleaderForm extends JModelForm
 			// Attempt to check the row out.
             if (method_exists($table, 'checkout')) {
                 if (!$table->checkout($user->get('id'), $id)) {
-                    $this->setError($table->getError());
+                    JFactory::$application->enqueueMessage($table->getError());
                     return false;
                 }
             }
@@ -223,22 +220,10 @@ class ConfmgtModelThemeleaderForm extends JModelForm
         $state = (!empty($data['state'])) ? 1 : 0;
         $user = JFactory::getUser();
 
-        if($id) {
-            //Check the user can edit this item
-            $authorised = $user->authorise('core.edit', 'com_confmgt') || $authorised = $user->authorise('core.edit.own', 'com_confmgt');
-            if($user->authorise('core.edit.state', 'com_confmgt') !== true && $state == 1){ //The user cannot edit the state of the item.
-                $data['state'] = 0;
-            }
-        } else {
-            //Check the user can create new items in this section
-            $authorised = $user->authorise('core.create', 'com_confmgt');
-            if($user->authorise('core.edit.state', 'com_confmgt') !== true && $state == 1){ //The user cannot edit the state of the item.
-                $data['state'] = 0;
-            }
-        }
+        $authorised = AclHelper::isSuperCoordinator();
 
         if ($authorised !== true) {
-            JError::raiseError(403, JText::_('JERROR_ALERTNOAUTHOR'));
+            throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'),403);
             return false;
         }
         
@@ -250,13 +235,22 @@ class ConfmgtModelThemeleaderForm extends JModelForm
         }
         
 	}
-    
-     function delete($data)
+
+    /**
+     * Method to delete data
+     *
+     * @param $data
+     *
+     * @return bool|int
+     *
+     * @since version 3.8.0
+     * @throws Exception
+     */
+	function delete($data)
     {
         $id = (!empty($data['id'])) ? $data['id'] : (int)$this->getState('themeleader.id');
         if(JFactory::getUser()->authorise('core.delete', 'com_confmgt') !== true){
-            JError::raiseError(403, JText::_('JERROR_ALERTNOAUTHOR'));
-            return false;
+            throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'),403);
         }
         $table = $this->getTable();
         if ($table->delete($data['id']) === true) {
@@ -264,8 +258,6 @@ class ConfmgtModelThemeleaderForm extends JModelForm
         } else {
             return false;
         }
-        
-        return true;
     }
     
 }
