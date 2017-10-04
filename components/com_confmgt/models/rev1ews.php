@@ -178,12 +178,13 @@ class ConfmgtModelRev1ews extends JModelList {
     public function getAbstractItemsPending() {
 		 
 		$abstract_items  = $this->_getItemsAbstractRvPending();
+        $item = NULL;
 
 		$return = array();
 		$i=0;
 		foreach ($abstract_items as $item) {
-			
-				$return[$i]->paperid = $item->id; 
+		        $return[$i] = new stdClass();
+				$return[$i]->paperid = $item->id;
 				$return[$i]->title = $item->title;
 				$return[$i]->due_date = $item->due_date;  
 				$return[$i]->mode = 'Abstract';
@@ -211,12 +212,13 @@ class ConfmgtModelRev1ews extends JModelList {
 		$return = array();
 		$i=0;
 		foreach ($fullpaper_items as $item) {
-				
-			$return[$i]->paperid = $item->id;
+
+            $return[$i] = new stdClass();
+		    $return[$i]->paperid = $item->id;
 			$return[$i]->title = $item->title;
 			$return[$i]->due_date = $item->due_date;
-			$return[$i]->mode = 'Abstract';
-			$return[$i]->fullpaper = $item->full_paper;
+			$return[$i]->mode = 'Full Paper';
+			$return[$i]->fullpaper = $item->fullpaper_id;
 			$i = $i+1;
 		}
 	
@@ -295,7 +297,7 @@ class ConfmgtModelRev1ews extends JModelList {
 		$query->where('a.created_by ='.(int)$user->id);
 		
 		if ($paperid > 0) {
-			$query->where('a.paper_id = '.(int)$paperid);
+			$query->where('a.paperid = '.(int)$paperid);
 		} 
 		
 		if ($mode) {

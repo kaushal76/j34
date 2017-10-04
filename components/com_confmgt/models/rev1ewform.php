@@ -287,16 +287,38 @@ class ConfmgtModelRev1ewForm extends JModelForm
 		
         $table = $this->getTable();
 		$paper_table = $this->getTable('Paper', 'ConfmgtTable');
+        $abstract_table = $this->getTable('Abstract', 'ConfmgtTable');
+        $fullpaper_table = $this->getTable('FullPaper', 'ConfmgtTable');
 
-		if (!$paper_table->load($data['linkid'])) {
-            JFactory::$application->enqueueMessage('Could not load the paper','error');
-			return false;
-		}
+        if (!$paper_table->load($data['linkid'])) {
+            JFactory::$application->enqueueMessage('Could not load the paper', 'error');
+            return false;
+        }
 
-		$data['abstract_id'] = $paper_table->abstractid;
-		$data['fullpaper_id'] = $paper_table->fullpaperid;
+
+        if ($data['mode'] == 'abstract') {
+            if (!$abstract_table->load($data['abstract_id'])) {
+                JFactory::$application->enqueueMessage('Could not load the paper', 'error');
+                return false;
+            }
+
+            $data['abstract_id'] = $paper_table->abstract_id;
+            $data['fullpaper_id'] = 0;
+        }
+
+        if ($data['mode'] == 'full') {
+            if (!$fullpaper_table->load($data['fullpaper_id'])) {
+                JFactory::$application->enqueueMessage('Could not load the paper','error');
+                return false;
+            }
+
+            $data['abstract_id'] = 0;
+            $data['fullpaper_id'] = $paper_table->fullpaper_id;
+
+        }
 		
         if ($table->save($data) === true) {
+            JFactory::$application->enqueueMessage('Review saved and submitted');
             return $id;
         } else {
             JFactory::$application->enqueueMessage('Error saving the review','error');
