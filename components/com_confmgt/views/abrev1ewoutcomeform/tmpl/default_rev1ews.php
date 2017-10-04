@@ -17,7 +17,6 @@ defined('_JEXEC') or die;
             echo JText::_('COM_CONFMGT_PAPER_REVIEW_PANEL_HEADING') . ' - ' . JText::_('Paper ID') . $this->item->id; ?>
         </h1>
     </div>
-    <div class="panel-body">
         <?php
         if ($this->rev1ews)
         { ?>
@@ -74,5 +73,4 @@ defined('_JEXEC') or die;
             }
             ?>
         </div>
-    </div>
 </div>

@@ -93,7 +93,7 @@ class ConfmgtModelPapers extends JModelList
 
         // Select the required fields from the table.
         $query->delete($db->quoteName('#__confmgt_papers'));
-        $query->where("title = ''");
+        $query->where('title IS NULL');
         // For security reasons, deleting only the records created by the logged in user
         $query->where('created_by = ' . $user->id);
         $db->setQuery($query);
