@@ -7,12 +7,13 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - http://www.confmgt.com
  */
+
 // No direct access.
 defined('_JEXEC') or die;
 
 
 /**
- * Paper model
+ * Model class for the paper
  *
  * @package     CONFMGT
  *
@@ -50,7 +51,7 @@ class ConfmgtModelPaper extends JModelItem
     {
         $linkid = JFactory::getApplication()->input->get('linkid');
         if (!$linkid) {
-            throw new Exception(JText::_('JERROR_NO_PAPERID'),404);
+            throw new Exception(JText::_('JERROR_NO_PAPERID'), 404);
         } else {
             return $linkid;
         }
@@ -63,7 +64,7 @@ class ConfmgtModelPaper extends JModelItem
      * @since version 3.8.0
      */
 
-    private function _getQuery($id=null)
+    private function _getQuery($id = null)
     {
         $db = JFactory::getDbo();
         $query = $db->getQuery(true);
@@ -123,7 +124,7 @@ class ConfmgtModelPaper extends JModelItem
             ->join('LEFT', $db->quoteName('#__confmgt_camerareadypapers', 'e') . ' ON (' . $db->quoteName('a.cameraready_id') . ' = ' . $db->quoteName('e.id') . ')')
             ->join('LEFT', $db->quoteName('#__confmgt_abstracts', 'c') . ' ON (' . $db->quoteName('a.abstract_id') . ' = ' . $db->quoteName('c.id') . ')')
             ->join('LEFT', $db->quoteName('#__confmgt_presentations', 'd') . ' ON (' . $db->quoteName('a.presentation_id') . ' = ' . $db->quoteName('d.id') . ')')
-            ->where($db->quoteName('a.id') . ' = '.$id);
+            ->where($db->quoteName('a.id') . ' = ' . $id);
 
         return $query;
     }
@@ -137,7 +138,7 @@ class ConfmgtModelPaper extends JModelItem
      * @since version 3.8.0
      */
 
-    public function getPaper ($id=null)
+    public function getPaper($id = null)
     {
 
         $db = JFactory::getDbo();
@@ -346,6 +347,17 @@ class ConfmgtModelPaper extends JModelItem
         return $paper;
     }
 
+    /**
+     * Method to get the table object
+     *
+     * @param string $type
+     * @param string $prefix
+     * @param array $config
+     *
+     * @return bool|JTable
+     *
+     * @since version 3.8.0
+     */
     public function getTable($type = 'Paper', $prefix = 'ConfmgtTable', $config = array())
     {
         $this->addTablePath(JPATH_COMPONENT_ADMINISTRATOR . '/tables');
