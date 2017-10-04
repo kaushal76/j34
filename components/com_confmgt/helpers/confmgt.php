@@ -42,18 +42,29 @@ abstract class MainHelper
      *
      * @since version 3.8.0
      */
-    public static function getRev1ews($paperid = 0, $mode = 0)
+    public static function getRev1ews($paper_id = 0, $mode = 0, $abstract_id = 0, $fullpaper_id = 0)
     {
         //Obtain a database connection
         $db = JFactory::getDbo();
 
-        //Paper id given, hence checking if the themeleader for the given paper
         //Build the query
         $query = $db->getQuery(true);
         $query->select('a.*');
         $query->from($db->quoteName('#__confmgt_reviews', 'a'));
-        if ($paperid) {
-            $query->where('a.linkid = ' . (int)$paperid);
+        if ($paper_id) {
+            $query->where('a.linkid = ' . (int)$paper_id);
+            if ($mode) {
+                $query->where('a.mode = ' . "'" . $mode . "'");
+            }
+            $query->order('a.id ASC');
+        }elseif ($abstract_id){
+            $query->where('a.abstract_id = ' . (int)$abstract_id);
+            if ($mode) {
+                $query->where('a.mode = ' . "'" . $mode . "'");
+            }
+            $query->order('a.id ASC');
+        }elseif ($fullpaper_id) {
+            $query->where('a.fullpaper_id = ' . (int)$fullpaper_id);
             if ($mode) {
                 $query->where('a.mode = ' . "'" . $mode . "'");
             }

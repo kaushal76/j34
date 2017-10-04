@@ -174,6 +174,7 @@ class ConfmgtModelPaper extends JModelItem
 
         // Loading the Btns
         $paper->abstractBtn = null;
+        $paper->full_paper_txt = null;
         $paper->fullPaperBtn = null;
         $paper->full_paper_download = null;
         $paper->cameraReadyBtn = null;

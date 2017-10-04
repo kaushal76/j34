@@ -132,7 +132,8 @@ class ConfmgtModelAbrev1ewoutcomeForm extends JModelForm
 	public function getRev1ewData()
 	{
 		$linkid = $this->getLinkid();
-		$rows = MainHelper::getRev1ews((int)$linkid, 'abstract');
+        $abstract_id = MainHelper::getPaper($linkid)->abstract_id;
+		$rows = MainHelper::getRev1ews(0, 'abstract',(int)$abstract_id,0);
 		if ($rows) {
 			return $rows;
 		}else{
