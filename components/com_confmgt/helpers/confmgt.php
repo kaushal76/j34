@@ -88,7 +88,7 @@ abstract class MainHelper
         //Build the query
         $query = $db->getQuery(true);
         $query->select('a.*')
-            ->select($db->quoteName('b.userid', 'leaderid'))
+            ->select($db->quoteName('b.user_id', 'leaderid'))
             ->select($db->quoteName('b.id', 'themeid'))
             ->select($db->quoteName('b.title', 'themename'))
             ->select($db->quoteName('c.full_review_outcome', 'c.full_review_outcome'))
@@ -196,13 +196,13 @@ abstract class MainHelper
         $query->select('a.*');
         $query->from('`#__confmgt_rev1ewers_papers` AS a');
         $query->select(array('b.id AS revid', 'b.surname AS revsurname', 'b.title as revtitle', 'b.firstname as revfirstname'));
-        $query->join('LEFT', '#__confmgt_rev1ewers AS b ON b.id=a.reviewerid');
+        $query->join('LEFT', '#__confmgt_rev1ewers AS b ON b.id=a.reviewer_id');
         if (!$paperid == 0) {
-            $query->where('a.paperid =' . $paperid);
+            $query->where('a.paper_id =' . $paperid);
         } else {
             self::getLinkid();
         }
-        $query->order('a.reviewerid ASC');
+        $query->order('a.reviewer_id ASC');
 
         $db->setQuery($query);
 
@@ -249,9 +249,9 @@ abstract class MainHelper
         $query = $db->getQuery(true);
         $query
             ->select('a.*')
-            ->select('COUNT(b.reviewerid) AS papers');
+            ->select('COUNT(b.reviewer_id) AS papers');
         $query->from($db->quoteName('#__confmgt_rev1ewers', 'a'));
-        $query->join('LEFT', $db->quoteName('#__confmgt_rev1ewers_papers', 'b') . ' ON (' . $db->quoteName('a.id') . ' = ' . $db->quoteName('b.reviewerid') . ')');
+        $query->join('LEFT', $db->quoteName('#__confmgt_rev1ewers_papers', 'b') . ' ON (' . $db->quoteName('a.id') . ' = ' . $db->quoteName('b.reviewer_id') . ')');
         $query->where('a.id = ' . $revid);
         $query->group('a.id');
         $query->order('a.ordering ASC');

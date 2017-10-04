@@ -1,5 +1,5 @@
 <?php
-/**
+ /**
  * @version     3.8.0
  * @package     com_confmgt
  * @copyright   Copyright (C) 2017. All rights reserved.

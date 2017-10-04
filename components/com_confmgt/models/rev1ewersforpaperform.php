@@ -96,11 +96,11 @@ class ConfmgtModelRev1ewersforPaperForm extends JModelForm
                 $user = JFactory::getUser();
                 $id = $table->id;
 				
-                $canEdit = AclHelper::isThemeleader(0,$table->paperid);
+                $canEdit = AclHelper::isThemeleader(0,$table->paper_id);
 				
 
                 if (!$canEdit) {
-                    JError::raiseError('500', JText::_('JERROR_ALERTNOAUTHOR'));
+                   throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'),500);
                 }
                 
 				// Check published state.
@@ -135,13 +135,13 @@ class ConfmgtModelRev1ewersforPaperForm extends JModelForm
         $query->select('a.*');
         $query->from('`#__confmgt_rev1ewers_papers` AS a');
 		$query->select(array('b.id AS revid','b.surname AS revsurname', 'b.title as revtitle', 'b.firstname as revfirstname'));
-		$query->join('LEFT', '#__confmgt_rev1ewers AS b ON b.id=a.reviewerid');
+		$query->join('LEFT', '#__confmgt_rev1ewers AS b ON b.id=a.reviewer_id');
 		if (!$linkid==0) { 
-			$query->where('a.paperid ='.$linkid);
+			$query->where('a.paper_id ='.$linkid);
 		}else{
 			throw new Exception('No paper id',500);
 		}
-		$query->order('a.reviewerid ASC');
+		$query->order('a.reviewer_id ASC');
 		return $query;
 		
 	}
@@ -287,6 +287,7 @@ class ConfmgtModelRev1ewersforPaperForm extends JModelForm
 		// Get the form.
 		$form = $this->loadForm('com_confmgt.rev1ewersforpaper', 'rev1ewersforpaperform', array('control' => 'jform', 'load_data' => $loadData));
 		if (empty($form)) {
+		    JFactory::$application->enqueueMessage('Could not load the form',500);
 			return false;
 		}
 
@@ -310,23 +311,22 @@ class ConfmgtModelRev1ewersforPaperForm extends JModelForm
 	
 		protected function checkRev1ewerExists($data)
 	{
-        if (!($data['reviewerid'] > 0 && $data['paperid'] > 0)) {
+        if (!($data['reviewer_id'] > 0 && $data['paper_id'] > 0)) {
             throw new Exception('No paper id',500);
-			return false;
         }
         $db		= $this->getDbo();
 		$query	= $db->getQuery(true);
 		
 		// get the paper id		
-		$linkid = $data['paperid'];
-		$reviewerid = $data['reviewerid'];
+		$linkid = $data['paper_id'];
+		$reviewerid = $data['reviewer_id'];
 		
 			
 		 // Select the required fields from the table.
         $query->select('a.*');
         $query->from('`#__confmgt_rev1ewers_papers` AS a');
-		$query->where('a.paperid ='.$linkid);
-		$query->where('a.reviewerid ='.$reviewerid);
+		$query->where('a.paper_id ='.$linkid);
+		$query->where('a.reviewer_id ='.$reviewerid);
 		
 		$db->setQuery($query);
 		$db->execute();
@@ -360,8 +360,8 @@ class ConfmgtModelRev1ewersforPaperForm extends JModelForm
 				throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'),500);
 		  }
 		
-		$data['paperid'] = $linkid;
-		$data['reviewerid'] = $data['rev1ewer'];
+		$data['paper_id'] = $linkid;
+		$data['reviewer_id'] = $data['rev1ewer'];
 		
 		$exists = $this->checkRev1ewerExists($data);
 		

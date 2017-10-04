@@ -293,8 +293,8 @@ class ConfmgtModelRev1ewForm extends JModelForm
 			return false;
 		}
 
-		$data['abstractid'] = $paper_table->abstractid;
-		$data['fullpaperid'] = $paper_table->fullpaperid;
+		$data['abstract_id'] = $paper_table->abstractid;
+		$data['fullpaper_id'] = $paper_table->fullpaperid;
 		
         if ($table->save($data) === true) {
             return $id;

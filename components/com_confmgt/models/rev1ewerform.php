@@ -309,7 +309,7 @@ class ConfmgtModelRev1ewerForm extends JModelForm
 		$data['agreed'] = 1;
 		
 		if ($userid >0) {
-			$data['userid'] = $userid;
+			$data['user_id'] = $userid;
 		}
 		
         $table = $this->getTable();
@@ -341,14 +341,14 @@ class ConfmgtModelRev1ewerForm extends JModelForm
 		$data['agreed'] = 0;
 		
 		if ($userid >0) {
-			$data['userid'] = $userid;
+			$data['user_id'] = $userid;
 		}
 		
         $table = $this->getTable();
         if ($table->save($data) === true) {
             return true;
         } else {
-			$this->setError($table->getError());
+			JFactory::$application->enqueueMessage($table->getError());
             return false;
         }
         

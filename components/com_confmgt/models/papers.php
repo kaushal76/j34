@@ -205,8 +205,6 @@ class ConfmgtModelPapers extends JModelList
         // Load the results as a list of stdClass objects (
         $results = $db->loadObjectList();
 
-
-
         return $results;
     }
 

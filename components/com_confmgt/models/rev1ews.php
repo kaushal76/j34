@@ -295,7 +295,7 @@ class ConfmgtModelRev1ews extends JModelList {
 		$query->where('a.created_by ='.(int)$user->id);
 		
 		if ($paperid > 0) {
-			$query->where('a.paperid = '.(int)$paperid);
+			$query->where('a.paper_id = '.(int)$paperid);
 		} 
 		
 		if ($mode) {

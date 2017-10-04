@@ -72,9 +72,9 @@ class ConfmgtModelRev1ewers extends JModelList {
 		$user = JFactory::getUser();
 		
 	    // Select the required fields from the table.
-        $query->select( array('a.*', 'COUNT(b.reviewerid) AS papers'));
+        $query->select( array('a.*', 'COUNT(b.reviewer_id) AS papers'));
         $query->from('#__confmgt_rev1ewers AS a');
-		$query->join('LEFT', $db->quoteName('#__confmgt_rev1ewers_papers', 'b') . ' ON (' . $db->quoteName('a.id') . ' = ' . $db->quoteName('b.reviewerid') . ')');
+		$query->join('LEFT', $db->quoteName('#__confmgt_rev1ewers_papers', 'b') . ' ON (' . $db->quoteName('a.id') . ' = ' . $db->quoteName('b.reviewer_id') . ')');
 		$query->group('a.id');
 		$query->order('a.ordering ASC'); 
 		return $query;
