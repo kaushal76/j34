@@ -154,8 +154,8 @@ class ConfmgtModelPapers extends JModelList
             ->from('#__confmgt_papers as a')
             ->select('b.title as theme')
             ->join('LEFT', '#__confmgt_themes as b ON a.theme = b.id')
-            ->select('COUNT(d.reviewerid) as rev1ewers')
-            ->join('LEFT', $db->quoteName('#__confmgt_rev1ewers_papers', 'd') . ' ON (' . $db->quoteName('d.paperid') . ' = ' . $db->quoteName('a.id') . ')')
+            ->select('COUNT(d.reviewer_id) as rev1ewers')
+            ->join('LEFT', $db->quoteName('#__confmgt_rev1ewers_papers', 'd') . ' ON (' . $db->quoteName('d.paper_id') . ' = ' . $db->quoteName('a.id') . ')')
             ->select('f.type as type')
             ->join('LEFT', '#__confmgt_submission_types as f ON a.type = f.id')
             ->select('uc.name as author')
@@ -174,7 +174,7 @@ class ConfmgtModelPapers extends JModelList
 
             // Only a themeleader, hence papers within the relevant themes
         } elseif ((!AclHelper::isStudentCoordinator()) AND (AclHelper::isThemeleader())) {
-            $query->where('b.userid = ' . $user->id);
+            $query->where('b.user_id = ' . $user->id);
 
             // If theme leaders don't manage student papers, remove those from the list
             if ($student_papers_managed_by_themeleader == 0) {
@@ -182,7 +182,7 @@ class ConfmgtModelPapers extends JModelList
             }
             //Student coordinator and a theme leader hence student papers and papers within the relevant themes
         } elseif ((AclHelper::isStudentCoordinator()) AND (AclHelper::isThemeleader())) {
-            $query->where('b.userid = ' . $user->id OR 'a.student_submission = 1');
+            $query->where('b.user_id = ' . $user->id OR 'a.student_submission = 1');
 
             // Should not be authorised
         } else {
