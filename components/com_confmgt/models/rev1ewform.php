@@ -75,17 +75,39 @@ class ConfmgtModelRev1ewForm extends JModelForm
 			}
 			
 			$table = $this->getTable('Paper', 'ConfmgtTable');
-			if ($table->load($id))
-			{
-				$id = $table->id;
+			if ($table->load($id)) {
+                $id = $table->id;
+                $canEdit = AclHelper::isAuthor($id);
 
-				$canEdit = AclHelper::isAuthor($id);
-	
-				if (!$canEdit) {
-					throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'),500);
-				}
+                if (!$canEdit) {
+                    throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 500);
+                }
 
-				$properties = $table->getProperties(1);
+                $abstract_table = $this->getTable('Abstract', 'ConfmgtTable');
+                $fullpaper_table = $this->getTable('Fullpaper', 'ConfmgtTable');
+
+                $properties = $table->getProperties(1);
+
+                if ($table->abstract_id > 0) {
+                    if (!$abstract_table->load($table->abstract_id)) {
+                        JFactory::$application->enqueueMessage('Could not load abstract data');
+                        return false;
+                    }else{
+                        $properties['abstract'] = $abstract_table->abstract;
+                    }
+
+
+                }
+
+                if ($table->fullpaper_id > 0) {
+                    if (!$fullpaper_table->load($table->fullpaper_id)) {
+                        JFactory::$application->enqueueMessage('Could not load abstract data');
+                        return false;
+                    }else{
+                        $properties['full_paper'] = $fullpaper_table->full_paper;
+                    }
+                }
+
 				$this->_paperItem = Joomla\Utilities\ArrayHelper::toObject($properties, 'JObject');
 				$this->_paperItem->full_paper_download = $this->_FullPaperDownloadBtn($this->_paperItem->full_paper);
 			} elseif ($error = $table->getError()) {
@@ -113,10 +135,7 @@ class ConfmgtModelRev1ewForm extends JModelForm
 				$id = $this->getState('rev1ew.id');
 			}
 
-			// Get a level row instance.
 			$table = $this->getTable();
-
-			// Attempt to load the row.
 			if ($table->load($id))
 			{
                 $id = $table->id;
@@ -170,15 +189,10 @@ class ConfmgtModelRev1ewForm extends JModelForm
 	 */
 	public function checkin($id = null)
 	{
-		// Get the id.
 		$id = (!empty($id)) ? $id : (int)$this->getState('rev1ew.id');
 
 		if ($id) {
-            
-			// Initialise the table
 			$table = $this->getTable();
-
-			// Attempt to check the row in.
             if (method_exists($table, 'checkin')) {
                 if (!$table->checkin($id)) {
                     JFactory::$application->enqueueMessage($table->getError());
