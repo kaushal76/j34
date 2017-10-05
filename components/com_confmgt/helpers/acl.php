@@ -129,12 +129,12 @@ abstract class AclHelper
         }
 
         $query->select($db->quoteName(array(
-            'a.userid',
-            'a.themeid',
+            'a.user_id',
+            'a.theme_id',
         )));
         $query->from($db->quoteName('#__confmgt_coordinators', 'a'));
-        $query->where('a.userid = ' . (int)$user->id);
-        $query->where('a.themeid = 0');
+        $query->where('a.user_id = ' . (int)$user->id);
+        $query->where('a.theme_id = 0');
 
         // get the number of records
         $db->setQuery($query);
@@ -170,12 +170,12 @@ abstract class AclHelper
         //Build the query
         $query = $db->getQuery(true);
         $query->select($db->quoteName(array(
-            'a.userid',
-            'a.themeid',
+            'a.user_id',
+            'a.theme_id',
         )));
         $query->from($db->quoteName('#__confmgt_coordinators', 'a'));
-        $query->where('a.userid = ' . (int)$user->id);
-        $query->where('a.themeid = -1');
+        $query->where('a.user_id = ' . (int)$user->id);
+        $query->where('a.theme_id = -1');
 
         // get the number of records
         $db->setQuery($query);
