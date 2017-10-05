@@ -256,6 +256,5 @@ class ConfmgtControllerAbrev1ewoutcomeForm extends ConfmgtController
 		// Flush the data from the session.
 		$app->setUserState('com_confmgt.edit.paper.data', null);
 	}
-    
-    
+
 }

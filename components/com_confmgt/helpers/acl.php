@@ -1,5 +1,5 @@
 <?php
-/**
+ /**
  * @version     3.8.0
  * @package     com_confmgt
  * @copyright   Copyright (C) 2017. All rights reserved.
@@ -73,21 +73,21 @@ abstract class AclHelper
         if ($paperid == 0 && $themeid == 0) {
             // No paperid given or themeid, hence checking if any of the theme leaders
             $query = $db->getQuery(true)
-                ->select('userid')
+                ->select('user_id')
                 ->from($db->quoteName('#__confmgt_themes'))
-                ->where('userid = ' . (int)$user->id);
+                ->where('user_id = ' . (int)$user->id);
         } else {
             //paperid and/or themeid given
             $query = $db->getQuery(true);
             $query->select($db->quoteName(array(
                 'a.theme',
                 'a.id',
-                'b.userid',
+                'b.user_id',
                 'b.id'
             )));
             $query->from($db->quoteName('#__confmgt_papers', 'a'));
             $query->join('INNER', $db->quoteName('#__confmgt_themes', 'b') . ' ON (' . $db->quoteName('a.theme') . ' = ' . $db->quoteName('b.id') . ')');
-            $query->where('b.userid = ' . (int)$user->id);
+            $query->where('b.user_id = ' . (int)$user->id);
             if ($paperid) {
                 $query->where('a.id = ' . (int)$paperid);
             }
@@ -246,20 +246,20 @@ abstract class AclHelper
         if ($paperid == 0) {
             //Build the query 
             $query = $db->getQuery(true)
-                ->select($db->quoteName(array('a.id', 'a.userid', 'a.agreed')))
+                ->select($db->quoteName(array('a.id', 'a.user_id', 'a.agreed')))
                 ->from($db->quoteName('#__confmgt_rev1ewers', 'a'))
-                ->where('a.userid = ' . (int)$user->id)
+                ->where('a.user_id = ' . (int)$user->id)
                 ->where('a.agreed = 1');
         }
         else {
             //Build the query 
             $query = $db->getQuery(true)
-                ->select($db->quoteName(array('a.reviewerid', 'a.paperid', 'b.agreed', 'b.userid', 'c.id')))
+                ->select($db->quoteName(array('a.reviewer_id', 'a.paper_id', 'b.agreed', 'b.user_id', 'c.id')))
                 ->from($db->quoteName('#__confmgt_rev1ewers_papers', 'a'))
-                ->join('INNER', $db->quoteName('#__confmgt_rev1ewers', 'b') . ' ON (' . $db->quoteName('a.reviewerid') . ' = ' . $db->quoteName('b.id') . ')')
-                ->join('INNER', $db->quoteName('#__users', 'c') . ' ON (' . $db->quoteName('b.userid') . ' = ' . $db->quoteName('c.id') . ')')
+                ->join('INNER', $db->quoteName('#__confmgt_rev1ewers', 'b') . ' ON (' . $db->quoteName('a.reviewer_id') . ' = ' . $db->quoteName('b.id') . ')')
+                ->join('INNER', $db->quoteName('#__users', 'c') . ' ON (' . $db->quoteName('b.user_id') . ' = ' . $db->quoteName('c.id') . ')')
                 ->where('c.id = ' . (int)$user->id)
-                ->where('a.paperid = ' . (int)$paperid)
+                ->where('a.paper_id = ' . (int)$paperid)
                 ->where('b.agreed = 1');
         }
         // get the number of records
@@ -294,7 +294,7 @@ abstract class AclHelper
 
         //Build the query
         $query = $db->getQuery(true);
-        $query->select($db->quoteName(array('a.theme', 'a.id', 'b.userid', 'b.id', 'b.title')));
+        $query->select($db->quoteName(array('a.theme', 'a.id', 'b.user_id', 'b.id', 'b.title')));
         $query->from($db->quoteName('#__confmgt_papers', 'a'));
         $query->join('INNER', $db->quoteName('#__confmgt_themes', 'b') . ' ON (' . $db->quoteName('a.theme') . ' = ' . $db->quoteName('b.id') . ')');
         $query->where('a.id = ' . (int)$paperid);
@@ -348,7 +348,7 @@ abstract class AclHelper
     {
         //Obtain a database connection
         $db = JFactory::getDbo();
-        $query = $db->getQuery(true)->select($db->quoteName(array('a.id', 'a.userid', 'a.email', 'a.agreed')))
+        $query = $db->getQuery(true)->select($db->quoteName(array('a.id', 'a.user_id', 'a.email', 'a.agreed')))
             ->from($db->quoteName('#__confmgt_rev1ewers', 'a'))
             ->where($db->quoteName('email') . ' = ' . $db->quote($email));
         //Prepare the query
@@ -375,9 +375,9 @@ abstract class AclHelper
         //Obtain a database connection
         $db = JFactory::getDbo();
         $query = $db->getQuery(true)
-            ->select($db->quoteName(array('a.id', 'a.userid', 'a.email', 'a.agreed')))
+            ->select($db->quoteName(array('a.id', 'a.user_id', 'a.email', 'a.agreed')))
             ->from($db->quoteName('#__confmgt_rev1ewers_papers', 'a'))
-            ->where($db->quoteName('paperid') . ' = ' . (int)($paperid));
+            ->where($db->quoteName('paper_id') . ' = ' . (int)($paperid));
         //Prepare the query
         $db->setQuery($query);
         $db->execute();

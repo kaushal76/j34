@@ -42,18 +42,29 @@ abstract class MainHelper
      *
      * @since version 3.8.0
      */
-    public static function getRev1ews($paperid = 0, $mode = 0)
+    public static function getRev1ews($paper_id = 0, $mode = 0, $abstract_id = 0, $fullpaper_id = 0)
     {
         //Obtain a database connection
         $db = JFactory::getDbo();
 
-        //Paper id given, hence checking if the themeleader for the given paper
         //Build the query
         $query = $db->getQuery(true);
         $query->select('a.*');
         $query->from($db->quoteName('#__confmgt_reviews', 'a'));
-        if ($paperid) {
-            $query->where('a.linkid = ' . (int)$paperid);
+        if ($paper_id) {
+            $query->where('a.linkid = ' . (int)$paper_id);
+            if ($mode) {
+                $query->where('a.mode = ' . "'" . $mode . "'");
+            }
+            $query->order('a.id ASC');
+        }elseif ($abstract_id){
+            $query->where('a.abstract_id = ' . (int)$abstract_id);
+            if ($mode) {
+                $query->where('a.mode = ' . "'" . $mode . "'");
+            }
+            $query->order('a.id ASC');
+        }elseif ($fullpaper_id) {
+            $query->where('a.fullpaper_id = ' . (int)$fullpaper_id);
             if ($mode) {
                 $query->where('a.mode = ' . "'" . $mode . "'");
             }
@@ -88,7 +99,7 @@ abstract class MainHelper
         //Build the query
         $query = $db->getQuery(true);
         $query->select('a.*')
-            ->select($db->quoteName('b.userid', 'leaderid'))
+            ->select($db->quoteName('b.user_id', 'leaderid'))
             ->select($db->quoteName('b.id', 'themeid'))
             ->select($db->quoteName('b.title', 'themename'))
             ->select($db->quoteName('c.full_review_outcome', 'c.full_review_outcome'))
@@ -196,13 +207,13 @@ abstract class MainHelper
         $query->select('a.*');
         $query->from('`#__confmgt_rev1ewers_papers` AS a');
         $query->select(array('b.id AS revid', 'b.surname AS revsurname', 'b.title as revtitle', 'b.firstname as revfirstname'));
-        $query->join('LEFT', '#__confmgt_rev1ewers AS b ON b.id=a.reviewerid');
+        $query->join('LEFT', '#__confmgt_rev1ewers AS b ON b.id=a.reviewer_id');
         if (!$paperid == 0) {
-            $query->where('a.paperid =' . $paperid);
+            $query->where('a.paper_id =' . $paperid);
         } else {
             self::getLinkid();
         }
-        $query->order('a.reviewerid ASC');
+        $query->order('a.reviewer_id ASC');
 
         $db->setQuery($query);
 
@@ -249,9 +260,9 @@ abstract class MainHelper
         $query = $db->getQuery(true);
         $query
             ->select('a.*')
-            ->select('COUNT(b.reviewerid) AS papers');
+            ->select('COUNT(b.reviewer_id) AS papers');
         $query->from($db->quoteName('#__confmgt_rev1ewers', 'a'));
-        $query->join('LEFT', $db->quoteName('#__confmgt_rev1ewers_papers', 'b') . ' ON (' . $db->quoteName('a.id') . ' = ' . $db->quoteName('b.reviewerid') . ')');
+        $query->join('LEFT', $db->quoteName('#__confmgt_rev1ewers_papers', 'b') . ' ON (' . $db->quoteName('a.id') . ' = ' . $db->quoteName('b.reviewer_id') . ')');
         $query->where('a.id = ' . $revid);
         $query->group('a.id');
         $query->order('a.ordering ASC');

@@ -5,7 +5,7 @@
  * @package     com_confmgt
  * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
- * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
+ * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - http://www.confmgt.com
  */
 defined('_JEXEC') or die;
 
@@ -75,11 +75,11 @@ class ConfmgtModelRev1ews extends JModelList {
 		$sub_query->where('created_by = '.(int)$user->id);
 		
   	    // Select the required fields from the table.
-        $query->select( array('a.*', 'b.paperid as paperid', 'b.reviewerid as breviewerid', 'c.id as revid', 'c.userid as userid', 'b.last_updated as due_date'));
+        $query->select( array('a.*', 'b.paper_id as paperid', 'b.reviewer_id as breviewerid', 'c.id as revid', 'c.user_id as userid', 'b.last_updated as due_date'));
         $query->from('#__confmgt_papers AS a');
-		$query->join('LEFT', $db->quoteName('#__confmgt_rev1ewers_papers', 'b') . ' ON (' . $db->quoteName('a.id') . ' = ' . $db->quoteName('b.paperid') . ')');
-		$query->join('LEFT', $db->quoteName('#__confmgt_rev1ewers', 'c') . ' ON (' . $db->quoteName('b.reviewerid') . ' = ' . $db->quoteName('c.id') . ')');
-		$query->where('c.userid ='.(int)$user->id);
+		$query->join('LEFT', $db->quoteName('#__confmgt_rev1ewers_papers', 'b') . ' ON (' . $db->quoteName('a.id') . ' = ' . $db->quoteName('b.paper_id') . ')');
+		$query->join('LEFT', $db->quoteName('#__confmgt_rev1ewers', 'c') . ' ON (' . $db->quoteName('b.reviewer_id') . ' = ' . $db->quoteName('c.id') . ')');
+		$query->where('c.user_id ='.(int)$user->id);
 		$query->where('a.abstract_id NOT IN ('.$sub_query.')');
 		$query->order('a.id ASC');  
 		return $query;
@@ -103,11 +103,11 @@ class ConfmgtModelRev1ews extends JModelList {
 		$sub_query->where('created_by = '.(int)$user->id);
 	
 		// Select the required fields from the table.
-		$query->select( array('a.*', 'b.paperid as paperid', 'b.reviewerid as breviewerid', 'c.id as revid', 'c.userid as userid', 'b.last_updated as due_date'));
+		$query->select( array('a.*', 'b.paper_id as paperid', 'b.reviewer_id as breviewerid', 'c.id as revid', 'c.user_id as userid', 'b.last_updated as due_date'));
 		$query->from('#__confmgt_papers AS a');
-		$query->join('LEFT', $db->quoteName('#__confmgt_rev1ewers_papers', 'b') . ' ON (' . $db->quoteName('a.id') . ' = ' . $db->quoteName('b.paperid') . ')');
-		$query->join('LEFT', $db->quoteName('#__confmgt_rev1ewers', 'c') . ' ON (' . $db->quoteName('b.reviewerid') . ' = ' . $db->quoteName('c.id') . ')');
-		$query->where('c.userid ='.(int)$user->id);
+		$query->join('LEFT', $db->quoteName('#__confmgt_rev1ewers_papers', 'b') . ' ON (' . $db->quoteName('a.id') . ' = ' . $db->quoteName('b.paper_id') . ')');
+		$query->join('LEFT', $db->quoteName('#__confmgt_rev1ewers', 'c') . ' ON (' . $db->quoteName('b.reviewer_id') . ' = ' . $db->quoteName('c.id') . ')');
+		$query->where('c.user_id ='.(int)$user->id);
 		$query->where('a.fullpaper_id NOT IN ('.$sub_query.')');
 		$query->where('a.fullpaper_id > 0');
 		$query->order('a.id ASC');
@@ -128,16 +128,16 @@ class ConfmgtModelRev1ews extends JModelList {
 		$user = JFactory::getUser();
 	
 		// Select the required fields from the table.
-		$query->select( array('a.paperid AS paperid', 'a.reviewerid AS rev1ewerid', 'b.userid AS userid', 'b.last_updated AS revassigned', 'c.title as title', 'c.abstract_id as abtract', 'c.fullpaper_id as fullpaper', 'COUNT(d.id) AS reviewsposted'));
+		$query->select( array('a.paper_id AS paperid', 'a.reviewer_id AS rev1ewerid', 'b.user_id AS userid', 'b.last_updated AS revassigned', 'c.title as title', 'c.abstract_id as abstract', 'c.fullpaper_id as fullpaper', 'COUNT(d.id) AS reviewsposted'));
 		$query->from('#__confmgt_rev1ewers_papers AS a');
-		$query->join('LEFT', $db->quoteName('#__confmgt_rev1ewers', 'b') . ' ON (' . $db->quoteName('a.reviewerid') . ' = ' . $db->quoteName('b.id') . ')');
-		$query->join('LEFT', $db->quoteName('#__confmgt_papers', 'c') . ' ON (' . $db->quoteName('a.paperid') . ' = ' . $db->quoteName('c.id') . ')');
-		$query->join('LEFT', $db->quoteName('#__confmgt_reviews', 'd') . ' ON (' . $db->quoteName('d.created_by') . ' = ' . $db->quoteName('b.userid') . 'AND ' . $db->quoteName('d.linkid') . ' = ' . $db->quoteName('a.paperid') . ')');
+		$query->join('LEFT', $db->quoteName('#__confmgt_rev1ewers', 'b') . ' ON (' . $db->quoteName('a.reviewer_id') . ' = ' . $db->quoteName('b.id') . ')');
+		$query->join('LEFT', $db->quoteName('#__confmgt_papers', 'c') . ' ON (' . $db->quoteName('a.paper_id') . ' = ' . $db->quoteName('c.id') . ')');
+		$query->join('LEFT', $db->quoteName('#__confmgt_reviews', 'd') . ' ON (' . $db->quoteName('d.created_by') . ' = ' . $db->quoteName('b.user_id') . 'AND ' . $db->quoteName('d.linkid') . ' = ' . $db->quoteName('a.paper_id') . ')');
 	
-		$query->where('b.userid ='.(int)$user->id);
+		$query->where('b.user_id ='.(int)$user->id);
 		$query->where('c.id > '.(int)0);
-		$query->group ('a.paperid');
-		$query->group ('a.reviewerid');
+		$query->group ('a.paper_id');
+		$query->group ('a.reviewer_id');
 		$query->order('c.id ASC');
 		return $query;
 	
@@ -165,12 +165,13 @@ class ConfmgtModelRev1ews extends JModelList {
     public function getAbstractItemsPending() {
 		 
 		$abstract_items  = $this->_getItemsAbstractRvPending();
+        $item = NULL;
 
 		$return = array();
 		$i=0;
 		foreach ($abstract_items as $item) {
-			
-				$return[$i]->paperid = $item->id; 
+		        $return[$i] = new stdClass();
+				$return[$i]->paperid = $item->id;
 				$return[$i]->title = $item->title;
 				$return[$i]->due_date = $item->due_date;  
 				$return[$i]->mode = 'Abstract';
@@ -198,12 +199,13 @@ class ConfmgtModelRev1ews extends JModelList {
 		$return = array();
 		$i=0;
 		foreach ($fullpaper_items as $item) {
-				
-			$return[$i]->paperid = $item->id;
+
+            $return[$i] = new stdClass();
+		    $return[$i]->paperid = $item->id;
 			$return[$i]->title = $item->title;
 			$return[$i]->due_date = $item->due_date;
-			$return[$i]->mode = 'Abstract';
-			$return[$i]->fullpaper = $item->full_paper;
+			$return[$i]->mode = 'Full Paper';
+			$return[$i]->fullpaper = $item->fullpaper_id;
 			$i = $i+1;
 		}
 	
