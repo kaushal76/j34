@@ -11,11 +11,10 @@ defined('_JEXEC') or die;
 
 ?>
 
-<?php 
-  echo $this->loadTemplate('pending');
-  echo $this->loadTemplate('completed');
+<?php
+echo $this->loadTemplate('pending');
+echo $this->loadTemplate('completed');
 ?>
-
 
 <div>
   <form id="form-entrypage-<?php echo $item->id ?>" action="<?php echo JRoute::_('index.php'); ?>" method="post" class="form-validate form-entry" enctype="multipart/form-data">

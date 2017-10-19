@@ -62,21 +62,15 @@ defined('_JEXEC') or die;
                 </tr>
             <?php endforeach; ?>
         <?php endif; ?>
-        </tbody>
-        <tfoot>
-        <?php if ($show): ?>
-            <div class="pagination">
-                <p class="counter"> <?php echo $this->pagination->getPagesCounter(); ?> </p>
-                <?php echo $this->pagination->getPagesLinks(); ?> </div>
+        <?php if (!$show): ?>
+            <tr>
+                <td colspan="5">
+                    <?php
+                    echo JText::_('COM_CONFMGT_NO_ITEMS');
+                    ?>
+                </td>
+            </tr>
         <?php endif; ?>
-        </tfoot>
+        </tbody>
     </table>
-    <?php if (!$show): ?>
-        <div class="panel-body"><p>
-                <?php
-                echo JText::_('COM_CONFMGT_NO_ITEMS');
-                ?>
-            </p>
-        </div>
-    <?php endif; ?>
 </div>
