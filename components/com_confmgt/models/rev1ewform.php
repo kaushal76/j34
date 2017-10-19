@@ -95,8 +95,6 @@ class ConfmgtModelRev1ewForm extends JModelForm
                     }else{
                         $properties['abstract'] = $abstract_table->abstract;
                     }
-
-
                 }
 
                 if ($table->fullpaper_id > 0) {
@@ -109,7 +107,9 @@ class ConfmgtModelRev1ewForm extends JModelForm
                 }
 
 				$this->_paperItem = Joomla\Utilities\ArrayHelper::toObject($properties, 'JObject');
-				$this->_paperItem->full_paper_download = $this->_FullPaperDownloadBtn($this->_paperItem->full_paper);
+                if (isset($this->_paperItem->full_paper)) {
+                    $this->_paperItem->full_paper_download = $this->_FullPaperDownloadBtn($this->_paperItem->full_paper);
+                }
 			} elseif ($error = $table->getError()) {
 				JFactory::$application->enqueueMessage($error);
 			}
