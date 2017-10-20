@@ -40,18 +40,11 @@ defined('_JEXEC') or die;
                     <td><?php echo $item->title; ?></td>
                     <td><?php echo $item->mode; ?></td>
                     <td><?php echo $item->due_date; ?></td>
-                    <td>
-                        <form id="form-review-post-<?php echo $item->abstractid; ?>" style="display:inline"
-                              action="<?php echo JRoute::_('index.php'); ?>" method="post" class="form-validate"
-                              enctype="multipart/form-data">
-                            <input type="hidden" name="jform['linkid']" value="<?php echo $item->paperid; ?>"/>
-                            <input type="hidden" name="linkid" value="<?php echo $item->paperid; ?>"/>
-                            <input type="hidden" name="option" value="com_confmgt"/>
-                            <input type="hidden" name="view" value="rev1ewform"/>
-                            <input type="hidden" name="layout" value="<?php echo $layout; ?>"/>
-                            <button type="submit" class="btn btn-general"><?php echo $btn; ?></button>
-                            <?php echo JHtml::_('form.token'); ?>
-                        </form>
+                    <td width="10%">
+                        <a class=""
+                           href="<?php echo JRoute::_('index.php?option=com_confmgt&view=rev1ewform&layout='.$layout.'&linkid='.(int)$item->paperid.'&jform[linkid]='.$item->paperid); ?>">
+                            <i class="icon-list"></i>
+                        </a>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -68,18 +61,11 @@ defined('_JEXEC') or die;
                     <td><?php echo $item->title; ?></td>
                     <td><?php echo $item->mode; ?></td>
                     <td><?php echo $item->due_date; ?></td>
-                    <td>
-                        <form id="form-review-post-<?php echo $item->fullpaperid; ?>" style="display:inline"
-                              action="<?php echo JRoute::_('index.php'); ?>" method="post" class="form-validate"
-                              enctype="multipart/form-data">
-                            <input type="hidden" name="jform['linkid']" value="<?php echo $item->paperid; ?>"/>
-                            <input type="hidden" name="linkid" value="<?php echo $item->paperid; ?>"/>
-                            <input type="hidden" name="option" value="com_confmgt"/>
-                            <input type="hidden" name="view" value="rev1ewform"/>
-                            <input type="hidden" name="layout" value="<?php echo $layout; ?>"/>
-                            <button type="submit" class="btn btn-general"><?php echo $btn; ?></button>
-                            <?php echo JHtml::_('form.token'); ?>
-                        </form>
+                    <td width="10%">
+                        <a class=""
+                           href="<?php echo JRoute::_('index.php?option=com_confmgt&view=rev1ewform&layout='.$layout.'&linkid='.(int)$item->paperid.'&jform[linkid]='.$item->paperid); ?>">
+                            <i class="icon-list"></i>
+                        </a>
                     </td>
                 </tr>
 

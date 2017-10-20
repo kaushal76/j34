@@ -32,32 +32,28 @@ defined('_JEXEC') or die;
         <?php if ($this->items_completed): ?>
             <?php foreach ($this->items_completed as $item) : ?>
                 <?php if ($item->mode == 'abstract') {
+                    $mode_text = 'Abstract';
                     $layout = 'abstract';
                     $btn = JText::_('View Abstract Review');
                 } elseif ($item->mode == 'full') {
                     $layout = 'full';
+                    $mode_text = 'Full Paper';
                     $btn = JText::_('View Full paper Review');
+                }else{
+                    $mode_text = $item->mode;
                 }
                 ?>
                 <?php $show = true; ?>
                 <tr>
                     <td width="5%"><?php echo $item->id; ?></td>
                     <td><?php echo $item->title; ?></td>
-                    <td><?php echo $item->mode; ?></td>
+                    <td><?php echo $mode_text; ?></td>
                     <td><?php echo $item->last_updated; ?></td>
-                    <td>
-                        <form id="form-paper-delete-<?php echo $item->id; ?>" style="display:inline"
-                              action="<?php echo JRoute::_('index.php'); ?>" method="post" class="form-validate"
-                              enctype="multipart/form-data">
-                            <input type="hidden" name="jform['linkid']" value="<?php echo $item->id; ?>"/>
-                            <input type="hidden" name="linkid" value="<?php echo $item->id; ?>"/>
-                            <input type="hidden" name="rev_id" value="<?php echo $item->rev_id; ?>"/>
-                            <input type="hidden" name="option" value="com_confmgt"/>
-                            <input type="hidden" name="view" value="rev1ew"/>
-                            <input type="hidden" name="layout" value="<?php echo $layout; ?>"/>
-                            <button type="submit" class="btn btn-genral"><?php echo $btn; ?></button>
-                            <?php echo JHtml::_('form.token'); ?>
-                        </form>
+                    <td width="10%">
+                        <a class=""
+                           href="<?php echo JRoute::_('index.php?option=com_confmgt&view=rev1ew&layout='.$layout.'&rev_id='.(int)$item->rev_id.'&linkid='.(int)$item->id.'&jform[linkid]='.$item->id); ?>">
+                            <i class="icon-list"></i>
+                        </a>
                     </td>
                 </tr>
             <?php endforeach; ?>

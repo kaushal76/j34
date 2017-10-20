@@ -82,9 +82,6 @@ $document->addScript($filterurl);
                     <?php if (empty($item->fullpaper_id)) {
                         echo JText::_("Full paper not submitted");
                     } elseif ((!empty($item->fullpaper_id)) && ($item->full_review_outcome == 0)) { ?>
-                        <?php if ($item->revisions > 1) { ?>
-                            <div><span class="label label-important">revision</span></div>
-                        <?php } ?>
                         <a href="<?php echo JRoute::_('index.php?option=com_confmgt&view=fullrev1ewoutcomeform&linkid=' . (int)$item->id); ?>">
                             <?php echo JText::_("No"); ?></a>
                     <?php } else { ?> <a

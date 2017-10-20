@@ -15,24 +15,25 @@ JHtml::_('behavior.formvalidation');
 ?>
 
 <div class='panel panel-default'>
-    <fieldset>
-        <legend><?php echo JText::_('Abstract'); ?></legend>
-        <table class="table table-striped">
-            <tr>
-                <th width="30%"> <?php echo JText::_('Abstract submitted:'); ?> </th>
-                <td> <?php echo(nl2br($this->paper->abstract)); ?> </td>
-            </tr>
-            <tr>
-                <th> <?php echo JText::_('Keywords:'); ?> </th>
-                <td> <?php echo(nl2br($this->paper->keywords)); ?></td>
-            </tr>
-        </table>
-    </fieldset>
+    <div class="panel-heading">
+        <h1><?php echo JText::_('Abstract'); ?></h1>
+    </div>
+    <table class="table table-striped">
+        <tr>
+            <th width="30%"> <?php echo JText::_('Abstract submitted:'); ?> </th>
+            <td> <?php echo(nl2br($this->paper->abstract)); ?> </td>
+        </tr>
+        <tr>
+            <th> <?php echo JText::_('Keywords:'); ?> </th>
+            <td> <?php echo(nl2br($this->paper->keywords)); ?></td>
+        </tr>
+    </table>
 </div>
 
 <div class='panel panel-default'>
-    <fieldset>
-        <legend><?php echo JText::_('Absrtact review details:'); ?></legend>
+    <div class="panel-heading">
+        <h1><?php echo JText::_('Abstract review details'); ?></h1>
+    </div>
         <table class="table table-striped">
             <tr>
                 <th width="30%"> <?php echo JText::_('Recommendation'); ?> </th>
@@ -52,9 +53,14 @@ JHtml::_('behavior.formvalidation');
                 <td> <?php echo $this->item->score; ?> </td>
             </tr>
             <tr>
-                <td colspan="2"><a class="btn btn-default"
+                <td colspan="2">
+                    <a class="btn btn-default"
                                    href="<?php echo JRoute::_('index.php?option=com_confmgt&task=rev1ewform.cancel'); ?>"
-                                   title="<?php echo JText::_('OK'); ?>"><?php echo JText::_('OK'); ?></a></td>
+                                   title="<?php echo JText::_('OK'); ?>">
+                        <i class="icon-ok"></i>
+                        <?php echo JText::_('OK'); ?>
+                    </a>
+                </td>
             </tr>
         </table>
     </fieldset>

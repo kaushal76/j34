@@ -94,7 +94,7 @@ JHtml::_('behavior.formvalidation');
                             <div class="controls"> <?php echo $this->form->getInput('score'); ?> </div>
                         </div>
                         <div class="control-group">
-                            <div class="form-actions">
+                            <div class="controls">
                                 <button type="submit"
                                         class="btn btn-primary"><?php echo JText::_('JSUBMIT'); ?></button>
                                 <?php echo JText::_('or'); ?> <a

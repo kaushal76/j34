@@ -5,7 +5,7 @@
  * @package     com_confmgt
  * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
- * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
+ * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - http://www.confmgt.com
  */
 // No direct access.
 defined('_JEXEC') or die;
@@ -72,7 +72,7 @@ class ConfmgtModelRev1ew extends JModelItem {
      *
      * @return	mixed	Object on success, false on failure.
      */
-    public function &getData($id = null) {
+    public function getData($id = null) {
         if ($this->_item === null) {
             $this->_item = false;
 
@@ -106,6 +106,66 @@ class ConfmgtModelRev1ew extends JModelItem {
 		}
 
         return $this->_item;
+    }
+
+
+    /**
+     * @param null $id
+     * Method to get the paper object
+     *
+     * @return bool|object
+     *
+     * @since version 3.8.0
+     * @throws Exception
+     */
+    public function getPaper($id = null)
+    {
+        $this->_paperItem = false;
+
+        if (empty($id)) {
+            $id = $this->getLinkid();
+        }
+
+        $table = $this->getTable('Paper', 'ConfmgtTable');
+        if ($table->load($id)) {
+            $id = $table->id;
+            $canEdit = AclHelper::isAuthor($id);
+
+            if (!$canEdit) {
+                throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 500);
+            }
+
+            $abstract_table = $this->getTable('Abstract', 'ConfmgtTable');
+            $fullpaper_table = $this->getTable('Fullpaper', 'ConfmgtTable');
+
+            $properties = $table->getProperties(1);
+
+            if ($table->abstract_id > 0) {
+                if (!$abstract_table->load($table->abstract_id)) {
+                    JFactory::$application->enqueueMessage('Could not load abstract data');
+                    return false;
+                }else{
+                    $properties['abstract'] = $abstract_table->abstract;
+                }
+            }
+
+            if ($table->fullpaper_id > 0) {
+                if (!$fullpaper_table->load($table->fullpaper_id)) {
+                    JFactory::$application->enqueueMessage('Could not load abstract data');
+                    return false;
+                }else{
+                    $properties['full_paper'] = $fullpaper_table->full_paper;
+                }
+            }
+
+            $this->_paperItem = Joomla\Utilities\ArrayHelper::toObject($properties, 'JObject');
+            if (isset($this->_paperItem->full_paper)) {
+                $this->_paperItem->full_paper_download = $this->_FullPaperDownloadBtn($this->_paperItem->full_paper);
+            }
+        } elseif ($error = $table->getError()) {
+            JFactory::$application->enqueueMessage($error);
+        }
+        return $this->_paperItem;
     }
 
     /**
@@ -214,6 +274,32 @@ class ConfmgtModelRev1ew extends JModelItem {
     public function delete($id) {
         $table = $this->getTable();
         return $table->delete($id);
+    }
+
+    /**
+     * Generate the download Btn
+     *
+     * @param $filename
+     *
+     * @return string
+     *
+     * @since version 3.8.0
+     */
+    private function _FullPaperDownloadBtn ($filename)
+    {
+        $html =  "<div style=\"display:inline\">";
+        $html = $html. "<form id=\"form-download\"";
+        $html = $html." action=\"".JRoute::_('index.php')."\" method=\"post\" class=\"form-validate\" enctype=\"multipart/form-data\">";
+        $html = $html.JHtml::_('form.token');
+        $html = $html."<input type=\"hidden\" name=\"option\" value=\"com_confmgt\" />";
+        $html = $html."<input type=\"hidden\" name=\"task\" value=\"paper.downloadfullpaper\" />";
+        $html = $html."<input type=\"hidden\" name=\"filename\" value=\"".$filename."\" />";
+        $html = $html."<button class=\"btn btn-default\" type=\"submit\">";
+        $html = $html."<i class=\"icon-download\"></i>";
+        $html =	$html.JText::_("Download");
+        $html = $html."</button></form></div>";
+        return $html;
+
     }
 
 }

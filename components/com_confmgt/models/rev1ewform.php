@@ -65,8 +65,17 @@ class ConfmgtModelRev1ewForm extends JModelForm
             return $linkid;
         }
     }
-	
-	public function getPaper($id = null)
+
+    /**
+     * @param null $id
+     * Method to get the paper object
+     *
+     * @return bool|object
+     *
+     * @since version 3.8.0
+     * @throws Exception
+     */
+    public function getPaper($id = null)
 	{
 			$this->_paperItem = false;
 		
@@ -388,6 +397,7 @@ class ConfmgtModelRev1ewForm extends JModelForm
   		$html = $html."<input type=\"hidden\" name=\"task\" value=\"paper.downloadfullpaper\" />";
 		$html = $html."<input type=\"hidden\" name=\"filename\" value=\"".$filename."\" />";
   		$html = $html."<button class=\"btn btn-default\" type=\"submit\">";
+        $html = $html."<i class=\"icon-download\"></i>";
 		$html =	$html.JText::_("Download");
 		$html = $html."</button></form></div>";
 		return $html;

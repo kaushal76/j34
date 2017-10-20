@@ -33,7 +33,7 @@ $document->addScript($delurl);
                 <th><?php echo JText::_("COM_CONFMGT_TITLE"); ?></th>
                 <th width="20%"><?php echo JText::_("COM_CONFMGT_PAPERS_THEME"); ?></th>
                 <th width="20%"><?php echo JText::_("COM_CONFMGT_PAPERS_SUBMITTED_ON"); ?></th>
-                <th width="20%"><?php echo JText::_("COM_CONFMGT_ACTION"); ?></th>
+                <th width="10%"><?php echo JText::_("COM_CONFMGT_ACTION"); ?></th>
             </tr>
             </thead>
             <tbody>
@@ -41,7 +41,7 @@ $document->addScript($delurl);
             <?php foreach ($this->items as $item) : ?>
                 <?php $show = true; ?>
                 <tr>
-                    <td width="5%"><?php echo $item->id; ?></td>
+                    <td><?php echo $item->id; ?></td>
                     <td><?php echo $item->title; ?></td>
                     <td><?php echo $item->theme_name; ?></td>
                     <td><?php echo $item->last_updated; ?></td>
