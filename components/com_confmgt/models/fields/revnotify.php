@@ -1,22 +1,15 @@
 <?php
 /**
- * @version     2.5.7
+ * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
- * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
+ * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - http://www.confmgt.com
  */defined('JPATH_BASE') or die;
 
 jimport('joomla.form.formfield');
 
-/**
- * 
- *
- * @package     Joomla.Platform
- * @subpackage  Form
- * @link        http://www.w3.org/TR/html-markup/textarea.html#textarea
- * @since       11.1
- */
+
 class  JFormFieldRevnotify extends JFormField
 {
 	/**
@@ -48,8 +41,8 @@ class  JFormFieldRevnotify extends JFormField
 		 
 		  $revid = JFactory::getApplication()->getUserState('com_confmgt.notify.rev.id');
           if ( $revid == 0 ) {
-            JError::raiseError( '500', JText::_( 'JERROR_NO_REVID' ) );
-            return false;
+            throw new Exception( JText::_( 'JERROR_NO_REVID' ), 404);
+
           }
 		  
 		  $rev1ewer = MainHelper::getRev1ewer($revid);
@@ -60,7 +53,7 @@ class  JFormFieldRevnotify extends JFormField
 		  $site_url=JURI::base();
 		  $login_url = JURI::base()."index.php/component/confmgt/";
 		  $directlinktoken = $rev1ewer->token;
-		  $user = JFactory::getUser($rev1ewer->userid);
+		  $user = JFactory::getUser($rev1ewer->user_id);
 		  $username = $user->username;
 		  $forgotpw = "index.php/component/users/?view=reset";
 		  //specify placeholders as an in the xml file e.g. array('ABSTRACT'=>$abstract,'NAME'=>$authorname,'TITLE'=>$title, 'KEYWORDS'=>$keywords,'SITE'=>$sitename, 'SITE_URL'=>$site_url, 'AUTHORS'=>$authordetails);
