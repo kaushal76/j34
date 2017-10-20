@@ -69,7 +69,6 @@ class ConfmgtModelRev1ewers extends JModelList {
     protected function getListQuery() {
 		$db		= $this->getDbo();
 		$query	= $db->getQuery(true);
-		$user = JFactory::getUser();
 		
 	    // Select the required fields from the table.
         $query->select( array('a.*', 'COUNT(b.reviewer_id) AS papers'));

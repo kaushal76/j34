@@ -50,7 +50,7 @@ $document->addScript($filterurl);
         <tbody>
         <?php $show = false; ?>
         <?php
-        foreach ($this->leadersitems as $item) : ?>
+        foreach ($this->leaders_items as $item) : ?>
             <?php
             $show = true; ?>
             <tr>

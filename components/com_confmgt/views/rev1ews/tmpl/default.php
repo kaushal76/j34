@@ -19,7 +19,10 @@ echo $this->loadTemplate('completed');
 <div>
   <form id="form-entrypage-<?php echo $item->id ?>" action="<?php echo JRoute::_('index.php'); ?>" method="post" class="form-validate form-entry" enctype="multipart/form-data">
     <?php echo JHtml::_('form.token'); ?>
-    <button class="btn btn-default btn-lg" type="submit"><?php echo JText::_("COM_CONFMGT_ENTRY_PAGE"); ?> </button>
+    <button class="btn btn-default btn-lg" type="submit">
+      <i class="icon-home"></i>
+      <?php echo JText::_("COM_CONFMGT_ENTRY_PAGE"); ?>
+    </button>
     <input type="hidden" name="option" value="com_confmgt" />
     <input type="hidden" name="view" value="entrypage" />
   </form>

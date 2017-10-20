@@ -4,7 +4,7 @@
  * @package     com_confmgt
  * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
- * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
+ * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - http://www.confmgt.com
  */
 // No direct access.
 defined('_JEXEC') or die;
@@ -100,7 +100,7 @@ class ConfmgtModelRev1ewerForm extends JModelForm
 	}
 	
 	
-		/**
+    /**
 	 * Method to get the agreed status.
 	 *
 	 * @param	integer	The id of the object to get.

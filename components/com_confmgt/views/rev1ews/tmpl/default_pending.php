@@ -4,7 +4,7 @@
  * @package     com_confmgt
  * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
- * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
+ * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - http://www.confmgt.com
  */
 // no direct access
 defined('_JEXEC') or die;
@@ -29,8 +29,8 @@ defined('_JEXEC') or die;
         </thead>
         <tbody>
         <?php $show = false; ?>
-        <?php if ($this->Abs_items_pending): ?>
-            <?php foreach ($this->Abs_items_pending as $item) :
+        <?php if ($this->abs_items_pending): ?>
+            <?php foreach ($this->abs_items_pending as $item) :
                 $layout = 'abstract';
                 $btn = JText::_('Post Abstract Review');
 
@@ -56,8 +56,8 @@ defined('_JEXEC') or die;
                 </tr>
             <?php endforeach; ?>
         <?php endif; ?>
-        <?php if ($this->Full_items_pending): ?>
-            <?php foreach ($this->Full_items_pending as $item) :
+        <?php if ($this->full_items_pending): ?>
+            <?php foreach ($this->full_items_pending as $item) :
 
                 $layout = 'full';
                 $btn = JText::_('Post Full paper Review');

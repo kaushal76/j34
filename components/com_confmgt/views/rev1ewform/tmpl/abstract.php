@@ -57,49 +57,57 @@ JHtml::_('behavior.formvalidation');
     </table>
 </div>
 
-<div class='form-horizontal well'>
-    <fieldset>
-        <div class="author-edit front-end-edit">
-            <?php if (!empty($this->item->id)): ?>
-                <legend><?php echo JText::_('Edit Review'); ?></legend>
-            <?php else: ?>
-                <legend><?php echo JText::_('Add New Review'); ?></legend>
-            <?php endif; ?>
-            <form id="form-author" role="form" action="<?php echo JRoute::_('index.php'); ?>" method="post"
-                  class="form-validate form-horizontal" enctype="multipart/form-data">
-                <div class="control-group">
-                    <div class="control-label"> <?php echo $this->form->getLabel('id'); ?> </div>
-                    <div class="controls"> <?php echo $this->form->getInput('id'); ?> </div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title"><?php echo JText::_('Abstract review'); ?></h3>
+    </div>
+    <div class="panel-body">
+        <div class='form-horizontal'>
+            <fieldset>
+                <div class="author-edit front-end-edit">
+                    <?php if (!empty($this->item->id)): ?>
+                        <legend><?php echo JText::_('Edit Review'); ?></legend>
+                    <?php else: ?>
+                        <legend><?php echo JText::_('Add New Review'); ?></legend>
+                    <?php endif; ?>
+                    <form id="form-author" role="form" action="<?php echo JRoute::_('index.php'); ?>" method="post"
+                          class="form-validate form-horizontal" enctype="multipart/form-data">
+                        <div class="control-group">
+                            <div class="control-label"> <?php echo $this->form->getLabel('id'); ?> </div>
+                            <div class="controls"> <?php echo $this->form->getInput('id'); ?> </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-label"> <?php echo $this->form->getLabel('recommendation'); ?> </div>
+                            <div class="controls"> <?php echo $this->form->getInput('recommendation'); ?> </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-label"> <?php echo $this->form->getLabel('author_comments'); ?> </div>
+                            <div class="controls"> <?php echo $this->form->getInput('author_comments'); ?> </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-label"> <?php echo $this->form->getLabel('leader_comments'); ?> </div>
+                            <div class="controls"> <?php echo $this->form->getInput('leader_comments'); ?> </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-label"> <?php echo $this->form->getLabel('score'); ?> </div>
+                            <div class="controls"> <?php echo $this->form->getInput('score'); ?> </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="controls">
+                                <button type="submit"
+                                        class="btn btn-primary"><?php echo JText::_('JSUBMIT'); ?></button>
+                                <?php echo JText::_('or'); ?> <a
+                                    href="<?php echo JRoute::_('index.php?option=com_confmgt&task=rev1ewform.cancel'); ?>"
+                                    title="<?php echo JText::_('JCANCEL'); ?>"><?php echo JText::_('JCANCEL'); ?></a>
+                                <input type="hidden" name="option" value="com_confmgt"/>
+                                <input type="hidden" name="task" value="rev1ewform.save"/>
+                                <input type="hidden" name="jform[linkid]" value="<?php echo $this->linkid; ?>"/>
+                                <input type="hidden" name="jform[mode]" value="abstract"/>
+                                <?php echo JHtml::_('form.token'); ?> </div>
+                        </div>
+                    </form>
                 </div>
-                <div class="control-group">
-                    <div class="control-label"> <?php echo $this->form->getLabel('recommendation'); ?> </div>
-                    <div class="controls"> <?php echo $this->form->getInput('recommendation'); ?> </div>
-                </div>
-                <div class="control-group">
-                    <div class="control-label"> <?php echo $this->form->getLabel('author_comments'); ?> </div>
-                    <div class="controls"> <?php echo $this->form->getInput('author_comments'); ?> </div>
-                </div>
-                <div class="control-group">
-                    <div class="control-label"> <?php echo $this->form->getLabel('leader_comments'); ?> </div>
-                    <div class="controls"> <?php echo $this->form->getInput('leader_comments'); ?> </div>
-                </div>
-                <div class="control-group">
-                    <div class="control-label"> <?php echo $this->form->getLabel('score'); ?> </div>
-                    <div class="controls"> <?php echo $this->form->getInput('score'); ?> </div>
-                </div>
-                <div class="control-group">
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary"><?php echo JText::_('JSUBMIT'); ?></button>
-                        <?php echo JText::_('or'); ?> <a
-                            href="<?php echo JRoute::_('index.php?option=com_confmgt&task=rev1ewform.cancel'); ?>"
-                            title="<?php echo JText::_('JCANCEL'); ?>"><?php echo JText::_('JCANCEL'); ?></a>
-                        <input type="hidden" name="option" value="com_confmgt"/>
-                        <input type="hidden" name="task" value="rev1ewform.save"/>
-                        <input type="hidden" name="jform[linkid]" value="<?php echo $this->linkid; ?>"/>
-                        <input type="hidden" name="jform[mode]" value="abstract"/>
-                        <?php echo JHtml::_('form.token'); ?> </div>
-                </div>
-            </form>
+            </fieldset>
         </div>
-    </fieldset>
+    </div>
 </div>

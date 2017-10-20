@@ -17,7 +17,7 @@ class ConfmgtViewPapers extends JViewLegacy
 {
 	protected $items;
 	protected $state;
-	protected $leadersitems;
+	protected $leaders_items;
 
 	/**
 	 * Method to display the view
@@ -28,7 +28,7 @@ class ConfmgtViewPapers extends JViewLegacy
 	{
 		$this->state        = $this->get('State');
 		$this->items        = $this->get('Items');
-		$this->leadersitems = $this->get('Leadersitems');
+		$this->leaders_items = $this->get('LeadersItems');
 
 
 		// Check for errors.

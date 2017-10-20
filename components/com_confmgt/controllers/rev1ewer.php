@@ -87,7 +87,6 @@ class ConfmgtControllerRev1ewer extends ConfmgtController {
      * @since version 3.8.0
      */
     public function remove() {
-        JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
         $app = JFactory::getApplication();
         $model = $this->getModel('Rev1ewer', 'ConfmgtModel');
