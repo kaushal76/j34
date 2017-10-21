@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @version     2.5.7
+ * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
- * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
+ * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - http://www.confmgt.com
  */
 // No direct access
 defined('_JEXEC') or die;
@@ -27,7 +27,7 @@ class ConfmgtTableAbstract extends JTable {
     /**
      * Overloaded bind function to pre-process the params.
      *
-     * @param	array		Named array
+     * @param	array Named array
      * @return	null|string	null is operation was satisfactory, otherwise returns an error
      * @see		JTable:bind
      * @since	1.5
@@ -37,23 +37,10 @@ class ConfmgtTableAbstract extends JTable {
     }
 
     /**
-     * This function convert an array of JAccessRule objects into an rules array.
-     * @param type $jaccessrules an arrao of JAccessRule objects.
-     */
-    private function JAccessRulestoArray($jaccessrules) {
-        $rules = array();
-        foreach ($jaccessrules as $action => $jaccess) {
-            $actions = array();
-            foreach ($jaccess->getData() as $group => $allow) {
-                $actions[$group] = ((bool) $allow);
-            }
-            $rules[$action] = $actions;
-        }
-        return $rules;
-    }
-
-    /**
-     * Overloaded check function
+     * Method to overload the check fucntion
+     * @return bool
+     *
+     * @since version 3.8.0
      */
     public function check() {
 
@@ -82,7 +69,7 @@ class ConfmgtTableAbstract extends JTable {
         $k = $this->_tbl_key;
 
         // Sanitize input.
-        JArrayHelper::toInteger($pks);
+        Joomla\Utilities\ArrayHelper::toInteger($pks);
         $userId = (int) $userId;
         $state = (int) $state;
 
@@ -93,7 +80,7 @@ class ConfmgtTableAbstract extends JTable {
             }
             // Nothing to set publishing state on, return false.
             else {
-                $this->setError(JText::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
+                JFactory::getApplication()->enqueueMessage(JText::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'),'error');
                 return false;
             }
         }
@@ -110,16 +97,15 @@ class ConfmgtTableAbstract extends JTable {
 
         // Update the publishing state for rows with the given primary keys.
         $this->_db->setQuery(
-                'UPDATE `' . $this->_tbl . '`' .
-                ' SET `state` = ' . (int) $state .
-                ' WHERE (' . $where . ')' .
-                $checkin
+            ' UPDATE `' . $this->_tbl . '`' .
+            ' SET `state` = ' . (int) $state .
+            ' WHERE (' . $where . ')' .
+            $checkin
         );
-        $this->_db->query();
-
-        // Check for a database error.
-        if ($this->_db->getErrorNum()) {
-            $this->setError($this->_db->getErrorMsg());
+        try {
+            $this->_db->execute();
+        }catch (Exception $e) {
+            JFactory::getApplication()->enqueueMessage($e->getMessage());
             return false;
         }
 
@@ -136,7 +122,6 @@ class ConfmgtTableAbstract extends JTable {
             $this->state = $state;
         }
 
-        $this->setError('');
         return true;
     }
 
@@ -148,7 +133,7 @@ class ConfmgtTableAbstract extends JTable {
      */
     protected function _getAssetName() {
         $k = $this->_tbl_key;
-        return 'com_confmgt.paper.' . (int) $this->$k;
+        return 'com_confmgt.author.' . (int) $this->$k;
     }
 
     /**
