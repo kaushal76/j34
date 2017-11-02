@@ -235,8 +235,16 @@ class ConfmgtModelThemeForm extends JModelForm
         }
         
         $table = $this->getTable();
+        $coordinator_table = $this->getTable('Coordinator','ConfmgtTable');
         if ($table->save($data) === true) {
+            $coordinator_data = array();
+            $coordinator_data['theme_id'] = $table->id;
+            $coordinator_data['user_id'] = $table->user_id;
+            if ($coordinator_table->save($coordinator_data)===false) {
+                return false;
+            }
             return $id;
+
         } else {
             return false;
         }

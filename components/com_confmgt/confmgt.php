@@ -18,11 +18,13 @@ JLoader::register('AclHelper', JPATH_COMPONENT . '/helpers/acl.php');
 JLoader::register('EmailHelper', JPATH_COMPONENT . '/helpers/email.php');
 JLoader::register('UploadHelper', JPATH_COMPONENT . '/helpers/upload.php');
 
-// adding overiding styles
-$url = "components/com_confmgt/assets/css/confmgt.css";
+$custom = "components/com_confmgt/assets/css/confmgt.css";
+
 $document = JFactory::getDocument();
-$document->addStyleSheet($url);
+$document->addStyleSheet($custom);
+
 $input = JFactory::getApplication()->input;
+
 
 // Execute the task.
 $controller = JControllerLegacy::getInstance('Confmgt');

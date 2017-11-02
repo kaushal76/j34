@@ -11,51 +11,65 @@
 defined('_JEXEC') or die;
 
 /**
- * Table class for Review
+ * Table class for Coordinator
  *
  * @package CONFMGT
  *
  * @since version 3.8.0
  */
-class ConfmgtTableRev1ew extends JTable {
+class ConfmgtTableCoordinator extends JTable
+{
 
     /**
      * Constructor
      *
      * @param JDatabase A database connector object
      */
-    public function __construct(&$db) {
-        parent::__construct('#__confmgt_reviews', 'id', $db);
+    public function __construct(&$db)
+    {
+        parent::__construct('#__confmgt_coordinators', 'id', $db);
     }
 
     /**
      * Overloaded bind function to pre-process the params.
      *
-     * @param	array Named array
-     * @return	null|string	null is operation was satisfactory, otherwise returns an error
-     * @see		JTable:bind
-     * @since	1.5
+     * @param    array        Named array
+     * @return    null|string    null is operation was satisfactory, otherwise returns an error
+     * @see        JTable:bind
+     * @since    1.5
      */
-    public function bind($array, $ignore = '') {
+    public function bind($array, $ignore = '')
+    {
 
-        
-		$input = JFactory::getApplication()->input;
-		$task = $input->getString('task', '');
 
+        $input = JFactory::getApplication()->input;
+        $task = $input->getString('task', '');
 
         if (isset($array['params']) && is_array($array['params'])) {
             $registry = new JRegistry();
             $registry->loadArray($array['params']);
-            $array['params'] = (string) $registry;
+            $array['params'] = (string)$registry;
         }
 
         if (isset($array['metadata']) && is_array($array['metadata'])) {
             $registry = new JRegistry();
             $registry->loadArray($array['metadata']);
-            $array['metadata'] = (string) $registry;
+            $array['metadata'] = (string)$registry;
         }
 
         return parent::bind($array, $ignore);
+    }
+
+    /**
+     * Overloading the check function
+     *
+     * @return bool
+     *
+     * @since version 3.8.0
+     */
+    public function check()
+    {
+        return parent::check();
     }
 
     /**
@@ -70,23 +84,24 @@ class ConfmgtTableRev1ew extends JTable {
      * @return    boolean    True on success.
      * @since    1.0.4
      */
-    public function publish($pks = null, $state = 1, $userId = 0) {
+
+    public function publish($pks = null, $state = 1, $userId = 0)
+    {
         // Initialise variables.
         $k = $this->_tbl_key;
 
         // Sanitize input.
         Joomla\Utilities\ArrayHelper::toInteger($pks);
-        $userId = (int) $userId;
-        $state = (int) $state;
+        $userId = (int)$userId;
+        $state = (int)$state;
 
         // If there are no primary keys set check to see if the instance key is set.
         if (empty($pks)) {
             if ($this->$k) {
                 $pks = array($this->$k);
-            }
-            // Nothing to set publishing state on, return false.
+            } // Nothing to set publishing state on, return false.
             else {
-                JFactory::getApplication()->enqueueMessage(JText::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'),'error');
+                JFactory::getApplication()->enqueueMessage(JText::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'), 'error');
                 return false;
             }
         }
@@ -98,19 +113,19 @@ class ConfmgtTableRev1ew extends JTable {
         if (!property_exists($this, 'checked_out') || !property_exists($this, 'checked_out_time')) {
             $checkin = '';
         } else {
-            $checkin = ' AND (checked_out = 0 OR checked_out = ' . (int) $userId . ')';
+            $checkin = ' AND (checked_out = 0 OR checked_out = ' . (int)$userId . ')';
         }
 
         // Update the publishing state for rows with the given primary keys.
         $this->_db->setQuery(
             ' UPDATE `' . $this->_tbl . '`' .
-            ' SET `state` = ' . (int) $state .
+            ' SET `state` = ' . (int)$state .
             ' WHERE (' . $where . ')' .
             $checkin
         );
         try {
             $this->_db->execute();
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             JFactory::getApplication()->enqueueMessage($e->getMessage());
             return false;
         }
@@ -131,6 +146,7 @@ class ConfmgtTableRev1ew extends JTable {
         return true;
     }
 
+
     /**
      * Method to delete a record
      *
@@ -140,7 +156,8 @@ class ConfmgtTableRev1ew extends JTable {
      *
      * @since version 3.8.0
      */
-    public function delete($pk = null) {
+    public function delete($pk = null)
+    {
         $this->load($pk);
         $result = parent::delete($pk);
         if ($result) {

@@ -40,8 +40,8 @@ JHtml::_('behavior.formvalidation');
                             <div class="controls"> <?php echo $this->form->getInput('description'); ?> </div>
                         </div>
                         <div class="control-group">
-                            <div class="control-label"> <?php echo $this->form->getLabel('userid'); ?> </div>
-                            <div class="controls"> <?php echo $this->form->getInput('userid'); ?> </div>
+                            <div class="control-label"> <?php echo $this->form->getLabel('user_id'); ?> </div>
+                            <div class="controls"> <?php echo $this->form->getInput('user_id'); ?> </div>
                         </div>
                         <div class="control-group">
                             <div class="controls">

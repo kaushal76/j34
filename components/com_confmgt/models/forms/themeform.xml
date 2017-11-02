@@ -26,7 +26,7 @@
 			
 		/>  
 		
-		<field name="userid" type="users"
+		<field name="user_id" type="users"
                 
             label="Theme leader"
 			description="Please select a theme leader"

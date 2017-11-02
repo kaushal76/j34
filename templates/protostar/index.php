@@ -83,13 +83,13 @@ if ($this->params->get('templateColor'))
 }
 
 // Check for a custom CSS file
-JHtml::_('stylesheet', 'user.css', array('version' => 'auto', 'relative' => true));
+//JHtml::_('stylesheet', 'user.css', array('version' => 'auto', 'relative' => true));
 
 // Check for a custom js file
-JHtml::_('script', 'user.js', array('version' => 'auto', 'relative' => true));
+//JHtml::_('script', 'user.js', array('version' => 'auto', 'relative' => true));
 
 // Load optional RTL Bootstrap CSS
-JHtml::_('bootstrap.loadCss', false, $this->direction);
+//JHtml::_('bootstrap.loadCss', false, $this->direction);
 
 // Adjusting content width
 if ($this->countModules('position-7') && $this->countModules('position-8'))

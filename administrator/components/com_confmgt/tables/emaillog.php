@@ -1,19 +1,23 @@
 <?php
 
 /**
- * @version     2.5.7
+ * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
- * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
+ * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - http://www.confmgt.com
  */
 // No direct access
 defined('_JEXEC') or die;
 
 /**
- * paper Table class
+ * Table class for email log
+ *
+ * @package  CONFMGT
+ *
+ * @since version 3.8.0
  */
-class ConfmgtTableemail_log extends JTable {
+class ConfmgtTableEmailLog extends JTable {
 
     /**
      * Constructor
@@ -52,43 +56,16 @@ class ConfmgtTableemail_log extends JTable {
             $registry->loadArray($array['metadata']);
             $array['metadata'] = (string) $registry;
         }
-		/*
-        if (!JFactory::getUser()->authorise('core.admin', 'com_confmgt.paper.' . $array['id'])) {
-            $actions = JFactory::getACL()->getActions('com_confmgt', 'paper');
-            $default_actions = JFactory::getACL()->getAssetRules('com_confmgt.paper.' . $array['id'])->getData();
-            $array_jaccess = array();
-            foreach ($actions as $action) {
-                $array_jaccess[$action->name] = $default_actions[$action->name];
-            }
-            $array['rules'] = $this->JAccessRulestoArray($array_jaccess);
-        }
-        //Bind the rules for ACL where supported.
-        if (isset($array['rules']) && is_array($array['rules'])) {
-            $this->setRules($array['rules']);
-        }
-		*/
 
         return parent::bind($array, $ignore);
     }
 
     /**
-     * This function convert an array of JAccessRule objects into an rules array.
-     * @param type $jaccessrules an arrao of JAccessRule objects.
-     */
-    private function JAccessRulestoArray($jaccessrules) {
-        $rules = array();
-        foreach ($jaccessrules as $action => $jaccess) {
-            $actions = array();
-            foreach ($jaccess->getData() as $group => $allow) {
-                $actions[$group] = ((bool) $allow);
-            }
-            $rules[$action] = $actions;
-        }
-        return $rules;
-    }
-
-    /**
-     * Overloaded check function
+     * Overload the check function
+     *
+     * @return bool
+     *
+     * @since version 3.8.0
      */
     public function check() {
 
@@ -117,7 +94,7 @@ class ConfmgtTableemail_log extends JTable {
         $k = $this->_tbl_key;
 
         // Sanitize input.
-        JArrayHelper::toInteger($pks);
+        Joomla\Utilities\ArrayHelper::toInteger($pks);
         $userId = (int) $userId;
         $state = (int) $state;
 
@@ -128,7 +105,7 @@ class ConfmgtTableemail_log extends JTable {
             }
             // Nothing to set publishing state on, return false.
             else {
-                $this->setError(JText::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
+                JFactory::getApplication()->enqueueMessage(JText::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'),'error');
                 return false;
             }
         }
@@ -145,16 +122,15 @@ class ConfmgtTableemail_log extends JTable {
 
         // Update the publishing state for rows with the given primary keys.
         $this->_db->setQuery(
-                'UPDATE `' . $this->_tbl . '`' .
-                ' SET `state` = ' . (int) $state .
-                ' WHERE (' . $where . ')' .
-                $checkin
+            'UPDATE `' . $this->_tbl . '`' .
+            ' SET `state` = ' . (int) $state .
+            ' WHERE (' . $where . ')' .
+            $checkin
         );
-        $this->_db->query();
-
-        // Check for a database error.
-        if ($this->_db->getErrorNum()) {
-            $this->setError($this->_db->getErrorMsg());
+        try {
+            $this->_db->execute();
+        }catch (Exception $e) {
+            JFactory::getApplication()->enqueueMessage($e->getMessage());
             return false;
         }
 
@@ -171,40 +147,18 @@ class ConfmgtTableemail_log extends JTable {
             $this->state = $state;
         }
 
-        $this->setError('');
         return true;
     }
 
     /**
-     * Define a namespaced asset name for inclusion in the #__assets table
-     * @return string The asset name 
+     * Method to delete a record
      *
-     * @see JTable::_getAssetName 
-     */
-    protected function _getAssetName() {
-        $k = $this->_tbl_key;
-        return 'com_confmgt.email_log.' . (int) $this->$k;
-    }
-
-    /**
-     * Returns the parent asset's id. If you have a tree structure, retrieve the parent's id using the external key field
+     * @param null $pk
      *
-     * @see JTable::_getAssetParentId 
+     * @return bool
+     *
+     * @since version 3.8.0
      */
-    protected function _getAssetParentId(JTable $table = null, $id = null) {
-        // We will retrieve the parent-asset from the Asset-table
-        $assetParent = JTable::getInstance('Asset');
-        // Default: if no asset-parent can be found we take the global asset
-        $assetParentId = $assetParent->getRootId();
-        // The item has the component as asset-parent
-        $assetParent->loadByName('com_confmgt');
-        // Return the found asset-parent-id
-        if ($assetParent->id) {
-            $assetParentId = $assetParent->id;
-        }
-        return $assetParentId;
-    }
-
     public function delete($pk = null) {
         $this->load($pk);
         $result = parent::delete($pk);

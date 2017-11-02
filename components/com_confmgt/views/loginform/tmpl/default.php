@@ -10,6 +10,7 @@
 defined('_JEXEC') or die;
 
 ?>
+
 <div class="row vertical-offset-100">
     <div class="offset3 span6">
         <div class="panel panel-default">

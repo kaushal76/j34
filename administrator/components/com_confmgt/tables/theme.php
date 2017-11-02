@@ -1,95 +1,78 @@
 <?php
 
 /**
- * @version     2.5.7
+ * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
- * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
+ * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - http://www.confmgt.com
  */
 // No direct access
 defined('_JEXEC') or die;
 
 /**
- * paper Table class
+ * Table class for Theme
+ *
+ * @package CONFMGT
+ *
+ * @since version 3.8.0
  */
-class ConfmgtTabletheme extends JTable {
+class ConfmgtTableTheme extends JTable
+{
 
     /**
      * Constructor
      *
      * @param JDatabase A database connector object
      */
-    public function __construct(&$db) {
+    public function __construct(&$db)
+    {
         parent::__construct('#__confmgt_themes', 'id', $db);
     }
 
     /**
      * Overloaded bind function to pre-process the params.
      *
-     * @param	array		Named array
-     * @return	null|string	null is operation was satisfactory, otherwise returns an error
-     * @see		JTable:bind
-     * @since	1.5
+     * @param    array        Named array
+     * @return    null|string    null is operation was satisfactory, otherwise returns an error
+     * @see        JTable:bind
+     * @since    1.5
      */
-    public function bind($array, $ignore = '') {
+    public function bind($array, $ignore = '')
+    {
 
-        
-		$input = JFactory::getApplication()->input;
-		$task = $input->getString('task', '');
+
+        $input = JFactory::getApplication()->input;
+        $task = $input->getString('task', '');
 
         if (isset($array['params']) && is_array($array['params'])) {
             $registry = new JRegistry();
             $registry->loadArray($array['params']);
-            $array['params'] = (string) $registry;
+            $array['params'] = (string)$registry;
         }
 
         if (isset($array['metadata']) && is_array($array['metadata'])) {
             $registry = new JRegistry();
             $registry->loadArray($array['metadata']);
-            $array['metadata'] = (string) $registry;
-        }
-        if (!JFactory::getUser()->authorise('core.admin', 'com_confmgt.paper.' . $array['id'])) {
-            $actions = JFactory::getACL()->getActions('com_confmgt', 'paper');
-            $default_actions = JFactory::getACL()->getAssetRules('com_confmgt.paper.' . $array['id'])->getData();
-            $array_jaccess = array();
-            foreach ($actions as $action) {
-                $array_jaccess[$action->name] = $default_actions[$action->name];
-            }
-            $array['rules'] = $this->JAccessRulestoArray($array_jaccess);
-        }
-        //Bind the rules for ACL where supported.
-        if (isset($array['rules']) && is_array($array['rules'])) {
-            $this->setRules($array['rules']);
+            $array['metadata'] = (string)$registry;
         }
 
         return parent::bind($array, $ignore);
     }
 
     /**
-     * This function convert an array of JAccessRule objects into an rules array.
-     * @param type $jaccessrules an arrao of JAccessRule objects.
+     * Overloading the check function
+     *
+     * @return bool
+     *
+     * @since version 3.8.0
      */
-    private function JAccessRulestoArray($jaccessrules) {
-        $rules = array();
-        foreach ($jaccessrules as $action => $jaccess) {
-            $actions = array();
-            foreach ($jaccess->getData() as $group => $allow) {
-                $actions[$group] = ((bool) $allow);
-            }
-            $rules[$action] = $actions;
-        }
-        return $rules;
-    }
-
-    /**
-     * Overloaded check function
-     */
-    public function check() {
+    public function check()
+    {
 
         //If there is an ordering column and this is a new row then get the next ordering value
         if (property_exists($this, 'ordering') && $this->id == 0) {
-            $this->ordering = self::getNextOrder('linkid ='.$this->linkid.' AND created_by = '.$this->created_by);
+            $this->ordering = self::getNextOrder('linkid =' . $this->linkid . ' AND created_by = ' . $this->created_by);
         }
 
         return parent::check();
@@ -107,23 +90,24 @@ class ConfmgtTabletheme extends JTable {
      * @return    boolean    True on success.
      * @since    1.0.4
      */
-    public function publish($pks = null, $state = 1, $userId = 0) {
+
+    public function publish($pks = null, $state = 1, $userId = 0)
+    {
         // Initialise variables.
         $k = $this->_tbl_key;
 
         // Sanitize input.
-        JArrayHelper::toInteger($pks);
-        $userId = (int) $userId;
-        $state = (int) $state;
+        Joomla\Utilities\ArrayHelper::toInteger($pks);
+        $userId = (int)$userId;
+        $state = (int)$state;
 
         // If there are no primary keys set check to see if the instance key is set.
         if (empty($pks)) {
             if ($this->$k) {
                 $pks = array($this->$k);
-            }
-            // Nothing to set publishing state on, return false.
+            } // Nothing to set publishing state on, return false.
             else {
-                $this->setError(JText::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
+                JFactory::getApplication()->enqueueMessage(JText::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'), 'error');
                 return false;
             }
         }
@@ -135,21 +119,20 @@ class ConfmgtTabletheme extends JTable {
         if (!property_exists($this, 'checked_out') || !property_exists($this, 'checked_out_time')) {
             $checkin = '';
         } else {
-            $checkin = ' AND (checked_out = 0 OR checked_out = ' . (int) $userId . ')';
+            $checkin = ' AND (checked_out = 0 OR checked_out = ' . (int)$userId . ')';
         }
 
         // Update the publishing state for rows with the given primary keys.
         $this->_db->setQuery(
-                'UPDATE `' . $this->_tbl . '`' .
-                ' SET `state` = ' . (int) $state .
-                ' WHERE (' . $where . ')' .
-                $checkin
+            ' UPDATE `' . $this->_tbl . '`' .
+            ' SET `state` = ' . (int)$state .
+            ' WHERE (' . $where . ')' .
+            $checkin
         );
-        $this->_db->query();
-
-        // Check for a database error.
-        if ($this->_db->getErrorNum()) {
-            $this->setError($this->_db->getErrorMsg());
+        try {
+            $this->_db->execute();
+        } catch (Exception $e) {
+            JFactory::getApplication()->enqueueMessage($e->getMessage());
             return false;
         }
 
@@ -166,41 +149,21 @@ class ConfmgtTabletheme extends JTable {
             $this->state = $state;
         }
 
-        $this->setError('');
         return true;
     }
 
-    /**
-     * Define a namespaced asset name for inclusion in the #__assets table
-     * @return string The asset name 
-     *
-     * @see JTable::_getAssetName 
-     */
-    protected function _getAssetName() {
-        $k = $this->_tbl_key;
-        return 'com_confmgt.author.' . (int) $this->$k;
-    }
 
     /**
-     * Returns the parent asset's id. If you have a tree structure, retrieve the parent's id using the external key field
+     * Method to delete a record
      *
-     * @see JTable::_getAssetParentId 
+     * @param null $pk
+     *
+     * @return bool
+     *
+     * @since version 3.8.0
      */
-    protected function _getAssetParentId(JTable $table = null, $id = null) {
-        // We will retrieve the parent-asset from the Asset-table
-        $assetParent = JTable::getInstance('Asset');
-        // Default: if no asset-parent can be found we take the global asset
-        $assetParentId = $assetParent->getRootId();
-        // The item has the component as asset-parent
-        $assetParent->loadByName('com_confmgt');
-        // Return the found asset-parent-id
-        if ($assetParent->id) {
-            $assetParentId = $assetParent->id;
-        }
-        return $assetParentId;
-    }
-
-    public function delete($pk = null) {
+    public function delete($pk = null)
+    {
         $this->load($pk);
         $result = parent::delete($pk);
         if ($result) {

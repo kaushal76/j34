@@ -1,14 +1,20 @@
 <?php
 /**
- * @version     3.4.1
+ * @version     3.8.0
  * @package     com_confmgt
- * @copyright   Copyright (C) 2015. All rights reserved.
+ * @copyright   Copyright (C) 2017. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
- * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
+ * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - http://www.confmgt.com
  */
 defined('_JEXEC') or die;
 
-//Email helper class for the confmgt. Helping with all email related acitivities within the Confmgt
+/**
+ * Email helper class for the confmgt. Helping with all email related acitivities within the Confmgt
+ *
+ * @package CONFMGT
+ *
+ * @since version 3.8.0
+ */
 
 abstract class EmailHelper
 {
@@ -82,7 +88,7 @@ abstract class EmailHelper
 		return $text;
 	}
 	
-	public static function getEmailcontent ($emailcode) 
+	public static function getEmailContent ($emailcode)
 	{
 		//Obtain a database connection
 		$db = JFactory::getDbo();
@@ -100,16 +106,18 @@ abstract class EmailHelper
 		//Prepare the query
 		$db->setQuery($query);
 		// Load the row.
-		$row = $db->loadObject();
-		$result = $row;
-		if ($error = $db->getErrorMsg()) {
-    		throw new Exception($error);
-		}else{ 
+		try{
+            $result = $db->loadObject();
+
+        } catch (Exception $e) {
+
+            JFactory::$application->enqueueMessage($e->getMessage(),'error');
+            return false;
+        }
 			return $result;
-		}
 	}
 	
-	private static function getTable($type = 'Email_log', $prefix = 'ConfmgtTable', $config = array())
+	private static function getTable($type = 'Emaillog', $prefix = 'ConfmgtTable', $config = array())
 	{   
         JModelLegacy::addTablePath(JPATH_COMPONENT_ADMINISTRATOR.'/tables');
         return JTable::getInstance($type, $prefix, $config);
