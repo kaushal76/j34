@@ -4,7 +4,6 @@
 		label="COM_CONFMGT_COMPONENT_LABEL"
 		description="COM_CONFMGT_COMPONENT_DESC"
 	>
-
 	</fieldset>
 	
 	<fieldset name="full_paper"
@@ -27,6 +26,16 @@
              default="components/com_confmgt/upload/"
              >
          </field>
+
+		<field name="myfolder"
+			   type="folderlist"
+			   default=""
+			   label="Select a folder"
+			   directory="../components/com_confmgt/"
+			   filter=""
+			   exclude=""
+			   stripext="" />
+
 
 	</fieldset>
 	

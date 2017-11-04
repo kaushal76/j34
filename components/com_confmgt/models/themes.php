@@ -1,18 +1,18 @@
 <?php
 
 /**
- * @version     2.5.7
+ * @version     3.8.0
  * @package     com_confmgt
  * @copyright   Copyright (C) 2015. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
- * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - htttp://www.confmgt.com
+ * @author      Dr Kaushal Keraminiyage <admin@confmgt.com> - http://www.confmgt.com
  */
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.modellist');
-
 /**
- * Methods supporting a list of Confmgt records.
+ * @package CONFMGT
+ *
+ * @since version 3.8.0
  */
 class ConfmgtModelThemes extends JModelList {
 
@@ -20,7 +20,7 @@ class ConfmgtModelThemes extends JModelList {
      * Constructor.
      *
      * @param    array    An optional associative array of configuration settings.
-     * @see        JController
+     * @see      JController
      * @since    1.6
      */
     public function __construct($config = array()) {
@@ -36,19 +36,6 @@ class ConfmgtModelThemes extends JModelList {
      */
     protected function populateState($ordering = null, $direction = null) {
 
-        // Initialise variables.
-        $app = JFactory::getApplication();
-
-        // List state information
-        $limit = $app->getUserStateFromRequest('global.list.limit', 'limit', $app->getCfg('list_limit'));
-        $this->setState('list.limit', $limit);
-
-        $limitstart = JFactory::getApplication()->input->getInt('limitstart', 0);
-        $this->setState('list.start', $limitstart);
-
-        
-
-        // List state information.
         parent::populateState($ordering, $direction);
     }
 
@@ -61,6 +48,12 @@ class ConfmgtModelThemes extends JModelList {
     protected function getListQuery() {
 		$db		= $this->getDbo();
 		$query	= $db->getQuery(true);
+
+        $query->select('a.*');
+        $query->from('`#__confmgt_themes` AS a');
+        $query->select('b.name as user_name');
+        $query->join('LEFT', '#__users AS b ON b.id=a.user_id');
+        $query->order('a.id ASC');
 		return $query;
 	}
 
@@ -68,5 +61,4 @@ class ConfmgtModelThemes extends JModelList {
 	public function getItems() {
         return parent::getItems();
     }
-
 }

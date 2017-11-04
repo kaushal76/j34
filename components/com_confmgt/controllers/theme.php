@@ -80,25 +80,31 @@ class ConfmgtControllerTheme extends ConfmgtController {
 
     public function remove() {
 
-        JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
         $app = JFactory::getApplication();
         $model = $this->getModel('Theme', 'ConfmgtModel');
 
-        $data = JFactory::getApplication()->input->get('jform', array(), 'array');
-        $return = $model->delete($data['id']);
+        $id = JFactory::getApplication()->input->get('id');
 
-        if ($return === false) {
-            $this->setMessage(JText::sprintf('Delete failed', $model->getError()), 'warning');   
-        } else {
-            if ($return) {
-                $model->checkin($return);
+        if ($model->checkAllocations($id)) {
+            $return = $model->delete($id);
+            if ($return === false) {
+                $this->setMessage(JText::sprintf('Delete failed', $model->getError()), 'error');
+            } else {
+                if ($return) {
+                    $model->checkin($return);
+                }
+
+                $app->setUserState('com_confmgt.edit.theme.id', null);
+                $app->setUserState('com_confmgt.edit.theme.data', null);
+                $this->setMessage(JText::_('COM_CONFMGT_ITEM_DELETED_SUCCESSFULLY'));
             }
+            $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=themes', false));
 
-            $app->setUserState('com_confmgt.edit.theme.id', null);
-            $app->setUserState('com_confmgt.edit.theme.data', null);
-            $this->setMessage(JText::_('COM_CONFMGT_ITEM_DELETED_SUCCESSFULLY'));
+
+        }else{
+            $this->setMessage(JText::sprintf('Delete failed', $model->getError()), 'error');
+            $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=themes', false));
         }
-        $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=themes', false));
     }
 
 }

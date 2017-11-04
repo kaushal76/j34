@@ -166,6 +166,8 @@ abstract class AclHelper
 
         if (!(isset($user->groups[8]) || isset($user->groups[7]))) {
             return false;
+        }else{
+            return true;
         }
         //Build the query
         $query = $db->getQuery(true);

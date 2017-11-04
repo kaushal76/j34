@@ -221,6 +221,39 @@ class ConfmgtModelTheme extends JModelItem {
     }
 
     /**
+     * Method to check if a theme is allocated already to papers
+     *
+     * @param $id
+     *
+     * @return bool
+     *
+     * @since version 3.8.0
+     */
+    public function checkAllocations($id) {
+
+        $db		= $this->getDbo();
+        $query	= $db->getQuery(true);
+
+        $query->select('a.id');
+        $query->from('`#__confmgt_papers` AS a');
+        $query->select('b.title as theme');
+        $query->join('LEFT', '#__confmgt_themes AS b ON b.id=a.theme');
+        $query->where ('b.id = '.$id);
+        $db->setQuery($query);
+        $db->execute();
+        $num_rows = $db->getNumRows();
+        $column= $db->loadColumn(0);
+        $comma_separated = implode(",", $column);
+
+        if ($num_rows > 0) {
+            JFactory::$application->enqueueMessage('This theme is allocated to some active papers. Paper IDs are: '.$comma_separated,'error');
+            return false;
+        }
+        return true;
+    }
+
+
+    /**
      * Method to delete an item
      *
      * @param $id

@@ -108,7 +108,7 @@ defined('_JEXEC') or die;
                               method="post" enctype="multipart/form-data" class="form-entry">
                             <?php echo JHtml::_('form.token'); ?>
                             <input type="hidden" name="option" value="com_confmgt"/>
-                            <input type="hidden" name="view" value="themeform"/>
+                            <input type="hidden" name="view" value="themes"/>
                             <button class="btn btn-default btn-entry" type="submit">
                                 <?php echo '<span class="centre"><img src="' . JURI::root() .
                                     'components/com_confmgt/assets/img/theme_leader.png" alt="Config" 
