@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form role = "form">
 	<fieldset name = "Theme details">      
-		<field name="id" type="hidden" default="0"/> 
+		<field name="id" type="hidden" default="0"/>
+		<field name="user_id" type="hidden"/>
+
 			
 		<field name="title" type="text" 
 		
@@ -25,17 +27,15 @@
             filter="safehtml" 
 			
 		/>  
-		
-		<field name="user_id" type="users"
-                
-            label="Theme leader"
-			description="Please select a theme leader"
-			class="input-block-level"
-			input-type = "list"
-			required = "true"
-			 /> 
-			
-		/>  
+
+		<field name="leader" type="subform"
+			   formsource="components/com_confmgt/models/forms/themeleader.xml"
+			   required = "true"
+			   multiple="true"
+			   label="Theme Leaders"
+			   description="Add multiple Theme Leaders to the theme"
+			   layout = "subform.repeatable-table"
+		/>
 		
          <field name="checked_out" type="hidden" filter="unset" />
         <field name="checked_out_time" type="hidden" filter="unset" />

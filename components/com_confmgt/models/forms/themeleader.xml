@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+    <field name="user_id" type="users"
+           label="Theme leader"
+           description="Please select a theme leader"
+           class="input-block-level"
+           input-type = "list"
+           required = "true"
+    />
+</form>

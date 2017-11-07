@@ -61,4 +61,23 @@ class ConfmgtModelThemes extends JModelList {
 	public function getItems() {
         return parent::getItems();
     }
+
+    /**
+     * Method to get leader name by user ID
+     *
+     * @param $leader_id
+     *
+     * @return mixed
+     *
+     * @since version 3.8.0
+     */
+    public function getLeaderNameById($leader_id) {
+        $db		= $this->getDbo();
+        $query	= $db->getQuery(true);
+        $query->select('a.name');
+        $query->from('`#__users` AS a');
+        $query->where('a.id ='.$leader_id);
+        $db->setQuery($query);
+        return $db->loadObject();
+    }
 }

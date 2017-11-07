@@ -590,6 +590,7 @@ abstract class JTable extends JObject implements JObservableInterface, JTableInt
 	 *
 	 * @since   11.1
 	 * @throws  InvalidArgumentException
+     *
 	 */
 	public function bind($src, $ignore = array())
 	{

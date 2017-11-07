@@ -31,24 +31,25 @@ class ConfmgtViewThemeform extends JViewLegacy {
      * @since version 3.8.0
      * @throws Exception
      */
-    public function display($tpl = null) {
-        
-		$app	= JFactory::getApplication();
+    public function display($tpl = null)
+    {
+
+        $app = JFactory::getApplication();
         $this->state = $this->get('State');
         $this->item = $this->get('Data');
+        $this->user = JFactory::getUser()->id;
 
         $this->params = $app->getParams('com_confmgt');
-   		$this->form		= $this->get('Form');
+        $this->form = $this->get('Form');
         if (count($errors = $this->get('Errors'))) {
             throw new Exception(implode("\n", $errors));
         }
-        
-		$authorised = AclHelper::isThemeleader();
+
+        $authorised = AclHelper::isThemeleader();
 
         if (!$authorised) {
-           throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'));
+            throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'));
         }
-
         parent::display($tpl);
     }
 }

@@ -27,7 +27,7 @@ class ConfmgtTableCoordinator extends JTable
      */
     public function __construct(&$db)
     {
-        parent::__construct('#__confmgt_coordinators', 'id', $db);
+        parent::__construct('#__confmgt_coordinators', array('theme_id','user_id'), $db);
     }
 
     /**

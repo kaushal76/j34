@@ -57,6 +57,10 @@ class ConfmgtTableTheme extends JTable
             $array['metadata'] = (string)$registry;
         }
 
+        if((!empty($array['leader'])&&(is_array($array['leader'])))) {
+            $this->_jsonEncode[]="leader";
+        }
+
         return parent::bind($array, $ignore);
     }
 

@@ -111,6 +111,9 @@ class ConfmgtControllerThemeForm extends ConfmgtController
 
     function cancel()
     {
+        $app = JFactory::getApplication();
+        $app->setUserState('com_confmgt.edit.theme.id', null);
+        $app->setUserState('com_confmgt.edit.theme.data', null);
         $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=themes', false));
     }
 

@@ -106,5 +106,4 @@ class ConfmgtControllerTheme extends ConfmgtController {
             $this->setRedirect(JRoute::_('index.php?option=com_confmgt&view=themes', false));
         }
     }
-
 }

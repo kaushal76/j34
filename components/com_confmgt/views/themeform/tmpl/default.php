@@ -39,10 +39,12 @@ JHtml::_('behavior.formvalidation');
                             <div class="control-label"> <?php echo $this->form->getLabel('description'); ?> </div>
                             <div class="controls"> <?php echo $this->form->getInput('description'); ?> </div>
                         </div>
+
                         <div class="control-group">
-                            <div class="control-label"> <?php echo $this->form->getLabel('user_id'); ?> </div>
-                            <div class="controls"> <?php echo $this->form->getInput('user_id'); ?> </div>
+                            <div class="control-label"> <?php echo $this->form->getLabel('leader'); ?> </div>
+                            <div class="controls"> <?php echo $this->form->getInput('leader'); ?> </div>
                         </div>
+
                         <div class="control-group">
                             <div class="controls">
                                 <button type="submit"
@@ -52,6 +54,7 @@ JHtml::_('behavior.formvalidation');
                                     title="<?php echo JText::_('JCANCEL'); ?>"><?php echo JText::_('JCANCEL'); ?></a>
                                 <input type="hidden" name="option" value="com_confmgt"/>
                                 <input type="hidden" name="task" value="themeform.save"/>
+                                <input type="hidden" name="user_id" value=<?php echo $this->user; ?>/>
                                 <?php echo JHtml::_('form.token'); ?> </div>
                         </div>
                     </form>

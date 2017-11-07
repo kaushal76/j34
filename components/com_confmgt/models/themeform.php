@@ -208,11 +208,16 @@ class ConfmgtModelThemeForm extends JModelForm
 	protected function loadFormData()
 	{
 		$data = JFactory::getApplication()->getUserState('com_confmgt.edit.theme.data', array());
+        if ($data) {
+            $data = Joomla\Utilities\ArrayHelper::toObject($data,'JObject');
+        }
         if (empty($data)) {
             $data = $this->getData();
         }
-        
+        $leader = json_decode(($data->leader),true);
+        $data->set('leader', $leader);
         return $data;
+
 	}
 
 	/**
@@ -236,12 +241,22 @@ class ConfmgtModelThemeForm extends JModelForm
         
         $table = $this->getTable();
         $coordinator_table = $this->getTable('Coordinator','ConfmgtTable');
+
+        $old_leaders_removed = $this->removeLeadersByThemeId($data['id']);
+
+        if (!$old_leaders_removed) {
+            JFactory::$application->enqueueMessage('Could not remove the old leaders from the Theme', 'error');
+        }
+
         if ($table->save($data) === true) {
-            $coordinator_data = array();
-            $coordinator_data['theme_id'] = $table->id;
-            $coordinator_data['user_id'] = $table->user_id;
-            if ($coordinator_table->save($coordinator_data)===false) {
-                return false;
+            $coordinator_data = $data['leader'];
+
+            foreach ($coordinator_data as $coordinator) {
+                $coordinator['theme_id'] = $table->id;
+                if (!$coordinator_table->save($coordinator)) {
+                    JFactory::$application->enqueueMessage('Could not have the theme leaders','error');
+                    return false;
+                }
             }
             return $id;
 
@@ -275,6 +290,50 @@ class ConfmgtModelThemeForm extends JModelForm
             return false;
         }
 
+    }
+
+    /**
+     * Method to get Leaders by Theme ID
+     *
+     * @param $theme_id
+     *
+     * @return mixed
+     *
+     * @since version
+     *
+     */
+    public function getLeadersByThemeId($theme_id) {
+        $db		= $this->getDbo();
+        $query	= $db->getQuery(true);
+        $query->select('a.*');
+        $query->from('`#__confmgt_coordinators` AS a');
+        $query->where('a.theme_id ='.$theme_id);
+        $db->setQuery($query);
+        return $db->loadAssocList();
+    }
+
+    /**
+     * Method to remove Old Leaders by Theme ID
+     * This is used to refresh data of leaders when updating with the subform data
+     *
+     * @param $theme_id
+     *
+     * @return mixed
+     *
+     * @since version
+     *
+     */
+    public function removeLeadersByThemeId($theme_id) {
+        $db = JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $conditions = array(
+            $db->quoteName('theme_id') .'='.$theme_id,
+        );
+        $query->delete($db->quoteName('#__confmgt_coordinators'));
+        $query->where($conditions);
+        $db->setQuery($query);
+        $result = $db->execute();
+        return $result;
     }
     
 }

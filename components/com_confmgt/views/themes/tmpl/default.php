@@ -32,7 +32,7 @@ $document->addScript($delurl);
             <th width="5%"><?php echo JText::_("#"); ?></th>
             <th><?php echo JText::_("Theme title"); ?></th>
             <th><?php echo JText::_("Theme Description"); ?></th>
-            <th><?php echo JText::_("Leader"); ?></th>
+            <th><?php echo JText::_("Theme Leaders"); ?></th>
             <th width="20%"><?php echo JText::_("Action"); ?></th>
         </tr>
         </thead>
@@ -42,12 +42,24 @@ $document->addScript($delurl);
         $i =1;
         ?>
         <?php foreach ($this->items as $item) : ?>
+            <?php $leaders = ''; ?>
             <?php $show = true; ?>
             <tr>
                 <td><?php echo $i ?></td>
                 <td><?php echo $item->title ?></td>
                 <td><?php echo $item->description ?></td>
-                <td><?php echo $item->user_name ?></td>
+                <?php if ($item->leader): ?>
+                    <?php foreach (json_decode($item->leader) as $theme_leader) : ?>
+                        <?php if ($leaders == '') {
+                            $colon = '';
+                        }else{
+                            $colon = '; ';
+                        }
+                        ?>
+                        <?php $leaders = $leaders.$colon. $this->getLeaderNameById($theme_leader->user_id);  ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+                <td><?php echo $leaders; ?></td>
                 <td>
                     <div class="inline">
                         <a

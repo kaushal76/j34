@@ -35,4 +35,11 @@ class ConfmgtViewThemes extends JViewLegacy
         }
         parent::display($tpl);
 	}
+
+    public function getLeaderNameById($leader_id) {
+        $model = $this->getModel();
+        $return = $model->getLeaderNameById($leader_id);
+        return $return->name;
+
+    }
 }
