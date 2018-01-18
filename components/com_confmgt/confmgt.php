@@ -13,7 +13,6 @@ defined('_JEXEC') or die ();
 
 // adding helpers
 JLoader::register('MainHelper', JPATH_COMPONENT . '/helpers/confmgt.php');
-JLoader::register('AjaxvalidateHelper', JPATH_COMPONENT . '/helpers/ajaxvalidate.php');
 JLoader::register('AclHelper', JPATH_COMPONENT . '/helpers/acl.php');
 JLoader::register('EmailHelper', JPATH_COMPONENT . '/helpers/email.php');
 JLoader::register('UploadHelper', JPATH_COMPONENT . '/helpers/upload.php');

@@ -241,7 +241,6 @@ class ConfmgtModelThemeForm extends JModelForm
         
         $table = $this->getTable();
         $coordinator_table = $this->getTable('Coordinator','ConfmgtTable');
-
         $old_leaders_removed = $this->removeLeadersByThemeId($data['id']);
 
         if (!$old_leaders_removed) {

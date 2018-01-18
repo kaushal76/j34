@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
     </div>
     <table class="table table-striped">
         <tr>
-            <td class="header"><?php
+            <td class="header" width="30%"><?php
                 echo JText::_('Full paper: '); ?>
             </td>
             <td><?php echo $this->item->full_paper_txt; ?>

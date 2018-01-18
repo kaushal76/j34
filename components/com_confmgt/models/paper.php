@@ -158,17 +158,14 @@ class ConfmgtModelPaper extends JModelItem
             $authorised = ($user->id > 0);
         }
 
-        if ($authorised !== true) {
-            throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'));
-        }
-
-        $query = $this->_getQuery($id);
-        $db->setQuery($query);
 
         // If not authorsied, no results returned and throw an exception;
         if (!$authorised) {
             throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 500);
         }
+
+        $query = $this->_getQuery($id);
+        $db->setQuery($query);
 
         // Load the results as a list of stdClass objects (
         $paper = $db->loadObject();
@@ -193,7 +190,7 @@ class ConfmgtModelPaper extends JModelItem
                     $paper->fullPaperBtn = $this->_FullPaperBtn($paper->paper_id, 'new');
 
                 } else {
-                    if ($change_allowed) {
+                    if (($change_allowed) AND (!($paper->fullpaper_full_review_outcome > 0))) {
                         $paper->fullPaperBtn = $this->_FullPaperBtn($paper->paper_id, 'change');
                     }
                     $paper->full_paper_txt = $paper->fullpaper_full_paper;

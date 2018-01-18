@@ -23,6 +23,7 @@ $canEdit = $this->isAuthor;
 
 if ($canView):
 ?>
+
 <div class="panel panel-default">
     <div class="panel-heading">
         <h1>
@@ -31,10 +32,13 @@ if ($canView):
         </h1>
     </div>
     <div class="panel-body">
-        <div align="table">
+        <div class="table">
             <?php
             if ($this->item): ?>
-                <?php echo $this->loadTemplate('authors'); ?><?php echo $this->loadTemplate('information'); ?><?php echo $this->loadTemplate('paper'); ?><?php echo $this->loadTemplate('rev1ew'); ?>
+                <?php echo $this->loadTemplate('authors'); ?>
+                <?php echo $this->loadTemplate('information_1'); ?>
+                <?php echo $this->loadTemplate('paper'); ?>
+                <?php echo $this->loadTemplate('rev1ew'); ?>
                 <?php
             else:
                 ?>
